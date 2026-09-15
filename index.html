@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>[EVENT NAME] – Competition Landing Page</title>
-  <meta name="description" content="[EVENT NAME] – The ultimate competition event. Register now and compete for glory." />
+  <title>Hack and Hunt – VIGYANTRA 2026 | SJBIT, Bengaluru</title>
+  <meta name="description" content="Hack and Hunt – The ultimate coding competition at SJBIT, Bengaluru. 30 Oct 2026. Prize pool ₹50,000. Register now!" />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Orbitron:wght@700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
 
   <style>
     /* ============================================================
@@ -18,21 +18,27 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg-deep:      #050812;
-      --bg-dark:      #0b0f1e;
-      --bg-card:      rgba(255,255,255,0.04);
-      --bg-card-hov:  rgba(255,255,255,0.08);
+      --bg-deep:      #000000;
+      --bg-dark:      #080f08;
+      --bg-card:      rgba(0,255,100,0.04);
+      --bg-card-hov:  rgba(0,255,100,0.09);
       --border:       rgba(255,255,255,0.08);
-      --border-glow:  rgba(99,102,241,0.35);
+      --border-glow:  rgba(0,220,80,0.4);
 
-      --grad-a:  #6366f1;   /* indigo */
-      --grad-b:  #a855f7;   /* purple */
-      --grad-c:  #ec4899;   /* pink */
-      --grad-d:  #06b6d4;   /* cyan */
+      --green-a:  #00e676;   /* bright green */
+      --green-b:  #00c853;   /* mid green */
+      --green-c:  #69f0ae;   /* light mint */
+      --green-d:  #1de9b6;   /* teal-green */
 
-      --text-primary:   #f1f5f9;
-      --text-secondary: #94a3b8;
-      --text-muted:     #64748b;
+      /* alias for existing classes */
+      --grad-a: var(--green-a);
+      --grad-b: var(--green-b);
+      --grad-c: var(--green-c);
+      --grad-d: var(--green-d);
+
+      --text-primary:   #ffffff;
+      --text-secondary: #a5d6a7;
+      --text-muted:     #558b5e;
 
       --radius-sm: 8px;
       --radius-md: 16px;
@@ -53,12 +59,31 @@
       overflow-x: hidden;
     }
 
-    ::selection { background: rgba(99,102,241,0.4); color: #fff; }
+    ::selection { background: rgba(0,230,118,0.35); color: #fff; }
 
-    /* scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg-dark); }
-    ::-webkit-scrollbar-thumb { background: var(--grad-a); border-radius: 99px; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: var(--green-a); border-radius: 99px; }
+
+    /* ============================================================
+       PARTICLE CANVAS (behind everything)
+    ============================================================ */
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       CONFETTI CANVAS
+    ============================================================ */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+    }
 
     /* ============================================================
        UTILITY
@@ -66,6 +91,8 @@
     .container {
       width: min(1200px, 92vw);
       margin-inline: auto;
+      position: relative;
+      z-index: 1;
     }
 
     .section-tag {
@@ -76,25 +103,31 @@
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--grad-a);
-      background: rgba(99,102,241,0.12);
-      border: 1px solid rgba(99,102,241,0.25);
+      color: var(--green-a);
+      background: rgba(0,230,118,0.1);
+      border: 1px solid rgba(0,230,118,0.25);
       padding: 6px 16px;
       border-radius: 99px;
       margin-bottom: 20px;
+      font-family: 'Fira Code', monospace;
     }
-    .section-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--grad-a); animation: pulse-dot 2s infinite; }
-    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.4)} }
+    .section-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green-a);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.5)} }
 
     .gradient-text {
-      background: linear-gradient(135deg, var(--grad-a), var(--grad-b), var(--grad-c));
+      background: linear-gradient(135deg, var(--green-a), var(--green-c));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-
-    .gradient-text-cyan {
-      background: linear-gradient(135deg, var(--grad-d), var(--grad-a));
+    .gradient-text-alt {
+      background: linear-gradient(135deg, var(--green-d), var(--green-a));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -102,17 +135,19 @@
 
     .glass-card {
       background: var(--bg-card);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(0,230,118,0.12);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-radius: var(--radius-md);
       transition: var(--transition);
+      position: relative;
+      z-index: 1;
     }
     .glass-card:hover {
       background: var(--bg-card-hov);
       border-color: var(--border-glow);
       transform: translateY(-4px);
-      box-shadow: 0 20px 60px rgba(99,102,241,0.12);
+      box-shadow: 0 20px 60px rgba(0,230,118,0.1);
     }
 
     .btn-primary {
@@ -120,10 +155,10 @@
       align-items: center;
       gap: 8px;
       padding: 14px 32px;
-      background: linear-gradient(135deg, var(--grad-a), var(--grad-b));
-      color: #fff;
+      background: linear-gradient(135deg, var(--green-a), var(--green-b));
+      color: #000;
       font-family: 'Space Grotesk', sans-serif;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.95rem;
       border: none;
       border-radius: 99px;
@@ -132,17 +167,12 @@
       transition: var(--transition);
       position: relative;
       overflow: hidden;
+      letter-spacing: 0.02em;
     }
-    .btn-primary::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-      opacity: 0;
-      transition: var(--transition);
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,230,118,0.4);
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(99,102,241,0.45); }
-    .btn-primary:hover::after { opacity: 1; }
 
     .btn-secondary {
       display: inline-flex;
@@ -150,25 +180,23 @@
       gap: 8px;
       padding: 13px 30px;
       background: transparent;
-      color: var(--text-primary);
+      color: var(--green-a);
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 600;
       font-size: 0.95rem;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(0,230,118,0.4);
       border-radius: 99px;
       cursor: pointer;
       text-decoration: none;
       transition: var(--transition);
     }
     .btn-secondary:hover {
-      border-color: var(--grad-a);
-      background: rgba(99,102,241,0.1);
-      color: var(--grad-a);
+      background: rgba(0,230,118,0.1);
       transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,230,118,0.2);
     }
 
-    section { padding: 100px 0; }
-    section + section { padding-top: 0; }
+    section { padding: 100px 0; position: relative; z-index: 1; }
 
     h1,h2,h3,h4 { font-family: 'Space Grotesk', sans-serif; }
 
@@ -183,21 +211,15 @@
       font-size: 1.05rem;
       max-width: 600px;
       margin-bottom: 56px;
+      line-height: 1.65;
     }
 
     /* scroll animations */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .reveal-left  { opacity:0; transform:translateX(-40px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal-right { opacity:0; transform:translateX( 40px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal-left.visible, .reveal-right.visible { opacity:1; transform:translateX(0); }
+    .reveal { opacity:0; transform:translateY(40px); transition:opacity 0.7s ease,transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-left  { opacity:0; transform:translateX(-40px); transition:opacity 0.7s ease,transform 0.7s ease; }
+    .reveal-right { opacity:0; transform:translateX( 40px); transition:opacity 0.7s ease,transform 0.7s ease; }
+    .reveal-left.visible,.reveal-right.visible { opacity:1; transform:translateX(0); }
 
     /* ============================================================
        1. NAVIGATION
@@ -212,11 +234,11 @@
       transition: var(--transition);
     }
     #navbar.scrolled {
-      background: rgba(5,8,18,0.85);
+      background: rgba(0,0,0,0.92);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--border);
-      box-shadow: 0 4px 40px rgba(0,0,0,0.4);
+      border-bottom: 1px solid rgba(0,230,118,0.15);
+      box-shadow: 0 4px 40px rgba(0,0,0,0.6), 0 0 20px rgba(0,230,118,0.05);
     }
     .nav-inner {
       width: min(1200px, 92vw);
@@ -226,29 +248,40 @@
       justify-content: space-between;
       gap: 24px;
     }
+
+    /* VIGYANTRA logo */
     .nav-logo {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       text-decoration: none;
+      flex-shrink: 0;
     }
     .nav-logo-icon {
-      width: 40px; height: 40px;
-      background: linear-gradient(135deg, var(--grad-a), var(--grad-b));
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--green-a), var(--green-b));
       border-radius: 10px;
       display: grid;
       place-items: center;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       flex-shrink: 0;
+      box-shadow: 0 0 16px rgba(0,230,118,0.4);
     }
-    .nav-logo-text {
+    .nav-logo-group { display: flex; flex-direction: column; line-height: 1; }
+    .nav-logo-main {
       font-family: 'Orbitron', sans-serif;
       font-size: 1.1rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--grad-a), var(--grad-b));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-weight: 900;
+      color: var(--green-a);
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 20px rgba(0,230,118,0.5);
+    }
+    .nav-logo-sub {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      margin-top: 2px;
     }
 
     .nav-links {
@@ -261,35 +294,31 @@
       padding: 8px 16px;
       color: var(--text-secondary);
       text-decoration: none;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       font-weight: 500;
       border-radius: 8px;
       transition: var(--transition);
+      font-family: 'Fira Code', monospace;
     }
-    .nav-links a:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+    .nav-links a:hover { color: var(--green-a); background: rgba(0,230,118,0.07); }
 
-    .nav-cta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
     .nav-register {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 9px 20px;
-      background: linear-gradient(135deg, var(--grad-a), var(--grad-b));
-      color: #fff;
-      font-weight: 600;
+      padding: 9px 22px;
+      background: linear-gradient(135deg, var(--green-a), var(--green-b));
+      color: #000;
+      font-weight: 700;
       font-size: 0.875rem;
       border-radius: 99px;
       text-decoration: none;
       transition: var(--transition);
       white-space: nowrap;
+      font-family: 'Space Grotesk', sans-serif;
     }
-    .nav-register:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,0.4); }
+    .nav-register:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,230,118,0.4); }
 
-    /* hamburger */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -302,7 +331,7 @@
     .hamburger span {
       display: block;
       width: 24px; height: 2px;
-      background: var(--text-primary);
+      background: var(--green-a);
       border-radius: 99px;
       transition: var(--transition);
     }
@@ -315,9 +344,9 @@
       position: fixed;
       top: var(--nav-h);
       left: 0; right: 0;
-      background: rgba(5,8,18,0.97);
+      background: rgba(0,0,0,0.97);
       backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(0,230,118,0.15);
       padding: 20px;
       z-index: 999;
     }
@@ -331,13 +360,72 @@
       font-weight: 500;
       border-radius: var(--radius-sm);
       transition: var(--transition);
+      font-family: 'Fira Code', monospace;
     }
-    .mobile-menu a:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
-    .mobile-menu .mobile-register {
-      margin-top: 12px;
-      display: block;
+    .mobile-menu a:hover { color: var(--green-a); background: rgba(0,230,118,0.07); }
+    .mobile-menu .mobile-register { margin-top: 12px; display: block; text-align: center; }
+
+    /* ============================================================
+       COUNTDOWN TIMER STRIP
+    ============================================================ */
+    #countdown-strip {
+      position: relative;
+      z-index: 999;
+      margin-top: var(--nav-h);
+      background: linear-gradient(90deg, rgba(0,230,118,0.12), rgba(0,200,83,0.18), rgba(0,230,118,0.12));
+      border-bottom: 1px solid rgba(0,230,118,0.2);
+      padding: 12px 0;
       text-align: center;
     }
+    .countdown-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+    }
+    .countdown-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.08em;
+    }
+    .countdown-units {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .countdown-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--green-a);
+      line-height: 1;
+      min-width: 44px;
+      text-align: center;
+      text-shadow: 0 0 14px rgba(0,230,118,0.5);
+    }
+    .countdown-unit-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .countdown-sep {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      color: var(--green-a);
+      opacity: 0.5;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:0.5} 50%{opacity:0.1} }
 
     /* ============================================================
        2. HERO
@@ -349,57 +437,59 @@
       position: relative;
       overflow: hidden;
       padding: 0;
+      /* no top margin — canvas is behind */
     }
 
-    /* abstract bg shapes */
     .hero-bg {
       position: absolute;
       inset: 0;
       pointer-events: none;
       z-index: 0;
     }
+    /* subtle scan-line overlay */
+    .hero-scanlines {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,230,118,0.015) 2px,
+        rgba(0,230,118,0.015) 4px
+      );
+      pointer-events: none;
+    }
+    /* green glow orbs */
     .hero-orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.25;
+      filter: blur(90px);
+      opacity: 0.18;
     }
-    .hero-orb-1 { width: 600px; height: 600px; background: var(--grad-a); top: -200px; right: -100px; animation: float 8s ease-in-out infinite; }
-    .hero-orb-2 { width: 400px; height: 400px; background: var(--grad-c); bottom: -100px; left: -80px; animation: float 10s ease-in-out infinite reverse; }
-    .hero-orb-3 { width: 300px; height: 300px; background: var(--grad-d); top: 40%; left: 35%; animation: float 12s ease-in-out infinite 2s; }
-
+    .hero-orb-1 { width:650px;height:650px;background:var(--green-a);top:-200px;right:-100px;animation:float 9s ease-in-out infinite; }
+    .hero-orb-2 { width:400px;height:400px;background:var(--green-b);bottom:-80px;left:-80px;animation:float 11s ease-in-out infinite reverse; }
+    .hero-orb-3 { width:300px;height:300px;background:var(--green-d);top:40%;left:35%;animation:float 13s ease-in-out infinite 2s; }
     @keyframes float {
-      0%,100% { transform: translate(0,0) scale(1); }
-      33% { transform: translate(20px,-20px) scale(1.05); }
-      66% { transform: translate(-15px,15px) scale(0.95); }
+      0%,100%{transform:translate(0,0) scale(1)}
+      33%{transform:translate(20px,-20px) scale(1.05)}
+      66%{transform:translate(-15px,15px) scale(0.95)}
     }
 
-    /* grid overlay */
-    .hero-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-    }
-
-    /* hero ring decorations */
     .hero-ring {
       position: absolute;
       border-radius: 50%;
-      border: 1px solid rgba(99,102,241,0.12);
+      border: 1px solid rgba(0,230,118,0.1);
       animation: spin 30s linear infinite;
     }
-    .hero-ring-1 { width: 700px; height: 700px; top: 50%; right: -150px; transform: translateY(-50%); }
-    .hero-ring-2 { width: 500px; height: 500px; top: 50%; right: -50px; transform: translateY(-50%); animation-duration: 20s; animation-direction: reverse; }
-    .hero-ring-3 { width: 900px; height: 900px; top: 50%; right: -250px; transform: translateY(-50%); animation-duration: 40s; border-color: rgba(168,85,247,0.08); }
+    .hero-ring-1 { width:700px;height:700px;top:50%;right:-150px;transform:translateY(-50%); }
+    .hero-ring-2 { width:500px;height:500px;top:50%;right:-50px;transform:translateY(-50%);animation-duration:20s;animation-direction:reverse; }
+    .hero-ring-3 { width:900px;height:900px;top:50%;right:-250px;transform:translateY(-50%);animation-duration:40s;border-color:rgba(0,200,83,0.06); }
     @keyframes spin { from{transform:translateY(-50%) rotate(0)} to{transform:translateY(-50%) rotate(360deg)} }
 
     .hero-content {
       position: relative;
       z-index: 1;
-      padding: 140px 0 100px;
+      padding: 80px 0 100px;
     }
 
     .hero-eyebrow {
@@ -410,12 +500,24 @@
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--grad-d);
-      background: rgba(6,182,212,0.1);
-      border: 1px solid rgba(6,182,212,0.2);
+      color: var(--green-a);
+      background: rgba(0,230,118,0.08);
+      border: 1px solid rgba(0,230,118,0.2);
       padding: 7px 18px;
       border-radius: 99px;
       margin-bottom: 28px;
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* VIGYANTRA sub-brand */
+    .hero-brand {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+      letter-spacing: 0.25em;
+      color: var(--green-a);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(0,230,118,0.5);
     }
 
     .hero-title {
@@ -429,50 +531,84 @@
 
     .hero-subtitle {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
       font-weight: 300;
       color: var(--text-secondary);
       margin-bottom: 36px;
-      max-width: 580px;
-      line-height: 1.5;
+      max-width: 560px;
+      line-height: 1.55;
     }
 
     .hero-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 14px;
       margin-bottom: 48px;
     }
     .hero-meta-item {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       color: var(--text-secondary);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: rgba(0,230,118,0.06);
+      border: 1px solid rgba(0,230,118,0.15);
       padding: 10px 18px;
       border-radius: 99px;
-      backdrop-filter: blur(10px);
+      font-family: 'Fira Code', monospace;
     }
-    .hero-meta-item .icon { font-size: 1rem; }
 
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 64px; }
 
     .hero-stats {
       display: flex;
       flex-wrap: wrap;
       gap: 32px;
-      margin-top: 64px;
       padding-top: 48px;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid rgba(0,230,118,0.12);
     }
     .hero-stat-value {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.2rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
       font-weight: 700;
+      color: var(--green-a);
+      text-shadow: 0 0 20px rgba(0,230,118,0.4);
     }
-    .hero-stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
+    .hero-stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+    /* Terminal window decoration */
+    .terminal-box {
+      background: rgba(0,10,0,0.7);
+      border: 1px solid rgba(0,230,118,0.2);
+      border-radius: 12px;
+      padding: 0;
+      overflow: hidden;
+      max-width: 420px;
+      margin-top: 40px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+    }
+    .terminal-bar {
+      background: rgba(0,230,118,0.08);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(0,230,118,0.1);
+    }
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .terminal-dot.red   { background: #ff5f57; }
+    .terminal-dot.yel   { background: #ffbd2e; }
+    .terminal-dot.grn   { background: var(--green-a); }
+    .terminal-title { font-size: 0.75rem; color: var(--text-muted); margin-left: 6px; }
+    .terminal-body { padding: 18px 20px; }
+    .terminal-line { margin-bottom: 6px; }
+    .t-prompt { color: var(--green-a); }
+    .t-cmd    { color: #fff; }
+    .t-out    { color: var(--text-secondary); }
+    .t-green  { color: var(--green-a); }
+    .t-cursor { display: inline-block; width: 8px; height: 14px; background: var(--green-a); animation: cursor-blink 1s step-end infinite; vertical-align: text-bottom; }
+    @keyframes cursor-blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
     /* ============================================================
        3. TIMELINE
@@ -483,78 +619,42 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 0;
     }
-
-    /* vertical line */
     .timeline-line {
       position: absolute;
       left: 50%;
       top: 0; bottom: 0;
       width: 2px;
-      background: linear-gradient(to bottom, var(--grad-a), var(--grad-b), var(--grad-c));
+      background: linear-gradient(to bottom, var(--green-a), var(--green-b), var(--green-d));
       transform: translateX(-50%);
     }
-
     .timeline-item {
       display: grid;
       grid-template-columns: 1fr 56px 1fr;
       align-items: center;
-      gap: 0;
       padding: 20px 0;
-      position: relative;
     }
+    .timeline-item:nth-child(odd)  .timeline-content { grid-column:1; text-align:right; padding-right:48px; }
+    .timeline-item:nth-child(odd)  .timeline-empty   { grid-column:3; }
+    .timeline-item:nth-child(even) .timeline-content { grid-column:3; text-align:left; padding-left:48px; }
+    .timeline-item:nth-child(even) .timeline-empty   { grid-column:1; }
 
-    .timeline-item:nth-child(odd) .timeline-content { grid-column: 1; text-align: right; padding-right: 48px; }
-    .timeline-item:nth-child(odd) .timeline-empty  { grid-column: 3; }
-    .timeline-item:nth-child(even) .timeline-content { grid-column: 3; text-align: left; padding-left: 48px; }
-    .timeline-item:nth-child(even) .timeline-empty  { grid-column: 1; }
-
-    .timeline-dot-wrapper {
-      grid-column: 2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      z-index: 1;
-    }
+    .timeline-dot-wrapper { grid-column:2; display:flex; justify-content:center; align-items:center; position:relative; z-index:1; }
     .timeline-dot {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--grad-a), var(--grad-b));
-      display: grid;
-      place-items: center;
-      font-size: 1.1rem;
-      box-shadow: 0 0 0 6px rgba(99,102,241,0.15), 0 0 24px rgba(99,102,241,0.3);
-      flex-shrink: 0;
+      width:48px; height:48px;
+      border-radius:50%;
+      background: linear-gradient(135deg, var(--green-a), var(--green-b));
+      display:grid; place-items:center;
+      font-size:1.1rem;
+      box-shadow: 0 0 0 6px rgba(0,230,118,0.12), 0 0 24px rgba(0,230,118,0.35);
     }
-
-    .timeline-label {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--grad-a);
-      margin-bottom: 6px;
-    }
-    .timeline-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .timeline-date {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-    }
-    .timeline-desc {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      margin-top: 6px;
-    }
+    .timeline-label { font-family:'Fira Code',monospace; font-size:0.7rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--green-a); margin-bottom:6px; }
+    .timeline-title { font-size:1.1rem; font-weight:700; margin-bottom:4px; color:#fff; }
+    .timeline-date  { font-size:0.85rem; color:var(--text-muted); font-family:'Fira Code',monospace; }
+    .timeline-desc  { font-size:0.85rem; color:var(--text-secondary); margin-top:6px; }
 
     /* ============================================================
-       4. QUOTE / THOUGHT
+       4. QUOTE
     ============================================================ */
     #thought {
       position: relative;
@@ -564,1393 +664,1255 @@
     .thought-bg {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(99,102,241,0.08) 0%, transparent 70%);
-      pointer-events: none;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,230,118,0.07) 0%, transparent 70%);
     }
-    .thought-inner {
-      position: relative;
-      text-align: center;
-      padding: 80px 20px;
-      max-width: 900px;
-      margin-inline: auto;
-    }
-    .thought-quote-mark {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 8rem;
-      line-height: 0.6;
-      color: var(--grad-a);
-      opacity: 0.2;
-      margin-bottom: 24px;
-    }
-    .thought-text {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1.4rem, 3vw, 2.2rem);
-      font-weight: 600;
-      line-height: 1.4;
-      color: var(--text-primary);
-      margin-bottom: 28px;
-    }
-    .thought-attr {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      letter-spacing: 0.08em;
-    }
+    .thought-inner { position:relative; text-align:center; padding:80px 20px; max-width:900px; margin-inline:auto; }
+    .thought-quote-mark { font-family:'Orbitron',sans-serif; font-size:8rem; line-height:0.6; color:var(--green-a); opacity:0.15; margin-bottom:24px; }
+    .thought-text { font-family:'Space Grotesk',sans-serif; font-size:clamp(1.4rem,3vw,2.2rem); font-weight:600; line-height:1.45; color:#fff; margin-bottom:28px; }
+    .thought-attr { font-size:0.875rem; color:var(--text-muted); letter-spacing:0.08em; font-family:'Fira Code',monospace; }
 
     /* ============================================================
-       5. EVENT OVERVIEW
+       5. OVERVIEW
     ============================================================ */
     #overview { background: var(--bg-dark); }
-
-    .overview-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-    .overview-card {
-      padding: 36px 28px;
-    }
+    .overview-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; }
+    .overview-card { padding:36px 28px; }
     .overview-icon {
-      width: 56px; height: 56px;
-      border-radius: var(--radius-sm);
-      display: grid;
-      place-items: center;
-      font-size: 1.5rem;
-      margin-bottom: 20px;
+      width:56px; height:56px;
+      border-radius:var(--radius-sm);
+      display:grid; place-items:center;
+      font-size:1.5rem;
+      margin-bottom:20px;
+      border: 1px solid rgba(0,230,118,0.15);
     }
-    .overview-card-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    .overview-card-text {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      line-height: 1.65;
-    }
+    .overview-card-title { font-size:1.1rem; font-weight:700; margin-bottom:10px; color:#fff; }
+    .overview-card-text  { font-size:0.875rem; color:var(--text-secondary); line-height:1.65; }
 
     /* ============================================================
        6. PRIZE POOL
     ============================================================ */
-    #prize-pool {
-      background: var(--bg-deep);
-      position: relative;
-      overflow: hidden;
-    }
+    #prize-pool { background:var(--bg-deep); position:relative; overflow:hidden; }
     .prize-pool-bg {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(168,85,247,0.08) 0%, transparent 70%);
+      position:absolute; inset:0;
+      background:radial-gradient(ellipse 70% 80% at 50% 50%, rgba(0,230,118,0.07) 0%, transparent 70%);
     }
-    .prize-pool-inner {
-      position: relative;
-      text-align: center;
-    }
+    .prize-pool-inner { position:relative; text-align:center; }
     .prize-pool-amount {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(3.5rem, 10vw, 8rem);
-      font-weight: 900;
-      line-height: 1;
-      background: linear-gradient(135deg, #fbbf24, #f59e0b, #ef4444);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 40px rgba(251,191,36,0.3));
-      margin-bottom: 20px;
+      font-family:'Orbitron',sans-serif;
+      font-size:clamp(3rem,10vw,7.5rem);
+      font-weight:900;
+      line-height:1;
+      color: var(--green-a);
+      filter: drop-shadow(0 0 40px rgba(0,230,118,0.45));
+      margin-bottom:20px;
+      letter-spacing:-0.02em;
     }
-    .prize-pool-desc {
-      font-size: 1.1rem;
-      color: var(--text-secondary);
-      max-width: 520px;
-      margin-inline: auto;
-    }
+    .prize-pool-desc { font-size:1.1rem; color:var(--text-secondary); max-width:520px; margin-inline:auto; }
 
     /* ============================================================
        7. PRIZE BREAKDOWN
     ============================================================ */
-    #prizes { background: var(--bg-dark); }
+    #prizes { background:var(--bg-dark); }
+    .prizes-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px; align-items:start; }
 
-    .prizes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 24px;
-      align-items: start;
-    }
-
-    .prize-card {
-      padding: 40px 28px 32px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .prize-card.first {
-      border-color: rgba(251,191,36,0.3);
-      background: rgba(251,191,36,0.05);
-    }
+    .prize-card { padding:40px 28px 32px; text-align:center; position:relative; overflow:hidden; }
+    .prize-card.first  { border-color:rgba(0,230,118,0.35); background:rgba(0,230,118,0.05); }
     .prize-card.first::before {
-      content: 'TOP PICK';
-      position: absolute;
-      top: 16px; right: -24px;
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      color: #000;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      padding: 4px 32px;
-      transform: rotate(45deg);
+      content:'TOP';
+      position:absolute; top:16px; right:-20px;
+      background:linear-gradient(135deg,var(--green-a),var(--green-b));
+      color:#000;
+      font-size:0.65rem; font-weight:700; letter-spacing:0.1em;
+      padding:4px 30px;
+      transform:rotate(45deg);
     }
-    .prize-card.second { border-color: rgba(148,163,184,0.25); }
-    .prize-card.third  { border-color: rgba(180,120,60,0.25); }
-    .prize-card.special { border-color: rgba(99,102,241,0.25); }
+    .prize-card.second { border-color:rgba(200,200,200,0.2); }
+    .prize-card.third  { border-color:rgba(180,130,50,0.25); }
+    .prize-card.special { border-color:rgba(0,230,118,0.2); }
 
-    .prize-medal { font-size: 3.5rem; margin-bottom: 16px; display: block; }
-    .prize-rank {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .prize-card.first  .prize-rank { color: #fbbf24; }
-    .prize-card.second .prize-rank { color: #94a3b8; }
-    .prize-card.third  .prize-rank { color: #b47a3c; }
-    .prize-card.special .prize-rank { color: var(--grad-a); }
+    .prize-medal  { font-size:3.5rem; margin-bottom:16px; display:block; }
+    .prize-rank   { font-size:0.75rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; font-family:'Fira Code',monospace; }
+    .prize-card.first  .prize-rank { color:var(--green-a); }
+    .prize-card.second .prize-rank { color:#cbd5e1; }
+    .prize-card.third  .prize-rank { color:#b47a3c; }
+    .prize-card.special .prize-rank { color:var(--green-d); }
 
-    .prize-name  { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
-    .prize-amount {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-    .prize-card.first  .prize-amount { color: #fbbf24; }
-    .prize-card.second .prize-amount { color: #cbd5e1; }
-    .prize-card.third  .prize-amount { color: #b47a3c; }
-    .prize-card.special .prize-amount { color: var(--grad-a); }
-    .prize-perks { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+    .prize-name  { font-size:1.2rem; font-weight:700; margin-bottom:10px; }
+    .prize-amount { font-family:'Orbitron',sans-serif; font-size:2rem; font-weight:700; margin-bottom:14px; }
+    .prize-card.first  .prize-amount { color:var(--green-a); text-shadow:0 0 20px rgba(0,230,118,0.4); }
+    .prize-card.second .prize-amount { color:#cbd5e1; }
+    .prize-card.third  .prize-amount { color:#b47a3c; }
+    .prize-card.special .prize-amount { color:var(--green-d); }
+    .prize-perks { font-size:0.85rem; color:var(--text-secondary); line-height:1.65; }
 
     /* ============================================================
        8. EVENT DETAILS
     ============================================================ */
-    #details { background: var(--bg-deep); }
-
-    .details-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .detail-card {
-      padding: 32px 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
-    }
+    #details { background:var(--bg-deep); }
+    .details-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; }
+    .detail-card { padding:32px 24px; display:flex; flex-direction:column; align-items:flex-start; gap:12px; }
     .detail-icon-wrap {
-      width: 52px; height: 52px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      font-size: 1.4rem;
-      background: rgba(99,102,241,0.12);
-      border: 1px solid rgba(99,102,241,0.2);
-      flex-shrink: 0;
+      width:52px; height:52px;
+      border-radius:14px;
+      display:grid; place-items:center;
+      font-size:1.4rem;
+      background:rgba(0,230,118,0.08);
+      border:1px solid rgba(0,230,118,0.15);
     }
-    .detail-label {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .detail-value {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      line-height: 1.3;
-    }
+    .detail-label { font-size:0.72rem; color:var(--text-muted); font-weight:600; letter-spacing:0.08em; text-transform:uppercase; font-family:'Fira Code',monospace; }
+    .detail-value { font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:600; color:#fff; line-height:1.35; }
 
     /* ============================================================
        9. REGISTRATION
     ============================================================ */
-    #registration {
-      background: var(--bg-dark);
-      position: relative;
-      overflow: hidden;
-    }
-    .reg-bg {
-      position: absolute;
-      right: -200px; top: -100px;
-      width: 600px; height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(99,102,241,0.12), transparent 70%);
-      pointer-events: none;
-    }
-    .reg-inner {
-      position: relative;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: start;
-    }
-    .reg-info h2 { margin-bottom: 16px; }
-    .reg-info p  { color: var(--text-secondary); margin-bottom: 32px; }
-
-    .reg-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 40px;
-    }
-    .reg-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-    }
+    #registration { background:var(--bg-dark); position:relative; overflow:hidden; }
+    .reg-bg { position:absolute; right:-200px; top:-100px; width:600px; height:600px; border-radius:50%; background:radial-gradient(circle, rgba(0,230,118,0.08), transparent 70%); pointer-events:none; }
+    .reg-inner { position:relative; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; }
+    .reg-info h2 { margin-bottom:16px; }
+    .reg-info p  { color:var(--text-secondary); margin-bottom:32px; }
+    .reg-list { list-style:none; display:flex; flex-direction:column; gap:14px; margin-bottom:40px; }
+    .reg-list li { display:flex; align-items:flex-start; gap:12px; font-size:0.9rem; color:var(--text-secondary); }
     .reg-list li::before {
-      content: '✓';
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      background: rgba(99,102,241,0.2);
-      color: var(--grad-a);
-      font-size: 0.75rem;
-      font-weight: 700;
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-      margin-top: 1px;
+      content:'>';
+      width:22px; height:22px;
+      border-radius:50%;
+      background:rgba(0,230,118,0.15);
+      color:var(--green-a);
+      font-size:0.8rem; font-weight:700;
+      display:grid; place-items:center;
+      flex-shrink:0;
+      margin-top:1px;
+      font-family:'Fira Code',monospace;
     }
-
     .reg-deadline {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.25);
-      border-radius: 99px;
-      color: #f87171;
-      font-size: 0.875rem;
-      font-weight: 600;
-      margin-bottom: 32px;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 20px;
+      background:rgba(0,230,118,0.08);
+      border:1px solid rgba(0,230,118,0.25);
+      border-radius:99px;
+      color:var(--green-a);
+      font-size:0.875rem; font-weight:600;
+      margin-bottom:32px;
+      font-family:'Fira Code',monospace;
     }
-
-    .reg-card { padding: 40px 32px; }
-    .reg-card h3 { font-size: 1.4rem; margin-bottom: 24px; }
-    .reg-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-bottom: 32px;
-    }
-    .reg-step {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-    }
+    .reg-card { padding:40px 32px; }
+    .reg-card h3 { font-size:1.4rem; margin-bottom:24px; }
+    .reg-steps { display:flex; flex-direction:column; gap:20px; margin-bottom:32px; }
+    .reg-step { display:flex; gap:16px; align-items:flex-start; }
     .reg-step-num {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--grad-a), var(--grad-b));
-      display: grid;
-      place-items: center;
-      font-size: 0.85rem;
-      font-weight: 700;
-      flex-shrink: 0;
+      width:32px; height:32px;
+      border-radius:50%;
+      background:linear-gradient(135deg,var(--green-a),var(--green-b));
+      display:grid; place-items:center;
+      font-size:0.85rem; font-weight:700;
+      flex-shrink:0; color:#000;
     }
-    .reg-step-text strong { display: block; margin-bottom: 2px; font-size: 0.95rem; }
-    .reg-step-text span { font-size: 0.85rem; color: var(--text-muted); }
+    .reg-step-text strong { display:block; margin-bottom:2px; font-size:0.95rem; }
+    .reg-step-text span   { font-size:0.85rem; color:var(--text-muted); }
 
     /* ============================================================
        10. RULES
     ============================================================ */
-    #rules { background: var(--bg-deep); }
-
-    .rules-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    .rule-card {
-      padding: 28px 24px;
-      display: flex;
-      gap: 20px;
-    }
-    .rule-num {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
-      color: rgba(99,102,241,0.2);
-      flex-shrink: 0;
-      line-height: 1;
-    }
-    .rule-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
-    .rule-text  { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; }
+    #rules { background:var(--bg-deep); }
+    .rules-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .rule-card { padding:28px 24px; display:flex; gap:20px; }
+    .rule-num { font-family:'Orbitron',sans-serif; font-size:2rem; font-weight:700; color:rgba(0,230,118,0.18); flex-shrink:0; line-height:1; }
+    .rule-title { font-size:1rem; font-weight:700; margin-bottom:8px; color:#fff; }
+    .rule-text  { font-size:0.875rem; color:var(--text-secondary); line-height:1.65; }
 
     /* ============================================================
        11. FAQ
     ============================================================ */
-    #faq { background: var(--bg-dark); }
-
-    .faq-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-width: 800px;
-    }
-
-    .faq-item {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      transition: var(--transition);
-    }
-    .faq-item.open {
-      border-color: var(--border-glow);
-      background: rgba(99,102,241,0.05);
-    }
+    #faq { background:var(--bg-dark); }
+    .faq-list { display:flex; flex-direction:column; gap:12px; max-width:800px; }
+    .faq-item { border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; transition:var(--transition); }
+    .faq-item.open { border-color:rgba(0,230,118,0.3); background:rgba(0,230,118,0.04); }
     .faq-question {
-      width: 100%;
-      padding: 22px 24px;
-      background: none;
-      border: none;
-      color: var(--text-primary);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      text-align: left;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      transition: var(--transition);
+      width:100%; padding:22px 24px;
+      background:none; border:none;
+      color:#fff; font-family:'Space Grotesk',sans-serif;
+      font-size:1rem; font-weight:600;
+      text-align:left; cursor:pointer;
+      display:flex; justify-content:space-between; align-items:center; gap:16px;
+      transition:var(--transition);
     }
-    .faq-question:hover { color: var(--grad-a); }
+    .faq-question:hover { color:var(--green-a); }
     .faq-chevron {
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-      font-size: 0.7rem;
-      transition: transform var(--transition);
+      width:24px; height:24px;
+      border-radius:50%;
+      border:1px solid var(--border);
+      display:grid; place-items:center;
+      flex-shrink:0; font-size:0.7rem;
+      transition:transform var(--transition);
+      color: var(--text-muted);
     }
-    .faq-item.open .faq-chevron { transform: rotate(180deg); border-color: var(--grad-a); color: var(--grad-a); }
-
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease;
-    }
-    .faq-answer-inner {
-      padding: 0 24px 22px;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
+    .faq-item.open .faq-chevron { transform:rotate(180deg); border-color:var(--green-a); color:var(--green-a); }
+    .faq-answer { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
+    .faq-answer-inner { padding:0 24px 22px; font-size:0.9rem; color:var(--text-secondary); line-height:1.75; }
 
     /* ============================================================
        12. COORDINATORS
     ============================================================ */
-    #coordinators { background: var(--bg-deep); }
-
-    .coordinators-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 24px;
-    }
-    .coord-card {
-      padding: 36px 28px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
+    #coordinators { background:var(--bg-deep); }
+    .coordinators-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:24px; }
+    .coord-card { padding:40px 28px; text-align:center; position:relative; overflow:hidden; }
     .coord-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--grad-a), var(--grad-b), var(--grad-c));
+      content:'';
+      position:absolute; top:0; left:0; right:0;
+      height:3px;
+      background:linear-gradient(90deg,var(--green-a),var(--green-d),var(--green-b));
     }
     .coord-avatar {
-      width: 100px; height: 100px;
-      border-radius: 50%;
-      margin: 0 auto 20px;
-      object-fit: cover;
-      border: 3px solid transparent;
-      background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
-                  linear-gradient(135deg, var(--grad-a), var(--grad-b)) border-box;
-      display: grid;
-      place-items: center;
-      font-size: 2.5rem;
-      background-color: rgba(99,102,241,0.15);
+      width:100px; height:100px;
+      border-radius:50%;
+      margin:0 auto 20px;
+      object-fit:cover;
+      border:3px solid var(--green-a);
+      box-shadow: 0 0 24px rgba(0,230,118,0.3);
+      display:grid; place-items:center;
+      font-size:2.5rem;
+      background:rgba(0,230,118,0.1);
     }
-    .coord-name  { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
-    .coord-role  { font-size: 0.8rem; color: var(--grad-a); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
-    .coord-phone {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      text-decoration: none;
-      margin-bottom: 20px;
-      transition: var(--transition);
-    }
-    .coord-phone:hover { color: var(--grad-a); }
-    .coord-links {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+    .coord-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .coord-name  { font-size:1.15rem; font-weight:700; margin-bottom:4px; color:#fff; }
+    .coord-role  { font-size:0.75rem; color:var(--green-a); font-weight:600; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:16px; font-family:'Fira Code',monospace; }
+    .coord-phone { display:inline-flex; align-items:center; gap:6px; font-size:0.9rem; color:var(--text-secondary); text-decoration:none; margin-bottom:20px; transition:var(--transition); font-family:'Fira Code',monospace; }
+    .coord-phone:hover { color:var(--green-a); }
+    .coord-links { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
     .coord-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 16px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 99px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: var(--transition);
+      display:inline-flex; align-items:center; gap:6px;
+      padding:7px 16px;
+      background:rgba(0,230,118,0.07);
+      border:1px solid rgba(0,230,118,0.15);
+      border-radius:99px;
+      font-size:0.8rem; font-weight:600;
+      color:var(--text-secondary);
+      text-decoration:none;
+      transition:var(--transition);
     }
-    .coord-link:hover { border-color: var(--grad-a); color: var(--grad-a); background: rgba(99,102,241,0.08); }
+    .coord-link:hover { border-color:var(--green-a); color:var(--green-a); }
 
     /* ============================================================
        FOOTER
     ============================================================ */
     footer {
-      background: var(--bg-dark);
-      border-top: 1px solid var(--border);
-      padding: 40px 0;
-      text-align: center;
+      background: #000;
+      border-top: 1px solid rgba(0,230,118,0.12);
+      padding: 48px 0 32px;
+      position: relative;
+      z-index: 1;
     }
-    .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-    .footer-logo { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; }
-    .footer-text { font-size: 0.85rem; color: var(--text-muted); }
-    .footer-links { display: flex; gap: 24px; }
-    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: var(--transition); }
-    .footer-links a:hover { color: var(--grad-a); }
-
-    /* ============================================================
-       RESPONSIVE
-    ============================================================ */
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .nav-register { display: none; }
-      .hamburger { display: flex; }
-
-      .timeline-line { left: 28px; }
-      .timeline-item {
-        grid-template-columns: 56px 1fr;
-        grid-template-rows: auto;
-      }
-      .timeline-item:nth-child(odd) .timeline-content,
-      .timeline-item:nth-child(even) .timeline-content {
-        grid-column: 2;
-        grid-row: 1;
-        text-align: left;
-        padding: 0 0 0 20px;
-      }
-      .timeline-item:nth-child(odd)  .timeline-empty,
-      .timeline-item:nth-child(even) .timeline-empty { display: none; }
-      .timeline-dot-wrapper { grid-column: 1; grid-row: 1; }
-
-      .reg-inner { grid-template-columns: 1fr; gap: 40px; }
-      .rules-grid { grid-template-columns: 1fr; }
+    .footer-logo-main {
+      font-family:'Orbitron',sans-serif;
+      font-size:1.3rem;
+      font-weight:900;
+      color:var(--green-a);
+      letter-spacing:0.1em;
+      text-shadow:0 0 20px rgba(0,230,118,0.4);
     }
-
-    @media (max-width: 560px) {
-      section { padding: 72px 0; }
-      .hero-meta-item { font-size: 0.8rem; padding: 8px 14px; }
-      .hero-stats { gap: 20px; }
+    .footer-logo-event {
+      font-family:'Space Grotesk',sans-serif;
+      font-size:0.85rem;
+      color:var(--text-muted);
+      margin-top:4px;
     }
+    .footer-inner { display:flex; flex-direction:column; align-items:center; gap:20px; }
+    .footer-links { display:flex; gap:24px; flex-wrap:wrap; justify-content:center; }
+    .footer-links a { color:var(--text-muted); text-decoration:none; font-size:0.85rem; transition:var(--transition); font-family:'Fira Code',monospace; }
+    .footer-links a:hover { color:var(--green-a); }
+    .footer-text { font-size:0.8rem; color:var(--text-muted); text-align:center; font-family:'Fira Code',monospace; }
+    .footer-divider { width:100%; max-width:400px; height:1px; background:rgba(0,230,118,0.1); }
 
     /* ============================================================
        BACK TO TOP
     ============================================================ */
     #back-top {
-      position: fixed;
-      bottom: 28px; right: 28px;
-      width: 46px; height: 46px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--grad-a), var(--grad-b));
-      border: none;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      font-size: 1.1rem;
-      color: #fff;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: var(--transition);
-      z-index: 900;
-      box-shadow: 0 8px 24px rgba(99,102,241,0.4);
+      position:fixed;
+      bottom:28px; right:28px;
+      width:46px; height:46px;
+      border-radius:50%;
+      background:linear-gradient(135deg,var(--green-a),var(--green-b));
+      border:none; cursor:pointer;
+      display:grid; place-items:center;
+      font-size:1.1rem; color:#000;
+      opacity:0; transform:translateY(20px);
+      transition:var(--transition);
+      z-index:900;
+      box-shadow:0 8px 24px rgba(0,230,118,0.4);
+      font-weight:700;
     }
-    #back-top.show { opacity: 1; transform: translateY(0); }
-    #back-top:hover { transform: translateY(-2px); }
+    #back-top.show { opacity:1; transform:translateY(0); }
+    #back-top:hover { transform:translateY(-2px); }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      .nav-links, .nav-register { display:none; }
+      .hamburger { display:flex; }
+
+      .timeline-line { left:28px; }
+      .timeline-item { grid-template-columns:56px 1fr; }
+      .timeline-item:nth-child(odd)  .timeline-content,
+      .timeline-item:nth-child(even) .timeline-content { grid-column:2; grid-row:1; text-align:left; padding:0 0 0 20px; }
+      .timeline-item:nth-child(odd)  .timeline-empty,
+      .timeline-item:nth-child(even) .timeline-empty { display:none; }
+      .timeline-dot-wrapper { grid-column:1; grid-row:1; }
+
+      .reg-inner { grid-template-columns:1fr; gap:40px; }
+      .rules-grid { grid-template-columns:1fr; }
+
+      .countdown-num { font-size:1.1rem; }
+      .hero-stat-value { font-size:1.6rem; }
+    }
+
+    @media (max-width: 560px) {
+      section { padding:72px 0; }
+      .terminal-box { max-width:100%; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- =============================================
-       1. NAVIGATION
-  ============================================= -->
-  <nav id="navbar" role="navigation" aria-label="Main navigation">
-    <div class="nav-inner">
-      <a href="#home" class="nav-logo" aria-label="[EVENT NAME] Home">
-        <div class="nav-logo-icon" aria-hidden="true">⚡</div>
-        <span class="nav-logo-text">[EVENT NAME]</span>
-      </a>
+<!-- Particle canvas (behind everything) -->
+<canvas id="particle-canvas"></canvas>
+<!-- Confetti canvas (on top) -->
+<canvas id="confetti-canvas"></canvas>
 
-      <ul class="nav-links" role="list">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#overview">About</a></li>
-        <li><a href="#coordinators">Coordinators</a></li>
-        <li><a href="#faq">FAQ</a></li>
-      </ul>
-
-      <div class="nav-cta">
-        <a href="[REGISTRATION LINK]" class="nav-register" target="_blank" rel="noopener">
-          ✦ Register Now
-        </a>
-        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
+<!-- =============================================
+     1. NAVIGATION
+============================================= -->
+<nav id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo" aria-label="VIGYANTRA – Hack and Hunt Home">
+      <div class="nav-logo-icon" aria-hidden="true">⚡</div>
+      <div class="nav-logo-group">
+        <span class="nav-logo-main">VIGYANTRA</span>
+        <span class="nav-logo-sub">Hack and Hunt '26</span>
       </div>
-    </div>
-  </nav>
-
-  <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobile-menu" role="menu" aria-hidden="true">
-    <a href="#home" role="menuitem">Home</a>
-    <a href="#overview" role="menuitem">About</a>
-    <a href="#coordinators" role="menuitem">Coordinators</a>
-    <a href="#faq" role="menuitem">FAQ</a>
-    <a href="[REGISTRATION LINK]" class="mobile-register btn-primary" target="_blank" rel="noopener" role="menuitem">
-      ✦ Register Now
     </a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="#home">~/home</a></li>
+      <li><a href="#overview">~/about</a></li>
+      <li><a href="#coordinators">~/team</a></li>
+      <li><a href="#faq">~/faq</a></li>
+    </ul>
+
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="[REGISTRATION LINK]" class="nav-register" target="_blank" rel="noopener">
+        ⚡ Register Now
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
+</nav>
 
-  <!-- =============================================
-       2. HERO
-  ============================================= -->
-  <section id="home" aria-label="Hero section">
-    <div class="hero-bg" aria-hidden="true">
-      <div class="hero-grid"></div>
-      <div class="hero-orb hero-orb-1"></div>
-      <div class="hero-orb hero-orb-2"></div>
-      <div class="hero-orb hero-orb-3"></div>
-      <div class="hero-ring hero-ring-1"></div>
-      <div class="hero-ring hero-ring-2"></div>
-      <div class="hero-ring hero-ring-3"></div>
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobile-menu" role="menu" aria-hidden="true">
+  <a href="#home" role="menuitem">~/home</a>
+  <a href="#overview" role="menuitem">~/about</a>
+  <a href="#coordinators" role="menuitem">~/team</a>
+  <a href="#faq" role="menuitem">~/faq</a>
+  <a href="[REGISTRATION LINK]" class="mobile-register btn-primary" target="_blank" rel="noopener" role="menuitem">
+    ⚡ Register Now
+  </a>
+</div>
+
+<!-- =============================================
+     COUNTDOWN STRIP
+============================================= -->
+<div id="countdown-strip" role="timer" aria-label="Countdown to event">
+  <div class="countdown-inner">
+    <span class="countdown-label">⏳ Event starts in:</span>
+    <div class="countdown-units">
+      <div class="countdown-unit">
+        <div class="countdown-num" id="cd-days">--</div>
+        <div class="countdown-unit-label">days</div>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <div class="countdown-num" id="cd-hours">--</div>
+        <div class="countdown-unit-label">hrs</div>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <div class="countdown-num" id="cd-mins">--</div>
+        <div class="countdown-unit-label">min</div>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-unit">
+        <div class="countdown-num" id="cd-secs">--</div>
+        <div class="countdown-unit-label">sec</div>
+      </div>
     </div>
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-eyebrow reveal">🏆 &nbsp; Annual Inter-College Competition</div>
+    <span class="countdown-label">📅 30 Oct 2026 · SJBIT, Bengaluru</span>
+  </div>
+</div>
 
-        <h1 class="hero-title reveal">
-          <span class="gradient-text">[EVENT</span><br />
-          <span style="color:var(--text-primary)">NAME]</span>
-          <span class="gradient-text"> '26</span>
-        </h1>
+<!-- =============================================
+     2. HERO
+============================================= -->
+<section id="home" aria-label="Hero section" style="margin-top:0;padding-top:60px;">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-scanlines"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <div class="hero-ring hero-ring-1"></div>
+    <div class="hero-ring hero-ring-2"></div>
+    <div class="hero-ring hero-ring-3"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-eyebrow reveal">🏆 &nbsp; VIGYANTRA · Annual Inter-College Competition · SJBIT</div>
 
-        <p class="hero-subtitle reveal">
-          Where innovation meets execution. Build, compete, and prove your worth — the stage is set, the clock is ticking.
+      <div class="hero-brand reveal">Hack and Hunt</div>
+
+      <h1 class="hero-title reveal">
+        <span class="gradient-text">HACK</span><br />
+        <span style="color:#fff">&amp;</span>
+        <span class="gradient-text"> HUNT</span>
+        <span style="color:rgba(255,255,255,0.25); font-size:0.5em;"> '26</span>
+      </h1>
+
+      <p class="hero-subtitle reveal">
+        Hunt the problem. Hack the solution. The most intense 
+        one-day coding competition at SJBIT is back — bigger prizes, 
+        tougher challenges, and one champion.
+      </p>
+
+      <div class="hero-meta reveal">
+        <div class="hero-meta-item">📅 &nbsp;30 October 2026</div>
+        <div class="hero-meta-item">📍 &nbsp;SJBIT, Bengaluru</div>
+        <div class="hero-meta-item">🏆 &nbsp;Prize Pool: ₹50,000</div>
+      </div>
+
+      <div class="hero-actions reveal">
+        <a href="[REGISTRATION LINK]" class="btn-primary" target="_blank" rel="noopener">
+          ⚡ Register Now — Free
+        </a>
+        <a href="#overview" class="btn-secondary">
+          Explore Event ↓
+        </a>
+      </div>
+
+      <!-- Terminal decoration -->
+      <div class="terminal-box reveal">
+        <div class="terminal-bar">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yel"></div>
+          <div class="terminal-dot grn"></div>
+          <span class="terminal-title">hack_and_hunt.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line">
+            <span class="t-prompt">vigyantra@sjbit:~$ </span>
+            <span class="t-cmd">./register --team</span>
+          </div>
+          <div class="terminal-line">
+            <span class="t-out">✓ Event: </span><span class="t-green">Hack and Hunt 2026</span>
+          </div>
+          <div class="terminal-line">
+            <span class="t-out">✓ Date:  </span><span class="t-green">30 October 2026</span>
+          </div>
+          <div class="terminal-line">
+            <span class="t-out">✓ Venue: </span><span class="t-green">SJBIT, Bengaluru</span>
+          </div>
+          <div class="terminal-line">
+            <span class="t-out">✓ Prize: </span><span class="t-green">₹50,000 Pool</span>
+          </div>
+          <div class="terminal-line" style="margin-top:6px;">
+            <span class="t-prompt">vigyantra@sjbit:~$ </span>
+            <span class="t-cursor"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-stats reveal">
+        <div>
+          <div class="hero-stat-value">500+</div>
+          <div class="hero-stat-label">Expected Participants</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">₹50K</div>
+          <div class="hero-stat-label">Total Prize Pool</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">3</div>
+          <div class="hero-stat-label">Competition Rounds</div>
+        </div>
+        <div>
+          <div class="hero-stat-value">1</div>
+          <div class="hero-stat-label">Champion Title</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     3. TIMELINE
+============================================= -->
+<section id="timeline" aria-label="Event timeline">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">// schedule</span>
+      <h2 class="section-heading">Event <span class="gradient-text">Timeline</span></h2>
+      <p class="section-sub">Mark your calendar — every deadline counts. Plan ahead and be ready.</p>
+    </div>
+
+    <div class="timeline-wrapper" role="list">
+      <div class="timeline-line" aria-hidden="true"></div>
+
+      <div class="timeline-item reveal" role="listitem">
+        <div class="timeline-content">
+          <div class="timeline-label">Phase 01</div>
+          <div class="timeline-title">Registration Opens</div>
+          <div class="timeline-date">📅 [START DATE]</div>
+          <div class="timeline-desc">Portal goes live. Form your team and grab your spot early.</div>
+        </div>
+        <div class="timeline-dot-wrapper"><div class="timeline-dot" aria-hidden="true">🚀</div></div>
+        <div class="timeline-empty"></div>
+      </div>
+
+      <div class="timeline-item reveal" role="listitem">
+        <div class="timeline-empty"></div>
+        <div class="timeline-dot-wrapper"><div class="timeline-dot" aria-hidden="true">⏰</div></div>
+        <div class="timeline-content">
+          <div class="timeline-label">Phase 02</div>
+          <div class="timeline-title">Registration Deadline</div>
+          <div class="timeline-date">📅 [DEADLINE DATE]</div>
+          <div class="timeline-desc">Last chance — no late entries accepted after this.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal" role="listitem">
+        <div class="timeline-content">
+          <div class="timeline-label">Phase 03</div>
+          <div class="timeline-title">Shortlisting & Confirmation</div>
+          <div class="timeline-date">📅 [SHORTLISTING DATE]</div>
+          <div class="timeline-desc">Selected teams notified via email. Check your inbox!</div>
+        </div>
+        <div class="timeline-dot-wrapper"><div class="timeline-dot" aria-hidden="true">📋</div></div>
+        <div class="timeline-empty"></div>
+      </div>
+
+      <div class="timeline-item reveal" role="listitem">
+        <div class="timeline-empty"></div>
+        <div class="timeline-dot-wrapper"><div class="timeline-dot" aria-hidden="true">⚔️</div></div>
+        <div class="timeline-content">
+          <div class="timeline-label">Phase 04</div>
+          <div class="timeline-title">Competition Day</div>
+          <div class="timeline-date">📅 30 October 2026 · SJBIT</div>
+          <div class="timeline-desc">Show up, hack hard, and compete for the crown.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal" role="listitem">
+        <div class="timeline-content">
+          <div class="timeline-label">Phase 05</div>
+          <div class="timeline-title">Winner Announcement</div>
+          <div class="timeline-date">📅 30 October 2026 · Evening</div>
+          <div class="timeline-desc">Champions crowned, prizes distributed, legends made.</div>
+        </div>
+        <div class="timeline-dot-wrapper"><div class="timeline-dot" aria-hidden="true">🏆</div></div>
+        <div class="timeline-empty"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     4. THOUGHT / QUOTE
+============================================= -->
+<section id="thought" aria-label="Event inspiration">
+  <div class="thought-bg" aria-hidden="true"></div>
+  <div class="container">
+    <div class="thought-inner reveal">
+      <div class="thought-quote-mark" aria-hidden="true">"</div>
+      <blockquote>
+        <p class="thought-text">
+          "First, solve the problem. Then, write the code.<br />
+          The best hackers don't just find bugs —
+          <span class="gradient-text">they build the future.</span>"
         </p>
+        <footer class="thought-attr">— Inspired by the spirit of Hack and Hunt · VIGYANTRA '26</footer>
+      </blockquote>
+    </div>
+  </div>
+</section>
 
-        <div class="hero-meta reveal">
-          <div class="hero-meta-item">
-            <span class="icon">📅</span>
-            <span>[DATE] · [TIME]</span>
-          </div>
-          <div class="hero-meta-item">
-            <span class="icon">📍</span>
-            <span>[VENUE]</span>
-          </div>
-          <div class="hero-meta-item">
-            <span class="icon">🏆</span>
-            <span>Prize Pool: [PRIZE POOL]</span>
-          </div>
-        </div>
+<!-- =============================================
+     5. OVERVIEW
+============================================= -->
+<section id="overview" aria-label="Event overview">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">// about</span>
+      <h2 class="section-heading">What is <span class="gradient-text">Hack and Hunt?</span></h2>
+      <p class="section-sub">
+        A premier inter-college coding competition under VIGYANTRA at SJBIT, Bengaluru.
+        One day. Real problems. One champion.
+      </p>
+    </div>
 
-        <div class="hero-actions reveal">
-          <a href="[REGISTRATION LINK]" class="btn-primary" target="_blank" rel="noopener">
-            ✦ Register Now
-          </a>
-          <a href="#overview" class="btn-secondary">
-            Explore Event ↓
-          </a>
-        </div>
-
-        <div class="hero-stats reveal">
-          <div>
-            <div class="hero-stat-value gradient-text">500+</div>
-            <div class="hero-stat-label">Expected Participants</div>
-          </div>
-          <div>
-            <div class="hero-stat-value gradient-text">[PRIZE POOL]</div>
-            <div class="hero-stat-label">Total Prize Pool</div>
-          </div>
-          <div>
-            <div class="hero-stat-value gradient-text">3</div>
-            <div class="hero-stat-label">Competition Rounds</div>
-          </div>
-          <div>
-            <div class="hero-stat-value gradient-text">1</div>
-            <div class="hero-stat-label">Champion Title</div>
-          </div>
-        </div>
+    <div class="overview-grid">
+      <div class="glass-card overview-card reveal">
+        <div class="overview-icon" style="background:rgba(0,230,118,0.08);">💡</div>
+        <h3 class="overview-card-title">What You'll Build</h3>
+        <p class="overview-card-text">Teams design and develop working solutions to real-world problem statements revealed on competition day. Creativity and speed are both rewarded.</p>
+      </div>
+      <div class="glass-card overview-card reveal">
+        <div class="overview-icon" style="background:rgba(0,200,83,0.08);">🎯</div>
+        <h3 class="overview-card-title">What You'll Learn</h3>
+        <p class="overview-card-text">Rapid prototyping, team collaboration, time management under pressure, and pitching ideas to an expert panel — real skills, real exposure.</p>
+      </div>
+      <div class="glass-card overview-card reveal">
+        <div class="overview-icon" style="background:rgba(0,230,118,0.08);">🤝</div>
+        <h3 class="overview-card-title">Teamwork First</h3>
+        <p class="overview-card-text">Hack and Hunt is built on collaboration. From developer to presenter — every role matters. The best teams win together, not alone.</p>
+      </div>
+      <div class="glass-card overview-card reveal">
+        <div class="overview-icon" style="background:rgba(29,233,182,0.08);">⚡</div>
+        <h3 class="overview-card-title">High-Intensity Format</h3>
+        <p class="overview-card-text">Time-boxed rounds, live judging, and surprise constraints. Only the most adaptable and well-prepared teams rise to the top.</p>
+      </div>
+      <div class="glass-card overview-card reveal">
+        <div class="overview-icon" style="background:rgba(0,230,118,0.08);">🌐</div>
+        <h3 class="overview-card-title">Open to All Domains</h3>
+        <p class="overview-card-text">Web dev, AI/ML, cybersecurity, hardware, or business strategy — problem statements span multiple tracks so every talent fits.</p>
+      </div>
+      <div class="glass-card overview-card reveal">
+        <div class="overview-icon" style="background:rgba(0,200,83,0.08);">🎖️</div>
+        <h3 class="overview-card-title">Recognition & Rewards</h3>
+        <p class="overview-card-text">Cash prizes, trophies, and certificates for winners. Every participant receives a participation certificate from SJBIT / VIGYANTRA.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- =============================================
-       3. TIMELINE
-  ============================================= -->
-  <section id="timeline" aria-label="Event timeline">
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">Schedule</span>
-        <h2 class="section-heading">Event <span class="gradient-text">Timeline</span></h2>
-        <p class="section-sub">Mark your calendar — every milestone matters. Don't miss a single deadline.</p>
+<!-- =============================================
+     6. PRIZE POOL
+============================================= -->
+<section id="prize-pool" aria-label="Total prize pool">
+  <div class="prize-pool-bg" aria-hidden="true"></div>
+  <div class="container">
+    <div class="prize-pool-inner reveal">
+      <span class="section-tag">// prizes</span>
+      <div class="prize-pool-amount" aria-label="Total prize pool: 50,000 rupees">₹50,000</div>
+      <h2 class="section-heading">Total Prize Pool</h2>
+      <p class="prize-pool-desc">Compete, create, and claim your reward. The most innovative and technically strong team walks away with the lion's share — and bragging rights.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     7. PRIZE BREAKDOWN
+============================================= -->
+<section id="prizes" aria-label="Prize breakdown">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">// breakdown</span>
+      <h2 class="section-heading">Prize <span class="gradient-text">Breakdown</span></h2>
+      <p class="section-sub">Every position comes with recognition. Fight for the top.</p>
+    </div>
+
+    <div class="prizes-grid">
+      <div class="glass-card prize-card first reveal">
+        <span class="prize-medal" aria-hidden="true">🥇</span>
+        <div class="prize-rank">1st Place</div>
+        <div class="prize-name">Champion</div>
+        <div class="prize-amount">₹25,000</div>
+        <div class="prize-perks">Cash prize · Gold Trophy · Certificate<br />VIGYANTRA exclusive goodies · Social feature</div>
       </div>
-
-      <div class="timeline-wrapper" role="list">
-        <div class="timeline-line" aria-hidden="true"></div>
-
-        <!-- Item 1 -->
-        <div class="timeline-item reveal" role="listitem">
-          <div class="timeline-content">
-            <div class="timeline-label">Phase 01</div>
-            <div class="timeline-title">Registration Opens</div>
-            <div class="timeline-date">📅 [START DATE]</div>
-            <div class="timeline-desc">Portal goes live. Create your team and lock in your spot early.</div>
-          </div>
-          <div class="timeline-dot-wrapper">
-            <div class="timeline-dot" aria-hidden="true">🚀</div>
-          </div>
-          <div class="timeline-empty"></div>
-        </div>
-
-        <!-- Item 2 -->
-        <div class="timeline-item reveal" role="listitem">
-          <div class="timeline-empty"></div>
-          <div class="timeline-dot-wrapper">
-            <div class="timeline-dot" aria-hidden="true">⏰</div>
-          </div>
-          <div class="timeline-content">
-            <div class="timeline-label">Phase 02</div>
-            <div class="timeline-title">Registration Deadline</div>
-            <div class="timeline-date">📅 [DEADLINE DATE]</div>
-            <div class="timeline-desc">Last chance to register your team. Late entries will not be accepted.</div>
-          </div>
-        </div>
-
-        <!-- Item 3 -->
-        <div class="timeline-item reveal" role="listitem">
-          <div class="timeline-content">
-            <div class="timeline-label">Phase 03</div>
-            <div class="timeline-title">Shortlisting & Confirmation</div>
-            <div class="timeline-date">📅 [SHORTLISTING DATE]</div>
-            <div class="timeline-desc">Selected teams will be notified via email. Check your inbox!</div>
-          </div>
-          <div class="timeline-dot-wrapper">
-            <div class="timeline-dot" aria-hidden="true">📋</div>
-          </div>
-          <div class="timeline-empty"></div>
-        </div>
-
-        <!-- Item 4 -->
-        <div class="timeline-item reveal" role="listitem">
-          <div class="timeline-empty"></div>
-          <div class="timeline-dot-wrapper">
-            <div class="timeline-dot" aria-hidden="true">⚔️</div>
-          </div>
-          <div class="timeline-content">
-            <div class="timeline-label">Phase 04</div>
-            <div class="timeline-title">Competition Day</div>
-            <div class="timeline-date">📅 [EVENT DATE]</div>
-            <div class="timeline-desc">The main event. Show up, build hard, and compete for the crown.</div>
-          </div>
-        </div>
-
-        <!-- Item 5 -->
-        <div class="timeline-item reveal" role="listitem">
-          <div class="timeline-content">
-            <div class="timeline-label">Phase 05</div>
-            <div class="timeline-title">Winner Announcement</div>
-            <div class="timeline-date">📅 [RESULT DATE]</div>
-            <div class="timeline-desc">Winners are crowned, prizes are distributed, and legends are made.</div>
-          </div>
-          <div class="timeline-dot-wrapper">
-            <div class="timeline-dot" aria-hidden="true">🏆</div>
-          </div>
-          <div class="timeline-empty"></div>
-        </div>
+      <div class="glass-card prize-card second reveal">
+        <span class="prize-medal" aria-hidden="true">🥈</span>
+        <div class="prize-rank">2nd Place</div>
+        <div class="prize-name">Runner-Up</div>
+        <div class="prize-amount">₹15,000</div>
+        <div class="prize-perks">Cash prize · Silver Trophy · Certificate<br />Goodies pack</div>
+      </div>
+      <div class="glass-card prize-card third reveal">
+        <span class="prize-medal" aria-hidden="true">🥉</span>
+        <div class="prize-rank">3rd Place</div>
+        <div class="prize-name">Second Runner-Up</div>
+        <div class="prize-amount">₹7,500</div>
+        <div class="prize-perks">Cash prize · Bronze Trophy · Certificate<br />Goodies pack</div>
+      </div>
+      <div class="glass-card prize-card special reveal">
+        <span class="prize-medal" aria-hidden="true">✨</span>
+        <div class="prize-rank">Special Mention</div>
+        <div class="prize-name">Best Innovation</div>
+        <div class="prize-amount">₹2,500</div>
+        <div class="prize-perks">Certificate of Excellence · Goodies<br />Jury recognition</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- =============================================
-       4. THOUGHT / QUOTE
-  ============================================= -->
-  <section id="thought" aria-label="Event inspiration">
-    <div class="thought-bg" aria-hidden="true"></div>
-    <div class="container">
-      <div class="thought-inner reveal">
-        <div class="thought-quote-mark" aria-hidden="true">"</div>
-        <blockquote>
-          <p class="thought-text">
-            "Innovation distinguishes between a leader and a follower.
-            The best way to predict the future is to
-            <span class="gradient-text">build it yourself.</span>"
-          </p>
-          <footer class="thought-attr">— Inspired by the spirit of [EVENT NAME]</footer>
-        </blockquote>
+<!-- =============================================
+     8. EVENT DETAILS
+============================================= -->
+<section id="details" aria-label="Event details">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">// info</span>
+      <h2 class="section-heading">Event <span class="gradient-text">Details</span></h2>
+      <p class="section-sub">Everything you need to know before you register.</p>
+    </div>
+
+    <div class="details-grid">
+      <div class="glass-card detail-card reveal">
+        <div class="detail-icon-wrap" aria-hidden="true">📅</div>
+        <div><div class="detail-label">When</div><div class="detail-value">30 October 2026<br />9:00 AM Onwards</div></div>
+      </div>
+      <div class="glass-card detail-card reveal">
+        <div class="detail-icon-wrap" aria-hidden="true">📍</div>
+        <div><div class="detail-label">Where</div><div class="detail-value">SJBIT Campus<br />Bengaluru, Karnataka</div></div>
+      </div>
+      <div class="glass-card detail-card reveal">
+        <div class="detail-icon-wrap" aria-hidden="true">👥</div>
+        <div><div class="detail-label">Team Size</div><div class="detail-value">2 – 4 Members<br />per team</div></div>
+      </div>
+      <div class="glass-card detail-card reveal">
+        <div class="detail-icon-wrap" aria-hidden="true">💳</div>
+        <div><div class="detail-label">Registration Fee</div><div class="detail-value">[REGISTRATION FEE]<br />per team</div></div>
+      </div>
+      <div class="glass-card detail-card reveal">
+        <div class="detail-icon-wrap" aria-hidden="true">🏆</div>
+        <div><div class="detail-label">Prize Pool</div><div class="detail-value">₹50,000<br />total rewards</div></div>
+      </div>
+      <div class="glass-card detail-card reveal">
+        <div class="detail-icon-wrap" aria-hidden="true">🎓</div>
+        <div><div class="detail-label">Eligibility</div><div class="detail-value">All UG/PG Students<br />Any College</div></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- =============================================
-       5. EVENT OVERVIEW
-  ============================================= -->
-  <section id="overview" aria-label="Event overview">
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">About</span>
-        <h2 class="section-heading">What is <span class="gradient-text">[EVENT NAME]</span>?</h2>
-        <p class="section-sub">
-          A premier inter-college competition designed to challenge your technical skills,
-          creativity, and ability to work under pressure.
-        </p>
+<!-- =============================================
+     9. REGISTRATION
+============================================= -->
+<section id="registration" aria-label="Registration">
+  <div class="reg-bg" aria-hidden="true"></div>
+  <div class="container">
+    <div class="reg-inner">
+      <div class="reg-info reveal-left">
+        <span class="section-tag">// join_us</span>
+        <h2 class="section-heading">Ready to <span class="gradient-text">Compete?</span></h2>
+        <p>Secure your spot before the deadline. Only the most motivated teams make it. Don't let your team miss out.</p>
+
+        <div class="reg-deadline" role="alert">
+          ⏰ &nbsp;Registration closes: <strong>[DEADLINE DATE]</strong>
+        </div>
+
+        <ul class="reg-list" aria-label="Eligibility requirements">
+          <li>Open to all UG/PG students from any college</li>
+          <li>Teams of 2 to 4 members — cross-college teams allowed</li>
+          <li>Cross-department and mixed-year teams encouraged</li>
+          <li>Each participant may register in only one team</li>
+          <li>Registration fee: <strong>[REGISTRATION FEE]</strong> per team</li>
+          <li>Valid college ID required on competition day (30 Oct 2026)</li>
+        </ul>
+
+        <a href="[REGISTRATION LINK]" class="btn-primary" target="_blank" rel="noopener" style="font-size:1rem;padding:16px 40px;">
+          ⚡ Register Your Team Now
+        </a>
       </div>
 
-      <div class="overview-grid">
-        <div class="glass-card overview-card reveal">
-          <div class="overview-icon" style="background:rgba(99,102,241,0.15)" aria-hidden="true">💡</div>
-          <h3 class="overview-card-title">What You'll Build</h3>
-          <p class="overview-card-text">
-            Teams will design, develop, and present working solutions to real-world problem statements
-            provided on competition day. Think creatively — originality is rewarded.
-          </p>
-        </div>
-
-        <div class="glass-card overview-card reveal">
-          <div class="overview-icon" style="background:rgba(168,85,247,0.15)" aria-hidden="true">🎯</div>
-          <h3 class="overview-card-title">What You'll Learn</h3>
-          <p class="overview-card-text">
-            Beyond competing, participants gain hands-on exposure to rapid prototyping, team collaboration,
-            time management, and pitching ideas to an expert panel.
-          </p>
-        </div>
-
-        <div class="glass-card overview-card reveal">
-          <div class="overview-icon" style="background:rgba(236,72,153,0.15)" aria-hidden="true">🤝</div>
-          <h3 class="overview-card-title">Teamwork First</h3>
-          <p class="overview-card-text">
-            [EVENT NAME] is built on the belief that the best ideas come from diverse, collaborative teams.
-            Every role — from developer to presenter — counts.
-          </p>
-        </div>
-
-        <div class="glass-card overview-card reveal">
-          <div class="overview-icon" style="background:rgba(6,182,212,0.15)" aria-hidden="true">⚡</div>
-          <h3 class="overview-card-title">High-Intensity Format</h3>
-          <p class="overview-card-text">
-            Time-boxed rounds, live judging, and surprise constraints make this a true test of adaptability.
-            Only the most prepared and agile teams rise to the top.
-          </p>
-        </div>
-
-        <div class="glass-card overview-card reveal">
-          <div class="overview-icon" style="background:rgba(34,197,94,0.15)" aria-hidden="true">🌐</div>
-          <h3 class="overview-card-title">Open to All Domains</h3>
-          <p class="overview-card-text">
-            Whether you're into web dev, AI, hardware, design, or business strategy — there's a place
-            for you. Problem statements span multiple domains.
-          </p>
-        </div>
-
-        <div class="glass-card overview-card reveal">
-          <div class="overview-icon" style="background:rgba(251,191,36,0.15)" aria-hidden="true">🎖️</div>
-          <h3 class="overview-card-title">Recognition & Rewards</h3>
-          <p class="overview-card-text">
-            Winners take home cash prizes, certificates, trophies, and exclusive goodies.
-            All participants receive a participation certificate.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =============================================
-       6. PRIZE POOL
-  ============================================= -->
-  <section id="prize-pool" aria-label="Prize pool">
-    <div class="prize-pool-bg" aria-hidden="true"></div>
-    <div class="container">
-      <div class="prize-pool-inner reveal">
-        <span class="section-tag">Prizes</span>
-        <div class="prize-pool-amount" aria-label="Total prize pool: [PRIZE POOL]">[PRIZE POOL]</div>
-        <h2 class="section-heading">Total Prize Pool</h2>
-        <p class="prize-pool-desc">
-          Put in your best effort and walk away with more than just experience.
-          The winners earn cash, glory, and a story worth telling.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- =============================================
-       7. PRIZE BREAKDOWN
-  ============================================= -->
-  <section id="prizes" aria-label="Prize breakdown">
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">Breakdown</span>
-        <h2 class="section-heading">Prize <span class="gradient-text">Breakdown</span></h2>
-        <p class="section-sub">Compete for the top spot — every position comes with recognition and rewards.</p>
-      </div>
-
-      <div class="prizes-grid">
-        <div class="glass-card prize-card first reveal">
-          <span class="prize-medal" aria-hidden="true">🥇</span>
-          <div class="prize-rank">1st Place</div>
-          <div class="prize-name">Champion</div>
-          <div class="prize-amount">[1ST PRIZE]</div>
-          <div class="prize-perks">Cash prize · Trophy · Certificate<br />Exclusive goodies · Social feature</div>
-        </div>
-
-        <div class="glass-card prize-card second reveal">
-          <span class="prize-medal" aria-hidden="true">🥈</span>
-          <div class="prize-rank">2nd Place</div>
-          <div class="prize-name">Runner-Up</div>
-          <div class="prize-amount">[2ND PRIZE]</div>
-          <div class="prize-perks">Cash prize · Silver trophy · Certificate<br />Goodies pack</div>
-        </div>
-
-        <div class="glass-card prize-card third reveal">
-          <span class="prize-medal" aria-hidden="true">🥉</span>
-          <div class="prize-rank">3rd Place</div>
-          <div class="prize-name">Second Runner-Up</div>
-          <div class="prize-amount">[3RD PRIZE]</div>
-          <div class="prize-perks">Cash prize · Bronze trophy · Certificate<br />Goodies pack</div>
-        </div>
-
-        <div class="glass-card prize-card special reveal">
-          <span class="prize-medal" aria-hidden="true">✨</span>
-          <div class="prize-rank">Special Mention</div>
-          <div class="prize-name">Best Innovation</div>
-          <div class="prize-amount">[SPECIAL PRIZE]</div>
-          <div class="prize-perks">Certificate of excellence · Goodies<br />Jury recognition</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =============================================
-       8. EVENT DETAILS
-  ============================================= -->
-  <section id="details" aria-label="Event details">
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">Info</span>
-        <h2 class="section-heading">Event <span class="gradient-text">Details</span></h2>
-        <p class="section-sub">Everything you need to know before you register.</p>
-      </div>
-
-      <div class="details-grid">
-        <div class="glass-card detail-card reveal">
-          <div class="detail-icon-wrap" aria-hidden="true">📅</div>
-          <div>
-            <div class="detail-label">When</div>
-            <div class="detail-value">[DATE]<br />[TIME]</div>
+      <div class="reveal-right">
+        <div class="glass-card reg-card">
+          <h3>How to Register</h3>
+          <div class="reg-steps">
+            <div class="reg-step">
+              <div class="reg-step-num">1</div>
+              <div class="reg-step-text"><strong>Form Your Team</strong><span>Gather 2–4 members — same or different colleges</span></div>
+            </div>
+            <div class="reg-step">
+              <div class="reg-step-num">2</div>
+              <div class="reg-step-text"><strong>Fill the Form</strong><span>Team name, individual details, contact info</span></div>
+            </div>
+            <div class="reg-step">
+              <div class="reg-step-num">3</div>
+              <div class="reg-step-text"><strong>Pay Registration Fee</strong><span>[REGISTRATION FEE] via online payment / at desk</span></div>
+            </div>
+            <div class="reg-step">
+              <div class="reg-step-num">4</div>
+              <div class="reg-step-text"><strong>Await Confirmation</strong><span>Confirmation email within 48 hours</span></div>
+            </div>
+            <div class="reg-step">
+              <div class="reg-step-num">5</div>
+              <div class="reg-step-text"><strong>Show Up & Compete!</strong><span>College ID + confirmation email on 30 Oct 2026</span></div>
+            </div>
           </div>
-        </div>
-
-        <div class="glass-card detail-card reveal">
-          <div class="detail-icon-wrap" aria-hidden="true">📍</div>
-          <div>
-            <div class="detail-label">Where</div>
-            <div class="detail-value">[VENUE]<br />[CITY]</div>
-          </div>
-        </div>
-
-        <div class="glass-card detail-card reveal">
-          <div class="detail-icon-wrap" aria-hidden="true">👥</div>
-          <div>
-            <div class="detail-label">Team Size</div>
-            <div class="detail-value">2 – 4 Members<br />per team</div>
-          </div>
-        </div>
-
-        <div class="glass-card detail-card reveal">
-          <div class="detail-icon-wrap" aria-hidden="true">💳</div>
-          <div>
-            <div class="detail-label">Registration Fee</div>
-            <div class="detail-value">[REGISTRATION FEE]<br />per team</div>
-          </div>
-        </div>
-
-        <div class="glass-card detail-card reveal">
-          <div class="detail-icon-wrap" aria-hidden="true">🏆</div>
-          <div>
-            <div class="detail-label">Prize Pool</div>
-            <div class="detail-value">[PRIZE POOL]<br />total rewards</div>
-          </div>
-        </div>
-
-        <div class="glass-card detail-card reveal">
-          <div class="detail-icon-wrap" aria-hidden="true">🎓</div>
-          <div>
-            <div class="detail-label">Eligibility</div>
-            <div class="detail-value">All UG/PG students<br />from any college</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =============================================
-       9. REGISTRATION
-  ============================================= -->
-  <section id="registration" aria-label="Registration information">
-    <div class="reg-bg" aria-hidden="true"></div>
-    <div class="container">
-      <div class="reg-inner">
-        <div class="reg-info reveal-left">
-          <span class="section-tag">Join Us</span>
-          <h2 class="section-heading">Ready to <span class="gradient-text">Compete?</span></h2>
-          <p>Secure your spot before the deadline. Registrations are limited — only the most motivated teams make it in.</p>
-
-          <div class="reg-deadline" role="alert">
-            ⏰ &nbsp;Registration closes: <strong>[DEADLINE DATE]</strong>
-          </div>
-
-          <ul class="reg-list" aria-label="Eligibility requirements">
-            <li>Open to all undergraduate and postgraduate students</li>
-            <li>Teams of 2 to 4 members from any college or institution</li>
-            <li>Cross-department and mixed-year teams are encouraged</li>
-            <li>Each participant may register in only one team</li>
-            <li>Registration fee: <strong>[REGISTRATION FEE]</strong> per team</li>
-            <li>Valid college ID required on competition day</li>
-          </ul>
-
-          <a href="[REGISTRATION LINK]" class="btn-primary" target="_blank" rel="noopener" style="font-size:1rem; padding:16px 40px;">
-            ✦ Register Your Team Now
+          <a href="[REGISTRATION LINK]" class="btn-primary" target="_blank" rel="noopener" style="width:100%;justify-content:center;">
+            Open Registration Form ↗
           </a>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="reg-info reveal-right">
-          <div class="glass-card reg-card">
-            <h3>How to Register</h3>
-            <div class="reg-steps">
-              <div class="reg-step">
-                <div class="reg-step-num">1</div>
-                <div class="reg-step-text">
-                  <strong>Form Your Team</strong>
-                  <span>Gather 2–4 members from your institution</span>
-                </div>
-              </div>
-              <div class="reg-step">
-                <div class="reg-step-num">2</div>
-                <div class="reg-step-text">
-                  <strong>Fill the Form</strong>
-                  <span>Provide team name, individual details & contact info</span>
-                </div>
-              </div>
-              <div class="reg-step">
-                <div class="reg-step-num">3</div>
-                <div class="reg-step-text">
-                  <strong>Pay Registration Fee</strong>
-                  <span>[REGISTRATION FEE] via online payment or at the desk</span>
-                </div>
-              </div>
-              <div class="reg-step">
-                <div class="reg-step-num">4</div>
-                <div class="reg-step-text">
-                  <strong>Await Confirmation</strong>
-                  <span>You'll receive a confirmation email within 48 hours</span>
-                </div>
-              </div>
-              <div class="reg-step">
-                <div class="reg-step-num">5</div>
-                <div class="reg-step-text">
-                  <strong>Show Up & Compete!</strong>
-                  <span>Bring your college ID and confirmation email on event day</span>
-                </div>
-              </div>
-            </div>
-            <a href="[REGISTRATION LINK]" class="btn-primary" target="_blank" rel="noopener" style="width:100%; justify-content:center;">
-              Open Registration Form ↗
-            </a>
-          </div>
+<!-- =============================================
+     10. RULES
+============================================= -->
+<section id="rules" aria-label="Competition rules">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">// rules</span>
+      <h2 class="section-heading">General <span class="gradient-text">Rules</span></h2>
+      <p class="section-sub">Fair play is non-negotiable. Every team competes under identical conditions.</p>
+    </div>
+
+    <div class="rules-grid">
+      <div class="glass-card rule-card reveal">
+        <div class="rule-num" aria-hidden="true">01</div>
+        <div>
+          <div class="rule-title">Team Eligibility & Size</div>
+          <div class="rule-text">Teams must consist of 2 to 4 members, all currently enrolled students with valid institutional IDs. Solo registrations are not permitted.</div>
+        </div>
+      </div>
+      <div class="glass-card rule-card reveal">
+        <div class="rule-num" aria-hidden="true">02</div>
+        <div>
+          <div class="rule-title">Code & Project Originality</div>
+          <div class="rule-text">All work must be original, created during the competition. Pre-built templates or previously developed code are prohibited. Plagiarism leads to disqualification.</div>
+        </div>
+      </div>
+      <div class="glass-card rule-card reveal">
+        <div class="rule-num" aria-hidden="true">03</div>
+        <div>
+          <div class="rule-title">Submission Deadline</div>
+          <div class="rule-text">All projects must be submitted by the announced deadline on competition day. Late submissions will not be accepted. Test and submit early.</div>
+        </div>
+      </div>
+      <div class="glass-card rule-card reveal">
+        <div class="rule-num" aria-hidden="true">04</div>
+        <div>
+          <div class="rule-title">Judging Criteria</div>
+          <div class="rule-text">Innovation (30%) · Technical Complexity (25%) · Practical Feasibility (25%) · Presentation (20%). Judges' decisions are final and binding.</div>
+        </div>
+      </div>
+      <div class="glass-card rule-card reveal">
+        <div class="rule-num" aria-hidden="true">05</div>
+        <div>
+          <div class="rule-title">Code of Conduct</div>
+          <div class="rule-text">Respect all participants, mentors, and judges. Any harassment, cheating, or misconduct results in immediate disqualification. Sportsmanship is mandatory.</div>
+        </div>
+      </div>
+      <div class="glass-card rule-card reveal">
+        <div class="rule-num" aria-hidden="true">06</div>
+        <div>
+          <div class="rule-title">Organizer Rights</div>
+          <div class="rule-text">VIGYANTRA organizers reserve the right to modify rules, timelines, or prize structures with prior notice. Registration implies agreement to all competition guidelines.</div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- =============================================
-       10. RULES
-  ============================================= -->
-  <section id="rules" aria-label="Competition rules">
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">Rules</span>
-        <h2 class="section-heading">General <span class="gradient-text">Rules</span></h2>
-        <p class="section-sub">Fair play is non-negotiable. Every team competes under the same conditions.</p>
+<!-- =============================================
+     11. FAQ
+============================================= -->
+<section id="faq" aria-label="Frequently asked questions">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">// faq</span>
+      <h2 class="section-heading">Got <span class="gradient-text">Questions?</span></h2>
+      <p class="section-sub">Most common questions answered. For anything else, reach out to a coordinator directly.</p>
+    </div>
+
+    <div class="faq-list" role="list">
+      <div class="faq-item reveal" role="listitem">
+        <button class="faq-question" aria-expanded="false">Who can participate in Hack and Hunt?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+        <div class="faq-answer" role="region"><div class="faq-answer-inner">Any currently enrolled UG/PG student from any college or university can participate. Students from any branch, year, or specialization are welcome. A valid institutional ID is mandatory on competition day (30 Oct 2026).</div></div>
       </div>
 
-      <div class="rules-grid">
-        <div class="glass-card rule-card reveal">
-          <div class="rule-num" aria-hidden="true">01</div>
-          <div>
-            <div class="rule-title">Team Eligibility & Size</div>
-            <div class="rule-text">Teams must consist of 2 to 4 members. All members must be currently enrolled students with valid institutional ID cards. Solo registrations are not permitted.</div>
-          </div>
-        </div>
+      <div class="faq-item reveal" role="listitem">
+        <button class="faq-question" aria-expanded="false">Can I register as a solo participant?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+        <div class="faq-answer" role="region"><div class="faq-answer-inner">No. Hack and Hunt is a team competition requiring a minimum of 2 and a maximum of 4 members. Solo registrations are not accepted. Reach out on our social handles if you need help finding teammates.</div></div>
+      </div>
 
-        <div class="glass-card rule-card reveal">
-          <div class="rule-num" aria-hidden="true">02</div>
-          <div>
-            <div class="rule-title">Code & Project Originality</div>
-            <div class="rule-text">All submitted work must be original and created during the competition. Use of pre-built templates or previously developed code is strictly prohibited. Plagiarism leads to disqualification.</div>
-          </div>
-        </div>
+      <div class="faq-item reveal" role="listitem">
+        <button class="faq-question" aria-expanded="false">Is there a registration fee?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+        <div class="faq-answer" role="region"><div class="faq-answer-inner">Yes, there is a registration fee of <strong>[REGISTRATION FEE]</strong> per team. This covers event access, refreshments, participation certificates, and event materials. Payment details are provided during registration.</div></div>
+      </div>
 
-        <div class="glass-card rule-card reveal">
-          <div class="rule-num" aria-hidden="true">03</div>
-          <div>
-            <div class="rule-title">Submission Deadline</div>
-            <div class="rule-text">All projects must be submitted by [SUBMISSION DEADLINE]. Late submissions will not be accepted under any circumstances. Ensure you test and submit early to avoid last-minute issues.</div>
-          </div>
-        </div>
+      <div class="faq-item reveal" role="listitem">
+        <button class="faq-question" aria-expanded="false">What should participants bring on event day?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+        <div class="faq-answer" role="region"><div class="faq-answer-inner">Bring: ✓ Valid college ID card ✓ Registration confirmation email ✓ Laptop + charger ✓ Any hardware/peripherals you plan to use ✓ Personal essentials. The venue provides Wi-Fi, power outlets, and workstations.</div></div>
+      </div>
 
-        <div class="glass-card rule-card reveal">
-          <div class="rule-num" aria-hidden="true">04</div>
-          <div>
-            <div class="rule-title">Judging Criteria</div>
-            <div class="rule-text">Projects are evaluated on: Innovation & Creativity (30%), Technical Complexity (25%), Practical Feasibility (25%), Presentation & Communication (20%). Judges' decisions are final.</div>
-          </div>
-        </div>
+      <div class="faq-item reveal" role="listitem">
+        <button class="faq-question" aria-expanded="false">How will projects be judged?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+        <div class="faq-answer" role="region"><div class="faq-answer-inner">An expert panel evaluates on: Innovation & Creativity (30%), Technical Complexity (25%), Practical Feasibility (25%), and Presentation & Communication (20%). Each team presents in a short demo. Judges' decisions are final.</div></div>
+      </div>
 
-        <div class="glass-card rule-card reveal">
-          <div class="rule-num" aria-hidden="true">05</div>
-          <div>
-            <div class="rule-title">Code of Conduct</div>
-            <div class="rule-text">Respect all participants, mentors, and judges. Any form of harassment, cheating, or misconduct will result in immediate disqualification. Maintain sportsmanship at all times.</div>
-          </div>
-        </div>
+      <div class="faq-item reveal" role="listitem">
+        <button class="faq-question" aria-expanded="false">Will certificates be provided?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+        <div class="faq-answer" role="region"><div class="faq-answer-inner">Yes! All competing teams receive a digital participation certificate. Winners and special mention awardees receive merit certificates from VIGYANTRA / SJBIT. Certificates are emailed within one week of the event.</div></div>
+      </div>
 
-        <div class="glass-card rule-card reveal">
-          <div class="rule-num" aria-hidden="true">06</div>
-          <div>
-            <div class="rule-title">Organizer Rights</div>
-            <div class="rule-text">Organizers reserve the right to modify rules, timelines, or prize structures with prior notice. By registering, teams agree to abide by all competition guidelines as communicated.</div>
-          </div>
-        </div>
+      <div class="faq-item reveal" role="listitem">
+        <button class="faq-question" aria-expanded="false">Can teams include members from different colleges?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+        <div class="faq-answer" role="region"><div class="faq-answer-inner">Absolutely! Inter-college teams are fully allowed and encouraged. All members must be enrolled students and carry their own college ID cards. There is no restriction on mixing institutions within a team.</div></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- =============================================
-       11. FAQ
-  ============================================= -->
-  <section id="faq" aria-label="Frequently asked questions">
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">FAQ</span>
-        <h2 class="section-heading">Got <span class="gradient-text">Questions?</span></h2>
-        <p class="section-sub">We've answered the most common ones. If yours isn't here, reach out to a coordinator.</p>
+<!-- =============================================
+     12. COORDINATORS
+============================================= -->
+<section id="coordinators" aria-label="Event coordinators">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">// team</span>
+      <h2 class="section-heading">Meet the <span class="gradient-text">Coordinators</span></h2>
+      <p class="section-sub">Have questions or need help? Our coordinators are available to assist you at every step.</p>
+    </div>
+
+    <div class="coordinators-grid">
+
+      <!-- Coordinator 1 -->
+      <div class="glass-card coord-card reveal">
+        <div class="coord-avatar" role="img" aria-label="Likitha G. — Event Head Coordinator">👩‍💻</div>
+        <div class="coord-name">Likitha G.</div>
+        <div class="coord-role">Event Head Coordinator</div>
+        <a href="tel:9481067015" class="coord-phone">📞 +91 94810 67015</a>
+        <div class="coord-links">
+          <a href="mailto:[EMAIL 1]" class="coord-link">✉️ Email</a>
+          <a href="[LINKEDIN 1]" class="coord-link" target="_blank" rel="noopener">in LinkedIn</a>
+        </div>
       </div>
 
-      <div class="faq-list" role="list">
-
-        <div class="faq-item reveal" role="listitem">
-          <button class="faq-question" aria-expanded="false">
-            Who can participate in [EVENT NAME]?
-            <span class="faq-chevron" aria-hidden="true">▼</span>
-          </button>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              Any currently enrolled undergraduate or postgraduate student from any college or university is eligible to participate. Students from any branch, year, or specialization are welcome. Valid institutional ID is required on competition day.
-            </div>
-          </div>
+      <!-- Coordinator 2 -->
+      <div class="glass-card coord-card reveal">
+        <div class="coord-avatar" role="img" aria-label="Jeevan Y. — Technical Coordinator">👨‍💻</div>
+        <div class="coord-name">Jeevan Y.</div>
+        <div class="coord-role">Technical Coordinator</div>
+        <a href="tel:7204402406" class="coord-phone">📞 +91 72044 02406</a>
+        <div class="coord-links">
+          <a href="mailto:[EMAIL 2]" class="coord-link">✉️ Email</a>
+          <a href="[LINKEDIN 2]" class="coord-link" target="_blank" rel="noopener">in LinkedIn</a>
         </div>
+      </div>
 
-        <div class="faq-item reveal" role="listitem">
-          <button class="faq-question" aria-expanded="false">
-            Can I register as an individual (solo participant)?
-            <span class="faq-chevron" aria-hidden="true">▼</span>
-          </button>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              No. [EVENT NAME] is a team competition. Teams must have a minimum of 2 and a maximum of 4 members. Solo registrations will not be accepted. We encourage you to team up with classmates or reach out in our community groups to find teammates.
-            </div>
-          </div>
-        </div>
+    </div>
+  </div>
+</section>
 
-        <div class="faq-item reveal" role="listitem">
-          <button class="faq-question" aria-expanded="false">
-            Is there a registration fee?
-            <span class="faq-chevron" aria-hidden="true">▼</span>
-          </button>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              Yes, the registration fee is <strong>[REGISTRATION FEE]</strong> per team. This fee covers event access, refreshments, participation certificates, and event materials. Payment details will be provided during the registration process.
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item reveal" role="listitem">
-          <button class="faq-question" aria-expanded="false">
-            What should participants bring on the day of the event?
-            <span class="faq-chevron" aria-hidden="true">▼</span>
-          </button>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              Please bring: a valid college ID card, your registration confirmation email/ID, your laptop and charger, any hardware or peripherals you plan to use, and personal essentials. The venue will provide Wi-Fi, power outlets, and workstations.
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item reveal" role="listitem">
-          <button class="faq-question" aria-expanded="false">
-            How will projects be judged?
-            <span class="faq-chevron" aria-hidden="true">▼</span>
-          </button>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              Projects are evaluated by a panel of expert judges on four criteria: Innovation & Creativity (30%), Technical Complexity (25%), Practical Feasibility (25%), and Presentation & Communication (20%). Each team will present their project in a brief demo session. The judges' decisions are final and binding.
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item reveal" role="listitem">
-          <button class="faq-question" aria-expanded="false">
-            Will certificates be provided to all participants?
-            <span class="faq-chevron" aria-hidden="true">▼</span>
-          </button>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              Yes! All participants who compete on event day will receive a digital participation certificate. Winners and special mention awardees will receive merit certificates. Certificates will be distributed within a week of the event via email.
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item reveal" role="listitem">
-          <button class="faq-question" aria-expanded="false">
-            Can teams include members from different colleges?
-            <span class="faq-chevron" aria-hidden="true">▼</span>
-          </button>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              Yes! Inter-college teams are fully allowed and encouraged. All team members must individually be enrolled students and carry their respective college ID cards on event day. There is no restriction on mixing institutions within a team.
-            </div>
-          </div>
-        </div>
-
+<!-- =============================================
+     FOOTER
+============================================= -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo-main">VIGYANTRA</div>
+        <div class="footer-logo-event">Hack and Hunt '26 · SJBIT, Bengaluru</div>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-links">
+        <a href="#home">~/home</a>
+        <a href="#overview">~/about</a>
+        <a href="#registration">~/register</a>
+        <a href="#faq">~/faq</a>
+        <a href="#coordinators">~/contact</a>
+      </div>
+      <div class="footer-text">
+        © 2026 VIGYANTRA · Hack and Hunt · SJBIT, Bengaluru · All rights reserved.
+      </div>
+      <div class="footer-text">
+        Organized by SJBIT Department of [DEPARTMENT] · For queries: contact coordinators above.
       </div>
     </div>
-  </section>
+  </div>
+</footer>
 
-  <!-- =============================================
-       12. COORDINATORS
-  ============================================= -->
-  <section id="coordinators" aria-label="Event coordinators">
-    <div class="container">
-      <div class="reveal">
-        <span class="section-tag">Team</span>
-        <h2 class="section-heading">Meet the <span class="gradient-text">Coordinators</span></h2>
-        <p class="section-sub">Have questions or need help? Our coordinators are here to assist you at every step.</p>
-      </div>
+<!-- Back to top -->
+<button id="back-top" aria-label="Back to top">↑</button>
 
-      <div class="coordinators-grid">
 
-        <div class="glass-card coord-card reveal">
-          <div class="coord-avatar" role="img" aria-label="Coordinator photo placeholder">👤</div>
-          <div class="coord-name">[Coordinator Name 1]</div>
-          <div class="coord-role">Event Head Coordinator</div>
-          <a href="tel:[PHONE 1]" class="coord-phone">📞 [+XX XXXXX XXXXX]</a>
-          <div class="coord-links">
-            <a href="mailto:[EMAIL 1]" class="coord-link">✉️ Email</a>
-            <a href="[LINKEDIN 1]" class="coord-link" target="_blank" rel="noopener">in LinkedIn</a>
-          </div>
-        </div>
+<!-- =============================================
+     JAVASCRIPT — All features
+============================================= -->
+<script>
+/* ══════════════════════════════════════════
+   PARTICLE BACKGROUND (binary / code themed)
+══════════════════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
 
-        <div class="glass-card coord-card reveal">
-          <div class="coord-avatar" role="img" aria-label="Coordinator photo placeholder">👤</div>
-          <div class="coord-name">[Coordinator Name 2]</div>
-          <div class="coord-role">Technical Coordinator</div>
-          <a href="tel:[PHONE 2]" class="coord-phone">📞 [+XX XXXXX XXXXX]</a>
-          <div class="coord-links">
-            <a href="mailto:[EMAIL 2]" class="coord-link">✉️ Email</a>
-            <a href="[LINKEDIN 2]" class="coord-link" target="_blank" rel="noopener">in LinkedIn</a>
-          </div>
-        </div>
+  const CHARS = '01{}<>()[];#/*abcdef0123456789&&||!=+=>><<';
+  const GREEN = '#00e676';
 
-        <div class="glass-card coord-card reveal">
-          <div class="coord-avatar" role="img" aria-label="Coordinator photo placeholder">👤</div>
-          <div class="coord-name">[Coordinator Name 3]</div>
-          <div class="coord-role">Logistics Coordinator</div>
-          <a href="tel:[PHONE 3]" class="coord-phone">📞 [+XX XXXXX XXXXX]</a>
-          <div class="coord-links">
-            <a href="mailto:[EMAIL 3]" class="coord-link">✉️ Email</a>
-            <a href="[LINKEDIN 3]" class="coord-link" target="_blank" rel="noopener">in LinkedIn</a>
-          </div>
-        </div>
+  let W, H, particles = [];
 
-        <div class="glass-card coord-card reveal">
-          <div class="coord-avatar" role="img" aria-label="Coordinator photo placeholder">👤</div>
-          <div class="coord-name">[Coordinator Name 4]</div>
-          <div class="coord-role">Registration & Support</div>
-          <a href="tel:[PHONE 4]" class="coord-phone">📞 [+XX XXXXX XXXXX]</a>
-          <div class="coord-links">
-            <a href="mailto:[EMAIL 4]" class="coord-link">✉️ Email</a>
-            <a href="[LINKEDIN 4]" class="coord-link" target="_blank" rel="noopener">in LinkedIn</a>
-          </div>
-        </div>
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
 
-      </div>
-    </div>
-  </section>
-
-  <!-- =============================================
-       FOOTER
-  ============================================= -->
-  <footer>
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-logo gradient-text">[EVENT NAME] '26</div>
-        <div class="footer-links">
-          <a href="#home">Home</a>
-          <a href="#overview">About</a>
-          <a href="#registration">Register</a>
-          <a href="#faq">FAQ</a>
-          <a href="#coordinators">Contact</a>
-        </div>
-        <div class="footer-text">
-          © 2026 [EVENT NAME]. All rights reserved. · Organized by [ORGANIZING BODY]
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Back to top -->
-  <button id="back-top" aria-label="Back to top">↑</button>
-
-  <!-- =============================================
-       JAVASCRIPT
-  ============================================= -->
-  <script>
-    /* ── Navbar scroll ── */
-    const navbar = document.getElementById('navbar');
-    const backTop = document.getElementById('back-top');
-
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 60) {
-        navbar.classList.add('scrolled');
-        backTop.classList.add('show');
-      } else {
-        navbar.classList.remove('scrolled');
-        backTop.classList.remove('show');
+  function Particle() {
+    this.reset = function() {
+      this.x    = Math.random() * W;
+      this.y    = Math.random() * H;
+      this.vy   = 0.3 + Math.random() * 0.9;
+      this.vx   = (Math.random() - 0.5) * 0.3;
+      this.alpha= 0.05 + Math.random() * 0.18;
+      this.size = 9 + Math.floor(Math.random() * 6);
+      this.char = CHARS[Math.floor(Math.random() * CHARS.length)];
+      this.changeEvery = 60 + Math.floor(Math.random() * 80);
+      this.frame = 0;
+    };
+    this.reset();
+    this.y = Math.random() * H; // start scattered
+    this.update = function() {
+      this.y += this.vy;
+      this.x += this.vx;
+      this.frame++;
+      if (this.frame % this.changeEvery === 0) {
+        this.char = CHARS[Math.floor(Math.random() * CHARS.length)];
       }
-    }, { passive: true });
+      if (this.y > H + 20) { this.reset(); this.y = -20; }
+      if (this.x < -20 || this.x > W + 20) { this.reset(); }
+    };
+    this.draw = function() {
+      ctx.globalAlpha = this.alpha;
+      ctx.fillStyle   = GREEN;
+      ctx.font        = `${this.size}px "Fira Code", monospace`;
+      ctx.fillText(this.char, this.x, this.y);
+    };
+  }
 
-    backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  function init() {
+    resize();
+    const count = Math.min(120, Math.floor((W * H) / 12000));
+    particles = Array.from({length: count}, () => new Particle());
+    window.addEventListener('resize', resize);
+  }
 
-    /* ── Mobile menu ── */
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(loop);
+  }
 
-    hamburger.addEventListener('click', () => {
-      const isOpen = mobileMenu.classList.toggle('open');
-      hamburger.classList.toggle('open', isOpen);
-      hamburger.setAttribute('aria-expanded', isOpen);
-      mobileMenu.setAttribute('aria-hidden', !isOpen);
+  init();
+  loop();
+})();
+
+
+/* ══════════════════════════════════════════
+   CONFETTI on page load
+══════════════════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx    = canvas.getContext('2d');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+
+  const COLORS = ['#00e676','#69f0ae','#ffffff','#00c853','#1de9b6','#b9f6ca'];
+  const TOTAL  = 160;
+  let pieces   = [];
+  let active   = true;
+
+  for (let i = 0; i < TOTAL; i++) {
+    pieces.push({
+      x:  Math.random() * canvas.width,
+      y:  -Math.random() * canvas.height,
+      w:  4 + Math.random() * 8,
+      h:  8 + Math.random() * 14,
+      r:  Math.random() * Math.PI * 2,
+      vx: (Math.random() - 0.5) * 3,
+      vy: 2 + Math.random() * 4,
+      vr: (Math.random() - 0.5) * 0.2,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      alpha: 1
+    });
+  }
+
+  let done = 0;
+  function confettiLoop() {
+    if (!active) { ctx.clearRect(0,0,canvas.width,canvas.height); return; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    done = 0;
+    pieces.forEach(p => {
+      p.x  += p.vx;
+      p.y  += p.vy;
+      p.r  += p.vr;
+      p.vy += 0.05; // gravity
+      if (p.y > canvas.height) {
+        p.alpha -= 0.04;
+        if (p.alpha <= 0) done++;
+      }
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.r);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    if (done < TOTAL) requestAnimationFrame(confettiLoop);
+    else { active = false; ctx.clearRect(0,0,canvas.width,canvas.height); }
+  }
+  // small delay so page renders first
+  setTimeout(confettiLoop, 400);
+})();
+
+
+/* ══════════════════════════════════════════
+   COUNTDOWN TIMER — 30 Oct 2026 09:00 IST
+══════════════════════════════════════════ */
+(function() {
+  // 30 Oct 2026 09:00:00 IST = UTC+5:30
+  const target = new Date('2026-10-30T09:00:00+05:30').getTime();
+
+  const dEl = document.getElementById('cd-days');
+  const hEl = document.getElementById('cd-hours');
+  const mEl = document.getElementById('cd-mins');
+  const sEl = document.getElementById('cd-secs');
+
+  function pad(n) { return String(n).padStart(2,'0'); }
+
+  function tick() {
+    const now  = Date.now();
+    const diff = target - now;
+    if (diff <= 0) {
+      dEl.textContent = hEl.textContent = mEl.textContent = sEl.textContent = '00';
+      return;
+    }
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000)  / 60000);
+    const secs  = Math.floor((diff % 60000)    / 1000);
+
+    dEl.textContent = pad(days);
+    hEl.textContent = pad(hours);
+    mEl.textContent = pad(mins);
+    sEl.textContent = pad(secs);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+
+/* ══════════════════════════════════════════
+   NAVBAR SCROLL
+══════════════════════════════════════════ */
+const navbar  = document.getElementById('navbar');
+const backTop = document.getElementById('back-top');
+
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 60) {
+    navbar.classList.add('scrolled');
+    backTop.classList.add('show');
+  } else {
+    navbar.classList.remove('scrolled');
+    backTop.classList.remove('show');
+  }
+}, { passive: true });
+
+backTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+
+/* ══════════════════════════════════════════
+   MOBILE MENU
+══════════════════════════════════════════ */
+const hamburger  = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+
+hamburger.addEventListener('click', () => {
+  const isOpen = mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open', isOpen);
+  hamburger.setAttribute('aria-expanded', isOpen);
+  mobileMenu.setAttribute('aria-hidden', !isOpen);
+});
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded','false');
+    mobileMenu.setAttribute('aria-hidden','true');
+  });
+});
+
+
+/* ══════════════════════════════════════════
+   SCROLL REVEAL with stagger
+══════════════════════════════════════════ */
+const revealEls = document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const siblings = Array.from(
+      entry.target.parentElement.querySelectorAll('.reveal,.reveal-left,.reveal-right')
+    );
+    const idx = siblings.indexOf(entry.target);
+    setTimeout(() => entry.target.classList.add('visible'), idx * 90);
+    revealObs.unobserve(entry.target);
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => revealObs.observe(el));
+
+
+/* ══════════════════════════════════════════
+   FAQ ACCORDION
+══════════════════════════════════════════ */
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item   = btn.parentElement;
+    const answer = item.querySelector('.faq-answer');
+    const isOpen = item.classList.contains('open');
+
+    document.querySelectorAll('.faq-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-question').setAttribute('aria-expanded','false');
+      i.querySelector('.faq-answer').style.maxHeight = null;
     });
 
-    // Close mobile menu on link click
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('open');
-        hamburger.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        mobileMenu.setAttribute('aria-hidden', 'true');
-      });
-    });
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded','true');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  });
+});
 
-    /* ── Scroll reveal ── */
-    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
 
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          // stagger sibling reveals
-          const siblings = Array.from(entry.target.parentElement.querySelectorAll('.reveal, .reveal-left, .reveal-right'));
-          const idx = siblings.indexOf(entry.target);
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, idx * 80);
-          revealObserver.unobserve(entry.target);
+/* ══════════════════════════════════════════
+   ACTIVE NAV LINK HIGHLIGHT
+══════════════════════════════════════════ */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const secObs   = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => {
+        a.style.color = '';
+        if (a.getAttribute('href') === `#${e.target.id}`) {
+          a.style.color = 'var(--green-a)';
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    }
+  });
+}, { threshold: 0.45 });
 
-    revealEls.forEach(el => revealObserver.observe(el));
+sections.forEach(s => secObs.observe(s));
+</script>
 
-    /* ── FAQ accordion ── */
-    document.querySelectorAll('.faq-question').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const item   = btn.parentElement;
-        const answer = item.querySelector('.faq-answer');
-        const isOpen = item.classList.contains('open');
-
-        // Close all
-        document.querySelectorAll('.faq-item').forEach(i => {
-          i.classList.remove('open');
-          i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
-          i.querySelector('.faq-answer').style.maxHeight = null;
-        });
-
-        // Open clicked if it wasn't open
-        if (!isOpen) {
-          item.classList.add('open');
-          btn.setAttribute('aria-expanded', 'true');
-          answer.style.maxHeight = answer.scrollHeight + 'px';
-        }
-      });
-    });
-
-    /* ── Active nav link highlight ── */
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks  = document.querySelectorAll('.nav-links a');
-
-    const sectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          navLinks.forEach(a => {
-            a.style.color = '';
-            if (a.getAttribute('href') === `#${id}`) {
-              a.style.color = 'var(--grad-a)';
-            }
-          });
-        }
-      });
-    }, { threshold: 0.4 });
-
-    sections.forEach(s => sectionObserver.observe(s));
-  </script>
 </body>
 </html>
