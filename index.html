@@ -275,7 +275,7 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       list-style: none;
       background: rgba(7, 21, 39, 0.7);
       padding: 5px 8px;
@@ -295,14 +295,15 @@
       letter-spacing: 0.02em;
     }
     .nav-links a:hover {
-      color: var(--text-main);
-      background: rgba(56, 189, 248, 0.12);
+      color: var(--text-accent);
+      background: rgba(255, 255, 255, 0.05);
     }
     .nav-links a.active {
-      color: #071527 !important;
-      background: var(--text-accent) !important;
+      color: var(--text-accent) !important;
+      background: transparent !important;
       font-weight: 700;
-      box-shadow: 0 2px 14px rgba(56, 189, 248, 0.45);
+      text-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+      box-shadow: none;
     }
 
     .nav-register {
@@ -310,8 +311,8 @@
       align-items: center;
       gap: 6px;
       padding: 9px 22px;
-      background: var(--btn-bg);
-      color: var(--btn-text);
+      background: #000000;
+      color: #EFF6FF;
       font-weight: 700;
       font-size: 0.875rem;
       border-radius: 99px;
@@ -319,12 +320,15 @@
       transition: var(--transition);
       white-space: nowrap;
       font-family: 'Space Grotesk', sans-serif;
-      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
     }
     .nav-register:hover {
-      background: var(--btn-bg-hov);
+      background: #111827;
+      color: var(--text-accent);
+      border-color: var(--text-accent);
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
     }
 
     .hamburger {
@@ -377,11 +381,23 @@
       background: rgba(56, 189, 248, 0.08);
     }
     .mobile-menu a.active {
-      color: #071527 !important;
-      background: var(--text-accent) !important;
+      color: var(--text-accent) !important;
+      background: transparent !important;
       font-weight: 700;
     }
-    .mobile-menu .mobile-register { margin-top: 12px; display: block; text-align: center; }
+    .mobile-menu .mobile-register {
+      margin-top: 12px;
+      display: block;
+      text-align: center;
+      background: #000000;
+      color: #EFF6FF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .mobile-menu .mobile-register:hover {
+      background: #111827;
+      color: var(--text-accent);
+      border-color: var(--text-accent);
+    }
 
     /* ============================================================
        COUNTDOWN TIMER STRIP (placed above //about)
@@ -1407,7 +1423,44 @@
 </section>
 
 <!-- =============================================
-     9. FAQ
+     9. COORDINATORS
+============================================= -->
+<section id="coordinators" aria-label="Event coordinators">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <span class="section-tag">// team</span>
+      <h2 class="section-heading">Meet the <span class="gradient-text">Coordinators</span></h2>
+      <p class="section-sub" style="margin-inline:auto;">Have questions or need help? Reach out to our event coordinators directly.</p>
+    </div>
+
+    <div class="coordinators-grid">
+
+      <!-- Coordinator 1 -->
+      <div class="glass-card coord-card reveal">
+        <div class="coord-avatar">
+          <img src="assets/likitha.jpg" alt="Likitha G. — Event Coordinator" />
+        </div>
+        <div class="coord-name">Likitha G.</div>
+        <div class="coord-role">Event Coordinator</div>
+        <a href="tel:9481067015" class="coord-phone">📞 +91 94810 67015</a>
+      </div>
+
+      <!-- Coordinator 2 -->
+      <div class="glass-card coord-card reveal">
+        <div class="coord-avatar">
+          <img src="assets/jeevan.jpg" alt="Jeevan Y. — Event Coordinator" />
+        </div>
+        <div class="coord-name">Jeevan Y.</div>
+        <div class="coord-role">Event Coordinator</div>
+        <a href="tel:7204402406" class="coord-phone">📞 +91 72044 02406</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     10. FAQ
 ============================================= -->
 <section id="faq" aria-label="Frequently asked questions">
   <div class="container">
@@ -1452,43 +1505,6 @@
         <button class="faq-question" aria-expanded="false">Can teams include members from different colleges?<span class="faq-chevron" aria-hidden="true">▼</span></button>
         <div class="faq-answer" role="region"><div class="faq-answer-inner">Absolutely! Inter-college teams of 4 are fully allowed and encouraged. All members must carry their respective college ID cards.</div></div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- =============================================
-     10. COORDINATORS
-============================================= -->
-<section id="coordinators" aria-label="Event coordinators">
-  <div class="container">
-    <div class="reveal" style="text-align:center;">
-      <span class="section-tag">// team</span>
-      <h2 class="section-heading">Meet the <span class="gradient-text">Coordinators</span></h2>
-      <p class="section-sub" style="margin-inline:auto;">Have questions or need help? Reach out to our event coordinators directly.</p>
-    </div>
-
-    <div class="coordinators-grid">
-
-      <!-- Coordinator 1 -->
-      <div class="glass-card coord-card reveal">
-        <div class="coord-avatar">
-          <img src="assets/likitha.jpg" alt="Likitha G. — Event Coordinator" />
-        </div>
-        <div class="coord-name">Likitha G.</div>
-        <div class="coord-role">Event Coordinator</div>
-        <a href="tel:9481067015" class="coord-phone">📞 +91 94810 67015</a>
-      </div>
-
-      <!-- Coordinator 2 -->
-      <div class="glass-card coord-card reveal">
-        <div class="coord-avatar">
-          <img src="assets/jeevan.jpg" alt="Jeevan Y. — Event Coordinator" />
-        </div>
-        <div class="coord-name">Jeevan Y.</div>
-        <div class="coord-role">Event Coordinator</div>
-        <a href="tel:7204402406" class="coord-phone">📞 +91 72044 02406</a>
-      </div>
-
     </div>
   </div>
 </section>
