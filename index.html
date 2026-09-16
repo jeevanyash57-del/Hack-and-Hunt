@@ -275,22 +275,34 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       list-style: none;
+      background: rgba(7, 21, 39, 0.7);
+      padding: 5px 8px;
+      border-radius: 99px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.4);
     }
     .nav-links a {
-      padding: 8px 16px;
+      padding: 7px 16px;
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.875rem;
+      font-size: 0.88rem;
       font-weight: 500;
-      border-radius: 8px;
-      transition: var(--transition);
-      font-family: 'Fira Code', monospace;
+      border-radius: 99px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.02em;
     }
     .nav-links a:hover {
-      color: var(--text-accent);
-      background: rgba(56, 189, 248, 0.08);
+      color: var(--text-main);
+      background: rgba(56, 189, 248, 0.12);
+    }
+    .nav-links a.active {
+      color: #071527 !important;
+      background: var(--text-accent) !important;
+      font-weight: 700;
+      box-shadow: 0 2px 14px rgba(56, 189, 248, 0.45);
     }
 
     .nav-register {
@@ -350,18 +362,24 @@
     .mobile-menu.open { display: block; }
     .mobile-menu a {
       display: block;
-      padding: 14px 16px;
-      color: var(--text-main);
+      padding: 12px 16px;
+      color: var(--text-muted);
       text-decoration: none;
       font-size: 1rem;
       font-weight: 500;
       border-radius: var(--radius-sm);
       transition: var(--transition);
-      font-family: 'Fira Code', monospace;
+      font-family: 'Space Grotesk', sans-serif;
+      margin-bottom: 4px;
     }
     .mobile-menu a:hover {
       color: var(--text-accent);
       background: rgba(56, 189, 248, 0.08);
+    }
+    .mobile-menu a.active {
+      color: #071527 !important;
+      background: var(--text-accent) !important;
+      font-weight: 700;
     }
     .mobile-menu .mobile-register { margin-top: 12px; display: block; text-align: center; }
 
@@ -953,12 +971,12 @@
     </a>
 
     <ul class="nav-links" role="list">
-      <li><a href="#home">~/home</a></li>
-      <li><a href="#overview">~/about</a></li>
-      <li><a href="#details">~/details</a></li>
-      <li><a href="#rules">~/rules</a></li>
-      <li><a href="#coordinators">~/team</a></li>
-      <li><a href="#faq">~/faq</a></li>
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#overview">About</a></li>
+      <li><a href="#details">Details</a></li>
+      <li><a href="#rules">Rules</a></li>
+      <li><a href="#coordinators">Team</a></li>
+      <li><a href="#faq">FAQ</a></li>
     </ul>
 
     <div style="display:flex;align-items:center;gap:12px;">
@@ -974,12 +992,12 @@
 
 <!-- Mobile menu -->
 <div class="mobile-menu" id="mobile-menu" role="menu" aria-hidden="true">
-  <a href="#home" role="menuitem">~/home</a>
-  <a href="#overview" role="menuitem">~/about</a>
-  <a href="#details" role="menuitem">~/details</a>
-  <a href="#rules" role="menuitem">~/rules</a>
-  <a href="#coordinators" role="menuitem">~/team</a>
-  <a href="#faq" role="menuitem">~/faq</a>
+  <a href="#home" class="active" role="menuitem">Home</a>
+  <a href="#overview" role="menuitem">About</a>
+  <a href="#details" role="menuitem">Details</a>
+  <a href="#rules" role="menuitem">Rules</a>
+  <a href="#coordinators" role="menuitem">Team</a>
+  <a href="#faq" role="menuitem">FAQ</a>
   <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="mobile-register btn-primary" target="_blank" rel="noopener" role="menuitem">
     Register Now
   </a>
@@ -1487,13 +1505,12 @@
       </div>
       <div class="footer-divider"></div>
       <div class="footer-links">
-        <a href="#home">~/home</a>
-        <a href="#overview">~/about</a>
-        <a href="#details">~/details</a>
-        <a href="#rules">~/rules</a>
-        <a href="#registration">~/register</a>
-        <a href="#faq">~/faq</a>
-        <a href="#coordinators">~/contact</a>
+        <a href="#home">Home</a>
+        <a href="#overview">About</a>
+        <a href="#details">Details</a>
+        <a href="#rules">Rules</a>
+        <a href="#coordinators">Team</a>
+        <a href="#faq">FAQ</a>
       </div>
       <div class="footer-text">
         © 2026 VIGYANTRA '26 · Hack and Hunt · SJBIT, Bengaluru · All rights reserved.
@@ -1764,24 +1781,46 @@ document.querySelectorAll('.faq-question').forEach(btn => {
 
 
 /* ══════════════════════════════════════════
-   ACTIVE NAV LINK HIGHLIGHT
+   ACTIVE NAV LINK HIGHLIGHT (Scroll Spy)
 ══════════════════════════════════════════ */
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-const secObs   = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      navLinks.forEach(a => {
-        a.style.color = '';
-        if (a.getAttribute('href') === `#${e.target.id}`) {
-          a.style.color = 'var(--text-accent)';
-        }
-      });
-    }
-  });
-}, { threshold: 0.45 });
+(function() {
+  const desktopLinks = document.querySelectorAll('.nav-links a');
+  const mobileLinks = document.querySelectorAll('.mobile-menu a:not(.mobile-register)');
+  const trackSections = [
+    { id: 'home', el: document.getElementById('home') },
+    { id: 'overview', el: document.getElementById('overview') },
+    { id: 'details', el: document.getElementById('details') },
+    { id: 'rules', el: document.getElementById('rules') },
+    { id: 'coordinators', el: document.getElementById('coordinators') },
+    { id: 'faq', el: document.getElementById('faq') }
+  ];
 
-sections.forEach(s => secObs.observe(s));
+  function highlightNav() {
+    const scrollPosition = window.scrollY + 180;
+    let currentId = 'home';
+
+    for (let i = trackSections.length - 1; i >= 0; i--) {
+      const sec = trackSections[i];
+      if (sec.el && sec.el.offsetTop <= scrollPosition) {
+        currentId = sec.id;
+        break;
+      }
+    }
+
+    [...desktopLinks, ...mobileLinks].forEach(link => {
+      const href = link.getAttribute('href');
+      if (href === `#${currentId}`) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', highlightNav, { passive: true });
+  window.addEventListener('resize', highlightNav, { passive: true });
+  highlightNav();
+})();
 </script>
 
 </body>
