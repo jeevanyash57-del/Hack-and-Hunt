@@ -456,75 +456,22 @@
       display: block;
     }
 
-    /* Cyber Security Hero Scanner Component */
+    /* Cyber Security Hero Scanner — full-width background canvas */
     .scanner-hero-wrap {
       position: relative;
-      width: min(640px, 92vw);
-      height: min(340px, 58vw);
-      margin: 24px auto 32px;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      border: 1px solid var(--border-subtle);
-      background: rgba(4, 26, 22, 0.85);
-      box-shadow: 0 16px 44px rgba(2, 18, 18, 0.85), inset 0 1px 0 rgba(0, 245, 155, 0.2);
+      width: 100%;
+      height: clamp(260px, 42vw, 420px);
+      margin: 0 auto 18px;
+      overflow: visible;
     }
     #cyber-scanner-canvas {
       width: 100%;
       height: 100%;
       display: block;
+      opacity: 0.92;
     }
-    .scanner-status-ui {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: rgba(2, 18, 18, 0.88);
-      border: 1px solid var(--border-glow);
-      padding: 8px 18px;
-      border-radius: var(--radius-full);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 8px 24px rgba(2, 18, 18, 0.7);
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      z-index: 10;
-    }
-    .scanner-status-ui.visible { opacity: 1; }
-    .scanner-caption {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #00F59B;
-      letter-spacing: 0.1em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .scanner-caption .pulse-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #00F59B; box-shadow: 0 0 8px #00F59B;
-      animation: pulse-dot 1.5s infinite;
-    }
-    .btn-secure-access {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: #021212;
-      background: #C7F9E5;
-      padding: 6px 16px;
-      border-radius: var(--radius-full);
-      text-decoration: none;
-      transition: var(--transition);
-      box-shadow: 0 0 12px rgba(0, 245, 155, 0.4);
-      white-space: nowrap;
-    }
-    .btn-secure-access:hover {
-      background: #00F59B;
-      box-shadow: 0 0 18px rgba(0, 245, 155, 0.6);
-    }
+
+
 
     .hero-tagline {
       font-family: 'Space Grotesk', sans-serif;
@@ -863,12 +810,10 @@
 
       <!-- CYBER-SECURITY HERO SCANNER ANIMATION COMPONENT -->
       <div class="scanner-hero-wrap reveal">
-        <canvas id="cyber-scanner-canvas" width="640" height="340"></canvas>
-        <div class="scanner-status-ui" id="scanner-status-ui">
-          <div class="scanner-caption"><span class="pulse-dot"></span> SEARCH COMPLETE</div>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="btn-secure-access" target="_blank" rel="noopener">Secure Access</a>
-        </div>
+        <canvas id="cyber-scanner-canvas" width="1200" height="420"></canvas>
       </div>
+
+
 
       <p class="hero-tagline reveal">Think. Code. Hunt. Conquer.</p>
 
@@ -1523,333 +1468,293 @@
 })();
 
 /* ══════════════════════════════════════════════════════════
-   CYBER SECURITY SCANNER ANIMATION (Exact Reference Scene)
-   Isometric 3D Dark Emerald Maze + Metallic Magnifying Glass + Glowing Key
+   CYBER SECURITY SCANNER ANIMATION — Full-width background
+   Glass sweeps left→right, key reveals at center
 ══════════════════════════════════════════════════════════ */
 (function() {
   const canvas = document.getElementById('cyber-scanner-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const statusUI = document.getElementById('scanner-status-ui');
 
-  let W = canvas.width = 640;
-  let H = canvas.height = 340;
+  function resize() {
+    const wrap = canvas.parentElement;
+    W = canvas.width  = wrap ? wrap.offsetWidth  : 1200;
+    H = canvas.height = wrap ? wrap.offsetHeight : 420;
+    // Rebuild iso grid whenever canvas resizes
+    buildGrid();
+  }
 
-  let state = 0; // 0: enter & sweep, 1: reveal key & pulse, 2: hold UI, 3: reset
+  let W = 1200, H = 420;
+  let state = 0;
   let progress = 0;
-  let keyAngle = -0.3;
   let keyAlpha = 0;
   let floatOffset = 0;
+  let glassX = -100;
 
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 1. Isometric 3D Maze Grid Data
-  const isoBlocks = [];
-  const isoCols = 9, isoRows = 9;
-  const tileW = 46, tileH = 23;
-  const originX = W / 2;
-  const originY = 80;
+  // ── Isometric 3D Maze Grid ──────────────────────────────
+  let isoBlocks = [];
+  const isoCols = 18, isoRows = 9;
+  const tileW = 54, tileH = 27;
 
-  // Build 3D maze blocks pattern
-  for (let r = 0; r < isoRows; r++) {
-    for (let c = 0; c < isoCols; c++) {
-      // Create interesting maze paths by omitting some blocks
-      if ((r + c) % 2 === 0 || (r === 4 && c === 4) || (r === 2 && c === 6) || (r === 6 && c === 2)) {
-        const height = ((r * 7 + c * 13) % 4 === 0) ? 38 : ((r + c) % 3 === 0 ? 24 : 16);
-        const screenX = originX + (c - r) * (tileW / 2);
-        const screenY = originY + (c + r) * (tileH / 2);
-        isoBlocks.push({ r, c, x: screenX, y: screenY, h: height });
+  function buildGrid() {
+    isoBlocks = [];
+    const originX = W / 2;
+    const originY = H * 0.28;
+    for (let r = 0; r < isoRows; r++) {
+      for (let c = 0; c < isoCols; c++) {
+        if ((r + c) % 2 === 0 || (r === 4 && c === 9) || (r === 2 && c === 12) || (r === 6 && c === 5)) {
+          const h = ((r * 7 + c * 13) % 4 === 0) ? 36 : ((r + c) % 3 === 0 ? 22 : 14);
+          const sx = originX + (c - r) * (tileW / 2);
+          const sy = originY + (c + r) * (tileH / 2);
+          isoBlocks.push({ x: sx, y: sy, h });
+        }
       }
     }
   }
 
-  // Matrix binary stream particles
-  const matrixCols = Array.from({ length: 18 }, () => ({
-    x: Math.random() * W,
-    y: Math.random() * H,
-    speed: 0.8 + Math.random() * 1.5,
-    chars: '01010101'
-  }));
-
-  // Draw 3D Isometric Extruded Block
-  function drawIsoBlock(x, y, h, isSpotlit) {
-    const halfW = tileW / 2;
-    const halfH = tileH / 2;
-
-    // Colors
-    const topColor   = isSpotlit ? '#0D483E' : '#082D27';
-    const leftColor  = isSpotlit ? '#072E27' : '#041B18';
-    const rightColor = isSpotlit ? '#093B33' : '#05231F';
-    const strokeCol  = isSpotlit ? 'rgba(0, 245, 155, 0.45)' : 'rgba(0, 245, 155, 0.12)';
-
-    // Top Face
-    ctx.fillStyle = topColor;
-    ctx.beginPath();
-    ctx.moveTo(x, y - h);
-    ctx.lineTo(x + halfW, y + halfH - h);
-    ctx.lineTo(x, y + tileH - h);
-    ctx.lineTo(x - halfW, y + halfH - h);
-    ctx.closePath();
-    ctx.fill();
-    ctx.strokeStyle = strokeCol;
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    // Left Face
-    ctx.fillStyle = leftColor;
-    ctx.beginPath();
-    ctx.moveTo(x - halfW, y + halfH - h);
-    ctx.lineTo(x, y + tileH - h);
-    ctx.lineTo(x, y + tileH);
-    ctx.lineTo(x - halfW, y + halfH);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-
-    // Right Face
-    ctx.fillStyle = rightColor;
-    ctx.beginPath();
-    ctx.moveTo(x, y + tileH - h);
-    ctx.lineTo(x + halfW, y + halfH - h);
-    ctx.lineTo(x + halfW, y + halfH);
-    ctx.lineTo(x, y + tileH);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
+  // Matrix streams
+  let matrixCols = [];
+  function buildMatrix() {
+    matrixCols = Array.from({ length: 30 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      speed: 0.6 + Math.random() * 1.2,
+      char: Math.random() > 0.5 ? '1' : '0'
+    }));
   }
 
-  // Draw Background Maze & Matrix
-  function drawIsoMaze(spotlightX, spotlightY, spotlightRadius) {
-    // Background fill
-    ctx.fillStyle = '#021212';
+  // ── Draw helpers ────────────────────────────────────────
+  function drawIsoBlock(x, y, h, lit) {
+    const hw = tileW / 2, hh = tileH / 2;
+    const top   = lit ? '#0E5244' : '#082D27';
+    const left  = lit ? '#07352D' : '#041B18';
+    const right = lit ? '#0A4038' : '#05231F';
+    const edge  = lit ? 'rgba(0,245,155,0.5)' : 'rgba(0,245,155,0.10)';
+
+    ctx.lineWidth = 0.8;
+    // Top face
+    ctx.fillStyle = top;
+    ctx.beginPath();
+    ctx.moveTo(x, y - h); ctx.lineTo(x + hw, y + hh - h);
+    ctx.lineTo(x, y + tileH - h); ctx.lineTo(x - hw, y + hh - h);
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = edge; ctx.stroke();
+    // Left face
+    ctx.fillStyle = left;
+    ctx.beginPath();
+    ctx.moveTo(x - hw, y + hh - h); ctx.lineTo(x, y + tileH - h);
+    ctx.lineTo(x, y + tileH);       ctx.lineTo(x - hw, y + hh);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    // Right face
+    ctx.fillStyle = right;
+    ctx.beginPath();
+    ctx.moveTo(x, y + tileH - h);   ctx.lineTo(x + hw, y + hh - h);
+    ctx.lineTo(x + hw, y + hh);     ctx.lineTo(x, y + tileH);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+  }
+
+  function drawScene(gx, gy, spotR) {
+    // Transparent background — no fillRect so page bg shows through
+    ctx.clearRect(0, 0, W, H);
+
+    // Subtle dark vignette gradient
+    const vg = ctx.createRadialGradient(W/2, H/2, H*0.1, W/2, H/2, H*0.75);
+    vg.addColorStop(0, 'rgba(2,18,18,0)');
+    vg.addColorStop(1, 'rgba(2,18,18,0.82)');
+    ctx.fillStyle = vg;
     ctx.fillRect(0, 0, W, H);
 
-    // Matrix streams in corners
-    ctx.font = '10px "Fira Code", monospace';
+    // Matrix rain
+    ctx.font = '11px "Fira Code", monospace';
     matrixCols.forEach(m => {
       m.y += m.speed;
-      if (m.y > H + 20) m.y = -20;
-      ctx.fillStyle = 'rgba(0, 245, 155, 0.15)';
-      ctx.fillText(m.chars[Math.floor(m.y) % m.chars.length], m.x, m.y);
+      if (m.y > H + 20) { m.y = -20; m.x = Math.random() * W; }
+      ctx.fillStyle = 'rgba(0,245,155,0.13)';
+      ctx.fillText(m.char, m.x, m.y);
     });
 
-    // Draw sorted isometric blocks from back to front
+    // Iso maze blocks
     isoBlocks.forEach(b => {
-      const dist = Math.hypot(b.x - spotlightX, b.y - spotlightY);
-      const isLit = dist < spotlightRadius;
-      drawIsoBlock(b.x, b.y, b.h, isLit);
+      const d = Math.hypot(b.x - gx, b.y - gy);
+      drawIsoBlock(b.x, b.y, b.h, d < spotR);
     });
   }
 
-  // Draw 3D Glowing Neon Green Cyber Key (Exact Reference Image 1)
-  function drawCyberKey(cx, cy, scale, alpha, rot) {
+  function drawCyberKey(cx, cy, scale, alpha) {
     ctx.save();
-    ctx.translate(cx, cy + Math.sin(floatOffset) * 4);
-    ctx.rotate(rot);
+    ctx.translate(cx, cy + Math.sin(floatOffset) * 5);
     ctx.scale(scale, scale);
     ctx.globalAlpha = alpha;
 
-    // Volumetric Spotlight Radial Glow
-    const keySpot = ctx.createRadialGradient(0, 0, 4, 0, 0, 75);
-    keySpot.addColorStop(0, 'rgba(0, 245, 155, 0.85)');
-    keySpot.addColorStop(0.4, 'rgba(16, 185, 129, 0.35)');
-    keySpot.addColorStop(1, 'transparent');
-    ctx.fillStyle = keySpot;
-    ctx.beginPath(); ctx.arc(0, 0, 75, 0, Math.PI * 2); ctx.fill();
+    // Glow pool
+    const glow = ctx.createRadialGradient(0, 0, 4, 0, 0, 80);
+    glow.addColorStop(0, 'rgba(0,245,155,0.9)');
+    glow.addColorStop(0.4, 'rgba(16,185,129,0.4)');
+    glow.addColorStop(1, 'transparent');
+    ctx.fillStyle = glow;
+    ctx.beginPath(); ctx.arc(0, 0, 80, 0, Math.PI * 2); ctx.fill();
 
-    // Key Glow Aura
-    ctx.shadowColor = '#00F59B';
-    ctx.shadowBlur = 22;
-    ctx.strokeStyle = '#00F59B';
-    ctx.fillStyle = '#C7F9E5';
-    ctx.lineWidth = 4;
+    ctx.shadowColor = '#00F59B'; ctx.shadowBlur = 28;
+    ctx.strokeStyle = '#00F59B'; ctx.fillStyle = '#C7F9E5'; ctx.lineWidth = 4;
 
-    // 1. Hexagonal Bow (Head)
+    // Hexagonal bow
     ctx.beginPath();
     for (let i = 0; i < 6; i++) {
-      const angle = (i * Math.PI) / 3 - Math.PI / 6;
-      const hx = -32 + 18 * Math.cos(angle);
-      const hy = 18 * Math.sin(angle);
-      if (i === 0) ctx.moveTo(hx, hy);
-      else ctx.lineTo(hx, hy);
+      const a = (i * Math.PI) / 3 - Math.PI / 6;
+      const hx = -32 + 18 * Math.cos(a), hy = 18 * Math.sin(a);
+      i === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
     }
-    ctx.closePath();
-    ctx.stroke();
-
-    // Inner Hexagon cutout
+    ctx.closePath(); ctx.stroke();
+    // Inner hole
     ctx.beginPath();
     for (let i = 0; i < 6; i++) {
-      const angle = (i * Math.PI) / 3 - Math.PI / 6;
-      const hx = -32 + 8 * Math.cos(angle);
-      const hy = 8 * Math.sin(angle);
-      if (i === 0) ctx.moveTo(hx, hy);
-      else ctx.lineTo(hx, hy);
+      const a = (i * Math.PI) / 3 - Math.PI / 6;
+      const hx = -32 + 8 * Math.cos(a), hy = 8 * Math.sin(a);
+      i === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
     }
-    ctx.closePath();
-    ctx.fillStyle = '#021212';
-    ctx.fill();
-    ctx.stroke();
-
-    // 2. Main Key Shaft
+    ctx.closePath(); ctx.fillStyle = 'rgba(2,18,18,0.9)'; ctx.fill(); ctx.stroke();
+    // Shaft
+    ctx.beginPath(); ctx.moveTo(-14, 0); ctx.lineTo(36, 0); ctx.stroke();
+    // Teeth
     ctx.beginPath();
-    ctx.moveTo(-14, 0);
-    ctx.lineTo(34, 0);
+    ctx.moveTo(14,0); ctx.lineTo(14,14); ctx.lineTo(20,14); ctx.lineTo(20,0);
+    ctx.moveTo(26,0); ctx.lineTo(26,18); ctx.lineTo(34,18); ctx.lineTo(34,0);
     ctx.stroke();
-
-    // 3. Cyber Key Teeth
-    ctx.beginPath();
-    ctx.moveTo(14, 0); ctx.lineTo(14, 14); ctx.lineTo(20, 14); ctx.lineTo(20, 0);
-    ctx.moveTo(24, 0); ctx.lineTo(24, 18); ctx.lineTo(32, 18); ctx.lineTo(32, 0);
-    ctx.stroke();
-
     ctx.restore();
   }
 
-  // Draw 3D Realistic Metallic Magnifying Glass (Exact Reference Image 1)
   function drawMagnifyingGlass(x, y, radius) {
     ctx.save();
     ctx.translate(x, y);
 
-    // 1. Long Metallic Dark Handle (Angled from lower-left to center)
-    const handleAngle = Math.PI * 0.75;
+    // Handle
     ctx.save();
-    ctx.rotate(handleAngle);
-
-    // Dark metallic handle body
-    const handleGrad = ctx.createLinearGradient(-12, 0, 12, 0);
-    handleGrad.addColorStop(0, '#041814');
-    handleGrad.addColorStop(0.3, '#103D34');
-    handleGrad.addColorStop(0.7, '#082520');
-    handleGrad.addColorStop(1, '#020E0C');
-
-    ctx.fillStyle = handleGrad;
+    ctx.rotate(Math.PI * 0.72);
+    const hg = ctx.createLinearGradient(-12, 0, 12, 0);
+    hg.addColorStop(0, '#041814');
+    hg.addColorStop(0.35, '#114038');
+    hg.addColorStop(0.7, '#082520');
+    hg.addColorStop(1, '#020E0C');
+    ctx.fillStyle = hg;
     ctx.beginPath();
-    ctx.roundRect(-8, radius * 0.85, 16, radius * 1.8, 8);
+    ctx.roundRect(-8, radius * 0.82, 16, radius * 1.9, 9);
     ctx.fill();
-
-    // Metallic grip rings
-    ctx.strokeStyle = 'rgba(0, 245, 155, 0.4)';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(0,245,155,0.4)'; ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(-8, radius * 1.1); ctx.lineTo(8, radius * 1.1);
-    ctx.moveTo(-8, radius * 1.25); ctx.lineTo(8, radius * 1.25);
+    ctx.moveTo(-8, radius * 1.3); ctx.lineTo(8, radius * 1.3);
     ctx.stroke();
     ctx.restore();
 
-    // 2. Metallic Bevelled Circular Rim (Outer & Inner)
-    const rimGrad = ctx.createLinearGradient(-radius, -radius, radius, radius);
-    rimGrad.addColorStop(0, '#124A40');
-    rimGrad.addColorStop(0.3, '#00F59B');
-    rimGrad.addColorStop(0.6, '#062923');
-    rimGrad.addColorStop(1, '#0B3B33');
+    // Lens dark fill (gives depth)
+    ctx.fillStyle = 'rgba(4,20,18,0.72)';
+    ctx.beginPath(); ctx.arc(0, 0, radius - 5, 0, Math.PI * 2); ctx.fill();
 
-    ctx.strokeStyle = rimGrad;
-    ctx.lineWidth = 7;
-    ctx.shadowColor = '#00F59B';
-    ctx.shadowBlur = 16;
-    ctx.beginPath();
-    ctx.arc(0, 0, radius, 0, Math.PI * 2);
-    ctx.stroke();
+    // Rim bevel
+    const rg = ctx.createLinearGradient(-radius, -radius, radius, radius);
+    rg.addColorStop(0, '#124A40');
+    rg.addColorStop(0.3, '#00F59B');
+    rg.addColorStop(0.65, '#062923');
+    rg.addColorStop(1, '#0B3B33');
+    ctx.strokeStyle = rg; ctx.lineWidth = 8;
+    ctx.shadowColor = '#00F59B'; ctx.shadowBlur = 20;
+    ctx.beginPath(); ctx.arc(0, 0, radius, 0, Math.PI * 2); ctx.stroke();
 
-    // Inner rim edge
-    ctx.strokeStyle = '#021212';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(0, 0, radius - 4, 0, Math.PI * 2);
-    ctx.stroke();
+    // Inner edge
+    ctx.strokeStyle = 'rgba(2,18,18,0.9)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(0, 0, radius - 5, 0, Math.PI * 2); ctx.stroke();
 
-    // 3. Glass Lens Surface Specular Highlight Arc
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.65)';
-    ctx.lineWidth = 3;
-    ctx.shadowBlur = 0;
-    ctx.beginPath();
-    ctx.arc(0, 0, radius - 6, Math.PI * 1.15, Math.PI * 1.65);
-    ctx.stroke();
+    // Specular highlight
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 3; ctx.shadowBlur = 0;
+    ctx.beginPath(); ctx.arc(0, 0, radius - 7, Math.PI * 1.15, Math.PI * 1.65); ctx.stroke();
 
     ctx.restore();
   }
 
-  // Main Render Loop
+  // ── State machine ────────────────────────────────────────
+  const RADIUS = 85;
+  const centerX = () => W / 2;
+  const centerY = () => H / 2;
+
   function render() {
-    floatOffset += 0.04;
-    const centerX = W / 2;
-    const centerY = H / 2 + 10;
+    floatOffset += 0.035;
 
     if (prefersReduced) {
-      drawIsoMaze(centerX, centerY, 90);
-      drawCyberKey(centerX, centerY, 1, 1, -0.2);
-      drawMagnifyingGlass(centerX, centerY, 85);
-      statusUI?.classList.add('visible');
+      const cx = centerX(), cy = centerY();
+      drawScene(cx, cy, RADIUS + 10);
+      drawCyberKey(cx, cy, 1, 1);
+      drawMagnifyingGlass(cx, cy, RADIUS);
+      requestAnimationFrame(render);
       return;
     }
 
     if (state === 0) {
-      // Scan beam sweeps left-to-right inside the lens; glass is centered & stationary
-      progress += 0.006;
-      // Beam oscillates: from left edge to right edge of glass, back and forth
-      const beamT = Math.sin(progress * Math.PI * 2);
-      const beamX = centerX + beamT * 68; // span ~68px each side
-      const beamY = centerY;
+      // Glass sweeps in from left edge to center
+      progress += 0.007;
+      glassX = -RADIUS + (centerX() + RADIUS) * Math.min(1, progress * 1.4);
+      const gy = centerY();
 
-      drawIsoMaze(beamX, beamY, 72);
+      drawScene(glassX, gy, RADIUS * 0.9);
+      drawMagnifyingGlass(glassX, gy, RADIUS);
 
-      // Draw neon scan line across the glass interior
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(centerX - 78, centerY - 78, 156, 156); // clip to glass area
-      ctx.clip();
-      const scanGrad = ctx.createLinearGradient(beamX - 30, 0, beamX + 30, 0);
-      scanGrad.addColorStop(0, 'transparent');
-      scanGrad.addColorStop(0.5, 'rgba(0, 245, 155, 0.55)');
-      scanGrad.addColorStop(1, 'transparent');
-      ctx.fillStyle = scanGrad;
-      ctx.fillRect(beamX - 30, centerY - 78, 60, 156);
-      ctx.restore();
+      if (progress >= 1) { state = 1; progress = 0; glassX = centerX(); }
 
-      drawMagnifyingGlass(centerX, centerY, 85);
-
-      if (progress >= 2.2) { // ~3 oscillations then reveal
-        state = 1; progress = 0;
-      }
-    } else if (state === 1) { // Key Reveal Phase
-      progress += 0.018;
-      keyAlpha = Math.min(1, progress);
-
-      drawIsoMaze(centerX, centerY, 95);
-      drawCyberKey(centerX, centerY, Math.min(1, progress * 1.05), keyAlpha, -0.2);
-      drawMagnifyingGlass(centerX, centerY, 85);
-
-      if (progress >= 1) {
-        state = 2; progress = 0;
-        statusUI?.classList.add('visible');
-      }
-    } else if (state === 2) { // Hold UI Phase
+    } else if (state === 1) {
+      // Glass at center, scans right → left
       progress += 0.005;
+      const sweep = Math.sin(progress * Math.PI * 2.5) * (W * 0.35);
+      glassX = centerX() + sweep;
+      const gy = centerY();
 
-      drawIsoMaze(centerX, centerY, 95);
-      drawCyberKey(centerX, centerY, 1, 1, -0.2);
-      drawMagnifyingGlass(centerX, centerY, 85);
+      drawScene(glassX, gy, RADIUS * 1.1);
+      drawMagnifyingGlass(glassX, gy, RADIUS);
 
-      if (progress >= 1) {
-        state = 3; progress = 0;
-        statusUI?.classList.remove('visible');
-      }
-    } else if (state === 3) { // Fade out & Reset Loop
-      progress += 0.025;
+      if (progress >= 1.4) { state = 2; progress = 0; glassX = centerX(); }
+
+    } else if (state === 2) {
+      // Key reveal at center
+      progress += 0.016;
+      keyAlpha = Math.min(1, progress);
+      const cx = centerX(), cy = centerY();
+
+      drawScene(cx, cy, RADIUS + 20);
+      drawCyberKey(cx, cy, Math.min(1, progress * 1.1), keyAlpha);
+      drawMagnifyingGlass(cx, cy, RADIUS);
+
+      if (progress >= 1) { state = 3; progress = 0; }
+
+    } else if (state === 3) {
+      // Hold key visible
+      progress += 0.004;
+      const cx = centerX(), cy = centerY();
+
+      drawScene(cx, cy, RADIUS + 20);
+      drawCyberKey(cx, cy, 1, 1);
+      drawMagnifyingGlass(cx, cy, RADIUS);
+
+      if (progress >= 1) { state = 4; progress = 0; }
+
+    } else if (state === 4) {
+      // Fade out & loop
+      progress += 0.022;
       keyAlpha = Math.max(0, 1 - progress);
+      const cx = centerX(), cy = centerY();
 
-      drawIsoMaze(centerX, centerY, 95 * keyAlpha);
-      drawCyberKey(centerX, centerY, 1, keyAlpha, -0.2);
-      drawMagnifyingGlass(centerX, centerY, 85);
+      drawScene(cx, cy, (RADIUS + 20) * keyAlpha);
+      drawCyberKey(cx, cy, 1, keyAlpha);
+      drawMagnifyingGlass(cx, cy, RADIUS);
 
-      if (progress >= 1) {
-        state = 0; progress = 0; keyAlpha = 0;
-      }
+      if (progress >= 1) { state = 0; progress = 0; keyAlpha = 0; glassX = -RADIUS; }
     }
 
     requestAnimationFrame(render);
   }
 
+  buildMatrix();
+  resize();
+  window.addEventListener('resize', resize);
   render();
 })();
 </script>
