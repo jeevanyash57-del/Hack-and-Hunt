@@ -172,14 +172,16 @@
       z-index: 1;
     }
 
-    /* ── Typography ─────────────────────────────────────────── */
+    /* ── Typography & Strict Hierarchy ───────────────────────── */
     h1, h2, h3, h4 {
       font-family: 'Space Grotesk', sans-serif;
       color: var(--text-main);
       line-height: 1.1;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
     }
 
-    /* Eyebrow label — used above every section heading */
+    /* Eyebrow label — consistent across all sections */
     .cin-label-sm {
       display: inline-flex;
       align-items: center;
@@ -189,11 +191,11 @@
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: #00F59B;
-      background: rgba(8, 41, 38, 0.9);
-      border: 1px solid rgba(0, 245, 155, 0.22);
+      background: #051A18;
+      border: 1px solid rgba(0, 245, 155, 0.24);
       padding: 5px 16px;
       border-radius: var(--radius-full);
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       font-family: 'Space Grotesk', sans-serif;
     }
     .cin-label-sm::before {
@@ -217,22 +219,39 @@
     /* Section intro block — consistent heading + description pattern */
     .section-intro {
       margin-bottom: var(--space-xl);
+      position: relative;
+      z-index: 2;
     }
     .section-intro h2 {
-      font-size: clamp(1.9rem, 4.5vw, 3rem);
+      font-size: clamp(1.85rem, 4.2vw, 2.9rem);
       font-weight: 900;
       letter-spacing: -0.01em;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .section-intro p {
-      font-size: 1rem;
+      font-size: 0.96rem;
       color: var(--text-secondary);
-      max-width: 540px;
+      max-width: 520px;
       line-height: 1.75;
-      margin-top: 8px;
+      margin-top: 6px;
+      letter-spacing: 0.01em;
     }
     .section-intro--center { text-align: center; }
     .section-intro--center p { margin-inline: auto; }
+
+    /* Section divider line with entry reveal */
+    .section-divider-line {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 245, 155, 0.28) 20%, rgba(0, 245, 155, 0.28) 80%, transparent);
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-top: -1px;
+    }
+    .section-divider-line.visible {
+      transform: scaleX(1);
+    }
 
     /* ── Scroll Progress Indicator ──────────────────────────── */
     #scroll-progress {
@@ -248,7 +267,52 @@
       box-shadow: 0 0 8px rgba(0, 245, 155, 0.65);
     }
 
-    /* ── Shared Card Interaction System (Overview, Prize, Details, Rules, Team) ── */
+    /* ── Outlined Lucide Vector Icon System ─────────────────── */
+    .lucide-icon {
+      display: inline-block;
+      vertical-align: -0.15em;
+      width: 1em;
+      height: 1em;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .overview-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--accent-cyan);
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .overview-card:hover .overview-icon svg {
+      transform: scale(1.1) rotate(4deg);
+      filter: drop-shadow(0 0 8px rgba(0, 245, 155, 0.5));
+    }
+    .btn-arrow {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2.4;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-left: 2px;
+    }
+    .btn-primary:hover .btn-arrow,
+    .nav-register:hover .btn-arrow,
+    .mobile-register:hover .btn-arrow,
+    #mobile-sticky-cta a:hover .btn-arrow {
+      transform: translateX(4px);
+    }
+
+    /* ── Shared Card Component System (Overview, Prize, Details, Rules, Team) ── */
     .glass-card,
     .rule-item-card,
     .overview-card,
@@ -322,7 +386,7 @@
       box-shadow: 0 3px 12px rgba(0, 245, 155, 0.2);
     }
 
-    /* Specific height & padding scales */
+    /* Button specific height & padding scales */
     .nav-register {
       height: 38px;
       padding: 0 20px;
@@ -377,11 +441,25 @@
       box-shadow: 0 0 18px rgba(0, 245, 155, 0.22);
     }
 
-    /* ── Scroll Reveal ───────────────────────────────────────── */
-    .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible { opacity:1; transform:translateY(0); }
+    /* ── Scroll Reveal with Staggering ───────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.06s; }
+    .reveal-delay-2 { transition-delay: 0.12s; }
+    .reveal-delay-3 { transition-delay: 0.18s; }
+    .reveal-delay-4 { transition-delay: 0.24s; }
+    .reveal-delay-5 { transition-delay: 0.30s; }
+    .reveal-delay-6 { transition-delay: 0.36s; }
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; transform: none; transition: none; }
+      .section-divider-line { transform: scaleX(1); transition: none; }
     }
 
     /* ============================================================
@@ -393,13 +471,13 @@
       height: var(--nav-h);
       display: flex; align-items: center;
       transition: background var(--transition), box-shadow var(--transition), border-color var(--transition);
-      background: rgba(2, 18, 18, 0.84);
+      background: rgba(2, 18, 18, 0.86);
       backdrop-filter: blur(22px);
       -webkit-backdrop-filter: blur(22px);
       border-bottom: 1px solid rgba(0, 245, 155, 0.10);
     }
     #navbar.scrolled {
-      background: rgba(2, 18, 18, 0.97);
+      background: rgba(2, 18, 18, 0.98);
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55);
       border-bottom-color: rgba(0, 245, 155, 0.20);
     }
@@ -417,8 +495,9 @@
       background: var(--gradient-primary);
       border-radius: 9px;
       display: grid; place-items: center;
-      font-size: 1rem; flex-shrink: 0; color: #021212;
+      color: #021212;
       box-shadow: 0 0 14px rgba(0, 245, 155, 0.3);
+      flex-shrink: 0;
     }
     .nav-logo-main {
       font-family: 'Orbitron', sans-serif;
@@ -495,27 +574,80 @@
     }
 
     /* ============================================================
-       2. HERO SECTION (Compact & Dramatic)
+       2. HERO SECTION — IMMERSIVE CYBER VISUAL BACKGROUND
     ============================================================ */
     #home {
-      min-height: auto;
-      display: flex; align-items: center; justify-content: center;
+      min-height: calc(100vh - var(--nav-h));
+      display: flex; align-items: center; justify-content: flex-start;
       position: relative; overflow: hidden;
-      padding: calc(var(--nav-h) + 24px) 0 40px;
-      background: radial-gradient(ellipse at 50% 18%, rgba(0, 245, 155, 0.07) 0%, transparent 65%), var(--bg-main);
-      text-align: center;
+      padding: calc(var(--nav-h) + 20px) 0 44px;
+      background: #021212;
+    }
+
+    /* Full background visual container */
+    .hero-bg-visual {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    /* Supplied green cyber magnifying-glass artwork */
+    .hero-bg-art {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 58%;
+      max-width: 820px;
+      height: 100%;
+      background: url('assets/cyber-magnifying-glass.png') no-repeat right 38% / contain;
+      opacity: 0.92;
+      filter: drop-shadow(0 0 36px rgba(0, 245, 155, 0.16));
+      mask-image: radial-gradient(ellipse at 65% 50%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 82%),
+                  linear-gradient(to right, transparent 0%, rgba(0,0,0,0.9) 25%, black 60%),
+                  linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse at 65% 50%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 82%),
+                          linear-gradient(to right, transparent 0%, rgba(0,0,0,0.9) 25%, black 60%),
+                          linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+      transition: transform 0.4s ease-out;
+    }
+
+    /* Dark gradient overlay for clear text contrast without looking like glass */
+    .hero-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #021212 0%, #021212 36%, rgba(2, 18, 18, 0.88) 55%, rgba(2, 18, 18, 0.35) 80%, rgba(2, 18, 18, 0.15) 100%),
+                  linear-gradient(180deg, rgba(2, 18, 18, 0.7) 0%, transparent 20%, transparent 75%, #021212 100%);
+      z-index: 1;
+    }
+
+    /* Cyber grid overlay */
+    .hero-cyber-grid {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(0, 245, 155, 0.035) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0, 245, 155, 0.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.65;
+      z-index: 1;
     }
 
     .hero-orb {
-      position: absolute; border-radius: 50%; filter: blur(150px); pointer-events: none;
+      position: absolute; border-radius: 50%; filter: blur(140px); pointer-events: none; z-index: 1;
     }
-    .hero-orb-1 { width:560px; height:560px; background:var(--accent-blue); opacity:0.08; top:-160px; right:-60px; }
-    .hero-orb-2 { width:420px; height:420px; background:var(--accent-cyan); opacity:0.06; bottom:-60px; left:-60px; }
+    .hero-orb-1 { width:520px; height:520px; background:var(--accent-blue); opacity:0.08; top:-140px; right:10%; }
+    .hero-orb-2 { width:380px; height:380px; background:var(--accent-cyan); opacity:0.06; bottom:-60px; left:-40px; }
 
+    /* Hero content layout — left/center on desktop */
     .hero-content {
-      display: flex; flex-direction: column; align-items: center;
-      position: relative; z-index: 1; width: 100%;
-      gap: 0;
+      display: flex; flex-direction: column;
+      position: relative; z-index: 2;
+      width: 100%;
+      max-width: 660px;
+      align-items: flex-start;
+      text-align: left;
     }
 
     /* ── HACK & HUNT title ───────────────────────────────── */
@@ -527,12 +659,12 @@
     .hack-hunt-banner {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 0.06em;
       font-family: 'Cinzel', 'Space Grotesk', serif;
       font-weight: 900;
       text-transform: uppercase;
-      font-size: clamp(2.8rem, 9vw, 6.8rem);
+      font-size: clamp(2.8rem, 8.8vw, 6.4rem);
       line-height: 0.92;
       letter-spacing: 0.02em;
     }
@@ -558,19 +690,24 @@
       z-index: 2;
     }
 
-    /* Scanner canvas — quieter background layer */
-    .scanner-hero-wrap {
+    /* Mobile-only magnifying glass framing */
+    .hero-art-mobile-wrap {
+      display: none;
+      width: min(340px, 86vw);
+      height: 180px;
+      margin: 12px auto 18px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
       position: relative;
-      width: 100%;
-      height: clamp(160px, 24vw, 250px);
-      margin: -6px auto 4px;
-      overflow: visible;
-      pointer-events: none;
-      opacity: 0.65;
+      border: 1px solid rgba(0, 245, 155, 0.25);
+      box-shadow: 0 0 24px rgba(0, 245, 155, 0.15);
+      background: #051A18;
     }
-    #cyber-scanner-canvas {
+    .hero-art-mobile-img {
       width: 100%;
       height: 100%;
+      object-fit: cover;
+      object-position: center;
       display: block;
     }
 
@@ -582,27 +719,31 @@
       color: var(--text-secondary);
       margin-bottom: 20px;
       letter-spacing: 0.04em;
-      max-width: 440px;
+      max-width: 460px;
     }
 
-    /* Chips */
+    /* Chips — solid cyberpunk surface, no glassmorphism */
     .hero-chips {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 20px;
+      display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 8px; margin-bottom: 22px;
     }
     .hero-chips span {
+      display: inline-flex; align-items: center; gap: 6px;
       font-family: 'Fira Code', monospace; font-size: 0.76rem; font-weight: 600;
-      color: var(--text-main); background: rgba(8, 41, 38, 0.9);
-      border: 1px solid rgba(0, 245, 155, 0.16); padding: 6px 14px;
+      color: var(--text-main); background: #051A18;
+      border: 1px solid rgba(0, 245, 155, 0.22); padding: 6px 14px;
       border-radius: var(--radius-full);
+      box-shadow: 0 2px 8px rgba(2, 18, 18, 0.6);
     }
+    .hero-chips span .lucide-icon { color: var(--accent-cyan); }
 
-    /* Typewriter */
+    /* Typewriter terminal box — solid dark panel, no glass */
     .hero-typer-box {
-      background: rgba(5, 26, 24, 0.95); border: 1px solid rgba(0, 245, 155, 0.14);
+      background: #051A18;
+      border: 1px solid rgba(0, 245, 155, 0.18);
       border-radius: var(--radius-md); padding: 11px 20px;
       font-family: 'Fira Code', monospace; font-size: 0.82rem;
-      max-width: 520px; width: 100%; margin-bottom: 22px; text-align: left;
-      box-shadow: 0 8px 24px rgba(2, 18, 18, 0.6); display: flex; align-items: center; gap: 8px;
+      max-width: 520px; width: 100%; margin-bottom: 24px; text-align: left;
+      box-shadow: 0 8px 24px rgba(2, 18, 18, 0.7); display: flex; align-items: center; gap: 8px;
     }
     .hero-typer-prefix { color: var(--accent-cyan); font-weight: 700; }
     .hero-typer-text { color: var(--text-main); }
@@ -611,7 +752,7 @@
 
     /* Scroll hint */
     .scroll-hint {
-      display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 26px;
+      display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 28px;
     }
     .scroll-hint__label { font-family: 'Fira Code', monospace; font-size: 0.58rem; color: var(--text-muted); letter-spacing: 0.22em; }
     .scroll-hint__line { width: 1px; height: 26px; background: linear-gradient(180deg, var(--accent-cyan), transparent); animation: pulse-line 2s infinite; }
@@ -625,6 +766,7 @@
       border-top: 1px solid rgba(0, 245, 155, 0.10);
       border-bottom: 1px solid rgba(0, 245, 155, 0.10);
       padding: 20px 0; text-align: center;
+      position: relative;
     }
     .countdown-banner__inner {
       display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px 32px;
@@ -656,12 +798,13 @@
     }
 
     /* ============================================================
-       5. EDITORIAL SECTIONS (Compact & Consistent Banners)
+       5. EDITORIAL SECTIONS (Compact Banners)
     ============================================================ */
     .ed-section {
       padding: 44px 0;
       border-top: 1px solid rgba(0, 245, 155, 0.06);
       border-bottom: 1px solid rgba(0, 245, 155, 0.06);
+      position: relative;
     }
     .ed-block { display: flex; flex-direction: column; gap: 6px; }
     .ed-line {
@@ -679,7 +822,7 @@
     /* ============================================================
        6. OVERVIEW GRID
     ============================================================ */
-    #overview { padding: var(--space-2xl) 0; }
+    #overview { padding: var(--space-2xl) 0; position: relative; }
     .overview-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -690,12 +833,12 @@
       display: flex; flex-direction: column; gap: 12px;
     }
     .overview-icon {
-      font-size: 1.6rem;
-      width: 46px; height: 46px;
+      width: 44px; height: 44px;
       background: rgba(0, 245, 155, 0.08);
       border-radius: var(--radius-md);
       display: grid; place-items: center;
-      border: 1px solid rgba(0, 245, 155, 0.12);
+      border: 1px solid rgba(0, 245, 155, 0.16);
+      color: var(--accent-cyan);
     }
     .overview-card-title {
       font-size: 1.02rem; font-weight: 700; color: var(--text-main);
@@ -706,7 +849,7 @@
     /* ============================================================
        7. PRIZE SECTION
     ============================================================ */
-    #prize-pool { padding: var(--space-2xl) 0; background: var(--bg-main-alt); }
+    #prize-pool { padding: var(--space-2xl) 0; background: var(--bg-main-alt); position: relative; }
     .prize-pool-box {
       text-align: center; max-width: 860px; margin: 0 auto 44px;
     }
@@ -737,7 +880,7 @@
     /* ============================================================
        8. INFO BENTO GRID (Event Details)
     ============================================================ */
-    #details { padding: var(--space-2xl) 0; }
+    #details { padding: var(--space-2xl) 0; position: relative; }
     .bento-grid {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;
     }
@@ -759,7 +902,7 @@
     /* ============================================================
        9. DIRECTIVES / RULES (Clean Two-Column Grid on Desktop)
     ============================================================ */
-    #rules { padding: var(--space-2xl) 0; background: var(--bg-main-alt); }
+    #rules { padding: var(--space-2xl) 0; background: var(--bg-main-alt); position: relative; }
     .split-layout {
       display: grid; grid-template-columns: 280px 1fr; gap: 48px; align-items: start;
     }
@@ -770,7 +913,7 @@
     }
     .sticky-desc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; max-width: 250px; }
 
-    /* Rules: Clean 2-Column Grid on Desktop */
+    /* Clean 2-column grid on desktop */
     .rules-list {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -808,7 +951,7 @@
     /* ============================================================
        10. INTEL DB / FAQ — ACCORDION
     ============================================================ */
-    #faq { padding: var(--space-2xl) 0; }
+    #faq { padding: var(--space-2xl) 0; position: relative; }
     .faq-list { display: flex; flex-direction: column; gap: 10px; }
     .faq-item {
       border: 1px solid rgba(0, 245, 155, 0.14);
@@ -867,7 +1010,7 @@
     /* ============================================================
        11. COORDINATORS (Compact 2-Profile Grid on Desktop)
     ============================================================ */
-    #coordinators { padding: var(--space-2xl) 0; background: var(--bg-main-alt); }
+    #coordinators { padding: var(--space-2xl) 0; background: var(--bg-main-alt); position: relative; }
     .coordinators-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -891,7 +1034,7 @@
     .coord-name { font-size: 1.15rem; font-weight: 800; color: var(--text-main); font-family: 'Space Grotesk', sans-serif; }
     .coord-role { font-size: 0.76rem; color: var(--text-muted); font-family: 'Fira Code', monospace; letter-spacing: 0.1em; }
     .coord-phone {
-      display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px;
+      display: inline-flex; align-items: center; gap: 7px; padding: 8px 18px;
       background: var(--bg-panel); color: var(--text-main); text-decoration: none;
       font-size: 0.85rem; font-weight: 700; border-radius: var(--radius-full);
       border: 1px solid rgba(0, 245, 155, 0.18);
@@ -906,7 +1049,7 @@
     /* ============================================================
        12. FINAL CALL / REGISTRATION
     ============================================================ */
-    #registration { padding: var(--space-2xl) 0; text-align: center; }
+    #registration { padding: var(--space-2xl) 0; text-align: center; position: relative; }
     .final-call-box {
       padding: 52px 36px; max-width: 800px; margin: 0 auto;
       display: flex; flex-direction: column; align-items: center; gap: 20px;
@@ -936,7 +1079,7 @@
       letter-spacing: 0.08em;
     }
     .footer-divider {
-      width: 40px; height: 1px;
+      width: 48px; height: 1.5px;
       background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
     }
     .footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
@@ -988,9 +1131,26 @@
     ============================================================ */
     @media (max-width: 1024px) {
       .split-layout { grid-template-columns: 240px 1fr; gap: 36px; }
+      .hero-bg-art { width: 50%; opacity: 0.85; }
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 899px) {
+      #home {
+        text-align: center;
+        justify-content: center;
+        padding: calc(var(--nav-h) + 16px) 0 36px;
+      }
+      .hero-bg-art { display: none; }
+      .hero-art-mobile-wrap { display: block; }
+      .hero-content {
+        align-items: center;
+        text-align: center;
+        max-width: 100%;
+      }
+      .hack-hunt-banner { justify-content: center; }
+      .hero-chips { justify-content: center; }
+      .hero-typer-box { margin-inline: auto; }
+      .scroll-hint { align-items: center; }
       .split-layout { grid-template-columns: 1fr; gap: 28px; }
       .sticky-side { position: relative; top: 0; }
       .sticky-desc { max-width: 100%; }
@@ -1007,7 +1167,6 @@
       .bento-grid { grid-template-columns: 1fr 1fr; }
       .prize-tiers-grid { grid-template-columns: 1fr; }
       .final-call-box { padding: 36px 20px; }
-      .scanner-hero-wrap { height: clamp(140px, 38vw, 220px); }
       body { padding-bottom: 74px; }
     }
 
@@ -1044,7 +1203,6 @@
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
       }
-      .scanner-hero-wrap { opacity: 0.45; }
     }
 
   </style>
@@ -1070,7 +1228,9 @@
 <nav id="navbar" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="#home" class="nav-logo" aria-label="VIGYANTRA × HACK & HUNT Home">
-      <div class="nav-logo-icon" aria-hidden="true">⚡</div>
+      <div class="nav-logo-icon" aria-hidden="true">
+        <svg class="lucide-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
       <span class="nav-logo-main">VIGYANTRA <span>× HACK &amp; HUNT</span></span>
     </a>
 
@@ -1085,7 +1245,8 @@
 
     <div style="display:flex;align-items:center;gap:12px;">
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="nav-register" target="_blank" rel="noopener">
-        REGISTER NOW →
+        REGISTER NOW
+        <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -1103,20 +1264,30 @@
   <a href="#faq" role="menuitem">Intel DB</a>
   <a href="#coordinators" role="menuitem">Team</a>
   <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="mobile-register btn-primary" target="_blank" rel="noopener" role="menuitem">
-    REGISTER NOW →
+    REGISTER NOW
+    <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
   </a>
 </div>
 
 <!-- HERO SECTION -->
 <section id="home" aria-label="Hero section">
+  <!-- Immersive Cyber Visual Background using supplied magnifying glass artwork -->
+  <div class="hero-bg-visual" aria-hidden="true">
+    <div class="hero-bg-art"></div>
+    <div class="hero-bg-overlay"></div>
+    <div class="hero-cyber-grid"></div>
+  </div>
+
   <div class="hero-orb hero-orb-1"></div>
   <div class="hero-orb hero-orb-2"></div>
   
   <div class="container">
     <div class="hero-content">
-      <span class="cin-label-sm reveal">🔍 SJBIT × VIGYANTRA 2026</span>
+      <span class="cin-label-sm reveal">
+        <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        SJBIT × VIGYANTRA 2026
+      </span>
 
-      
       <h1 class="hero-h1 reveal" aria-label="HACK AND HUNT 2026">
         <div class="hack-hunt-banner">
           <span class="word-distressed">HACK</span>
@@ -1125,20 +1296,26 @@
         </div>
       </h1>
 
-
-      <!-- CYBER-SECURITY HERO SCANNER ANIMATION COMPONENT -->
-      <div class="scanner-hero-wrap reveal">
-        <canvas id="cyber-scanner-canvas" width="1200" height="420"></canvas>
+      <!-- Mobile-only dedicated magnifying glass presentation -->
+      <div class="hero-art-mobile-wrap reveal" aria-hidden="true">
+        <img src="assets/cyber-magnifying-glass.png" alt="" class="hero-art-mobile-img" />
       </div>
-
-
 
       <p class="hero-tagline reveal">Think. Code. Hunt. Conquer.</p>
 
       <div class="hero-chips reveal">
-        <span>📅 30 OCT 2026</span>
-        <span>📍 SJBIT, BENGALURU</span>
-        <span>🏆 ₹50,000 PRIZE POOL</span>
+        <span>
+          <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          30 OCT 2026
+        </span>
+        <span>
+          <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          SJBIT, BENGALURU
+        </span>
+        <span>
+          <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+          ₹50,000 PRIZE POOL
+        </span>
       </div>
 
       <!-- Typewriter Console Box -->
@@ -1149,8 +1326,9 @@
       </div>
 
       <div class="reveal">
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="btn-primary" target="_blank" rel="noopener" style="font-size:1.05rem;padding:16px 40px;">
-          REGISTER NOW →
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="btn-primary" target="_blank" rel="noopener">
+          REGISTER NOW
+          <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
 
@@ -1219,6 +1397,7 @@
 </section>
 
 <!-- OVERVIEW / ARENA GRID -->
+<div class="section-divider-line reveal" aria-hidden="true"></div>
 <section id="overview" aria-label="Event overview">
   <div class="container">
     <div class="reveal section-intro">
@@ -1230,38 +1409,50 @@
     </div>
 
     <div class="overview-grid">
-      <div class="glass-card overview-card reveal">
-        <div class="overview-icon">💡</div>
+      <div class="glass-card overview-card reveal reveal-delay-1">
+        <div class="overview-icon">
+          <svg viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+        </div>
         <h3 class="overview-card-title">What You'll Build</h3>
         <p class="overview-card-text">Teams design and develop working solutions to real-world problem statements revealed on competition day. Creativity and speed are both rewarded.</p>
       </div>
 
-      <div class="glass-card overview-card reveal">
-        <div class="overview-icon">🎯</div>
+      <div class="glass-card overview-card reveal reveal-delay-2">
+        <div class="overview-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        </div>
         <h3 class="overview-card-title">What You'll Learn</h3>
         <p class="overview-card-text">Rapid prototyping, team collaboration, time management under pressure, and pitching ideas to an expert panel — real skills, real exposure.</p>
       </div>
 
-      <div class="glass-card overview-card reveal">
-        <div class="overview-icon">🤝</div>
+      <div class="glass-card overview-card reveal reveal-delay-3">
+        <div class="overview-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
         <h3 class="overview-card-title">Teamwork First</h3>
         <p class="overview-card-text">Hack and Hunt is built on collaboration. From developer to presenter — every role matters. The best teams win together, not alone.</p>
       </div>
 
-      <div class="glass-card overview-card reveal">
-        <div class="overview-icon">⚡</div>
+      <div class="glass-card overview-card reveal reveal-delay-4">
+        <div class="overview-icon">
+          <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
         <h3 class="overview-card-title">High-Intensity Format</h3>
         <p class="overview-card-text">Time-boxed rounds, live judging, and surprise constraints across 04 intense rounds. Only the most adaptable teams rise to the top.</p>
       </div>
 
-      <div class="glass-card overview-card reveal">
-        <div class="overview-icon">🌐</div>
+      <div class="glass-card overview-card reveal reveal-delay-5">
+        <div class="overview-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
         <h3 class="overview-card-title">Open to All Domains</h3>
         <p class="overview-card-text">Web dev, AI/ML, cybersecurity, or algorithm design — problem statements span multiple tracks so every talent fits.</p>
       </div>
 
-      <div class="glass-card overview-card reveal">
-        <div class="overview-icon">🎖️</div>
+      <div class="glass-card overview-card reveal reveal-delay-6">
+        <div class="overview-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        </div>
         <h3 class="overview-card-title">Recognition &amp; Rewards</h3>
         <p class="overview-card-text">Cash prizes, trophies, and certificates for winners. Every participant receives an official participation certificate from SJBIT / VIGYANTRA.</p>
       </div>
@@ -1269,7 +1460,8 @@
   </div>
 </section>
 
-<!-- PRIZE POOL SECTION (AIPromptBattle Style) -->
+<!-- PRIZE POOL SECTION -->
+<div class="section-divider-line reveal" aria-hidden="true"></div>
 <section id="prize-pool" aria-label="Prize pool breakdown">
   <div class="container">
     <div class="prize-pool-box reveal section-intro section-intro--center">
@@ -1280,19 +1472,19 @@
     </div>
 
     <div class="prize-tiers-grid">
-      <div class="glass-card prize-tier-card reveal">
+      <div class="glass-card prize-tier-card reveal reveal-delay-1">
         <div class="prize-tier-badge">&lt; 15 TEAMS</div>
         <div class="prize-tier-title">Single Prize Awarded</div>
         <p class="prize-tier-desc">1st Place Winner takes the primary pool award.</p>
       </div>
 
-      <div class="glass-card prize-tier-card reveal">
+      <div class="glass-card prize-tier-card reveal reveal-delay-2">
         <div class="prize-tier-badge">15 – 30 TEAMS</div>
         <div class="prize-tier-title">Two Prizes Awarded</div>
         <p class="prize-tier-desc">1st and 2nd Place Winners share the prize tier.</p>
       </div>
 
-      <div class="glass-card prize-tier-card reveal">
+      <div class="glass-card prize-tier-card reveal reveal-delay-3">
         <div class="prize-tier-badge">30+ TEAMS</div>
         <div class="prize-tier-title">Full Prize Pool Unlocked</div>
         <p class="prize-tier-desc">1st, 2nd, and 3rd Place Winners unlock full ₹50,000 rewards.</p>
@@ -1302,6 +1494,7 @@
 </section>
 
 <!-- INFO BENTO GRID SECTION -->
+<div class="section-divider-line reveal" aria-hidden="true"></div>
 <section id="details" aria-label="Event details">
   <div class="container">
     <div class="reveal section-intro section-intro--center">
@@ -1311,25 +1504,25 @@
     </div>
 
     <div class="bento-grid">
-      <div class="glass-card bento-card reveal">
+      <div class="glass-card bento-card reveal reveal-delay-1">
         <span class="bento-title">DATE &amp; TIME</span>
         <span class="bento-value">30 OCT 2026</span>
         <span style="font-size:0.85rem; color:var(--text-secondary);">9:00 AM Onwards</span>
       </div>
 
-      <div class="glass-card bento-card reveal">
+      <div class="glass-card bento-card reveal reveal-delay-2">
         <span class="bento-title">VENUE</span>
         <span class="bento-value">SJBIT CAMPUS</span>
         <span style="font-size:0.85rem; color:var(--text-secondary);">Bengaluru, Karnataka</span>
       </div>
 
-      <div class="glass-card bento-card reveal">
+      <div class="glass-card bento-card reveal reveal-delay-3">
         <span class="bento-title">TEAM SIZE</span>
         <span class="bento-value">4 MEMBERS</span>
         <span style="font-size:0.85rem; color:var(--text-secondary);">Strictly per team</span>
       </div>
 
-      <div class="glass-card bento-card reveal">
+      <div class="glass-card bento-card reveal reveal-delay-4">
         <span class="bento-title">ENTRY FEE</span>
         <span class="bento-value">₹400 / TEAM</span>
         <span style="font-size:0.85rem; color:var(--text-secondary);">Official registration</span>
@@ -1339,6 +1532,7 @@
 </section>
 
 <!-- EDITORIAL SECTION 2 -->
+<div class="section-divider-line reveal" aria-hidden="true"></div>
 <section class="ed-section" aria-label="Editorial Section 2">
   <div class="container">
     <div class="ed-block reveal">
@@ -1354,6 +1548,7 @@
 </section>
 
 <!-- DIRECTIVES (RULES) SPLIT LAYOUT -->
+<div class="section-divider-line reveal" aria-hidden="true"></div>
 <section id="rules" aria-label="Competition directives">
   <div class="container">
     <div class="split-layout">
@@ -1367,7 +1562,7 @@
       <!-- Scrollable List -->
       <div class="rules-list">
         <!-- 01 -->
-        <div class="glass-card rule-item-card reveal">
+        <div class="glass-card rule-item-card reveal reveal-delay-1">
           <div class="rule-item-num">01</div>
           <div>
             <div class="rule-item-title">TEAM COMPOSITION</div>
@@ -1376,7 +1571,7 @@
         </div>
 
         <!-- 02 -->
-        <div class="glass-card rule-item-card reveal">
+        <div class="glass-card rule-item-card reveal reveal-delay-2">
           <div class="rule-item-num">02</div>
           <div>
             <div class="rule-item-title">TEAM ID &amp; IDENTIFICATION</div>
@@ -1385,7 +1580,7 @@
         </div>
 
         <!-- 03 -->
-        <div class="glass-card rule-item-card reveal">
+        <div class="glass-card rule-item-card reveal reveal-delay-3">
           <div class="rule-item-num">03</div>
           <div>
             <div class="rule-item-title">REGISTERED EMAIL ID</div>
@@ -1394,7 +1589,7 @@
         </div>
 
         <!-- 04 -->
-        <div class="glass-card rule-item-card reveal">
+        <div class="glass-card rule-item-card reveal reveal-delay-4">
           <div class="rule-item-num">04</div>
           <div>
             <div class="rule-item-title">REPORTING &amp; CONDUCT</div>
@@ -1403,7 +1598,7 @@
         </div>
 
         <!-- 05 -->
-        <div class="glass-card rule-item-card reveal">
+        <div class="glass-card rule-item-card reveal reveal-delay-1">
           <div class="rule-item-num">05</div>
           <div>
             <div class="rule-item-title">PERMITTED RESOURCES</div>
@@ -1412,7 +1607,7 @@
         </div>
 
         <!-- 06 -->
-        <div class="glass-card rule-item-card reveal">
+        <div class="glass-card rule-item-card reveal reveal-delay-2">
           <div class="rule-item-num">06</div>
           <div>
             <div class="rule-item-title">FAIR PLAY</div>
@@ -1421,7 +1616,7 @@
         </div>
 
         <!-- 07 -->
-        <div class="glass-card rule-item-card reveal">
+        <div class="glass-card rule-item-card reveal reveal-delay-3">
           <div class="rule-item-num">07</div>
           <div>
             <div class="rule-item-title">TIME LIMITS &amp; SUBMISSIONS</div>
@@ -1430,7 +1625,7 @@
         </div>
 
         <!-- 08 -->
-        <div class="glass-card rule-item-card reveal">
+        <div class="glass-card rule-item-card reveal reveal-delay-4">
           <div class="rule-item-num">08</div>
           <div>
             <div class="rule-item-title">ROUND PROGRESSION &amp; SCORING</div>
@@ -1439,7 +1634,7 @@
         </div>
 
         <!-- 09 -->
-        <div class="glass-card rule-item-card reveal">
+        <div class="glass-card rule-item-card reveal reveal-delay-1">
           <div class="rule-item-num">09</div>
           <div>
             <div class="rule-item-title">CLUES, MOVEMENT &amp; SAFETY</div>
@@ -1448,7 +1643,7 @@
         </div>
 
         <!-- 10 -->
-        <div class="glass-card rule-item-card reveal">
+        <div class="glass-card rule-item-card reveal reveal-delay-2">
           <div class="rule-item-num">10</div>
           <div>
             <div class="rule-item-title">PRIZE DISTRIBUTION TIERS</div>
@@ -1462,7 +1657,7 @@
         </div>
 
         <!-- 11 -->
-        <div class="glass-card rule-item-card reveal">
+        <div class="glass-card rule-item-card reveal reveal-delay-3">
           <div class="rule-item-num">11</div>
           <div>
             <div class="rule-item-title">SAFETY PROTOCOLS &amp; NOTICE</div>
@@ -1475,6 +1670,7 @@
 </section>
 
 <!-- EDITORIAL SECTION 3 -->
+<div class="section-divider-line reveal" aria-hidden="true"></div>
 <section class="ed-section" aria-label="Editorial Section 3">
   <div class="container" style="text-align:center;">
     <div class="ed-block reveal">
@@ -1492,6 +1688,7 @@
 </section>
 
 <!-- INTEL DB (FAQ) SPLIT LAYOUT -->
+<div class="section-divider-line reveal" aria-hidden="true"></div>
 <section id="faq" aria-label="Intel DB FAQ">
   <div class="container">
     <div class="split-layout">
@@ -1505,37 +1702,37 @@
       <!-- FAQ Accordion -->
       <div class="faq-list">
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">Who can participate in Hack and Hunt?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+          <button class="faq-question" aria-expanded="false">Who can participate in Hack and Hunt?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
           <div class="faq-answer"><div class="faq-answer-inner">Any currently enrolled student from any college or university can participate. Students from any branch, year, or specialization are welcome. A valid institutional ID is mandatory on competition day (30 Oct 2026).</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">Can I register individually or with fewer than 4 members?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+          <button class="faq-question" aria-expanded="false">Can I register individually or with fewer than 4 members?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
           <div class="faq-answer"><div class="faq-answer-inner">No. Hack and Hunt requires teams of strictly 4 registered members. Solo registrations or teams with fewer members are not accepted. Reach out to classmates or friends to form your 4-member squad.</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">Is there a registration fee?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+          <button class="faq-question" aria-expanded="false">Is there a registration fee?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
           <div class="faq-answer"><div class="faq-answer-inner">Yes, the registration fee is <strong>₹400/- per team</strong>. This covers event access, refreshments, participation certificates, and event materials. Payment details are provided in the registration form.</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">What should participants bring on event day?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+          <button class="faq-question" aria-expanded="false">What should participants bring on event day?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
           <div class="faq-answer"><div class="faq-answer-inner">Bring: ✓ Valid college ID card ✓ Registration confirmation email ✓ Laptop + charger ✓ Any hardware/peripherals you plan to use ✓ Personal essentials. The venue provides Wi-Fi, power outlets, and workstations.</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">How will projects and tasks be judged?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+          <button class="faq-question" aria-expanded="false">How will projects and tasks be judged?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
           <div class="faq-answer"><div class="faq-answer-inner">Hack and Hunt follows a sequential elimination format across 04 rounds evaluated by expert judges. Official answer sheets, timestamps, completion records, and verified results determine qualification. The decision of authorized judges is final.</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">Can team members be from different colleges?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+          <button class="faq-question" aria-expanded="false">Can team members be from different colleges?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
           <div class="faq-answer"><div class="faq-answer-inner">Yes! Cross-college and cross-department teams are fully allowed and encouraged. Just ensure all 4 team members have valid college ID cards.</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">Will certificates be provided to all participants?<span class="faq-chevron" aria-hidden="true">▼</span></button>
+          <button class="faq-question" aria-expanded="false">Will certificates be provided to all participants?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
           <div class="faq-answer"><div class="faq-answer-inner">Yes. Every registered participant who attends and competes will receive an official Certificate of Participation from VIGYANTRA '26 / SJBIT. Winners will receive merit certificates and cash prizes.</div></div>
         </div>
       </div>
@@ -1544,6 +1741,7 @@
 </section>
 
 <!-- COORDINATORS SECTION -->
+<div class="section-divider-line reveal" aria-hidden="true"></div>
 <section id="coordinators" aria-label="Event coordinators">
   <div class="container">
     <div class="reveal section-intro section-intro--center">
@@ -1553,28 +1751,35 @@
     </div>
 
     <div class="coordinators-grid">
-      <div class="glass-card coord-card reveal">
+      <div class="glass-card coord-card reveal reveal-delay-1">
         <div class="coord-avatar">
           <img src="assets/likitha.jpg" alt="Likitha G." />
         </div>
         <div class="coord-name">Likitha G.</div>
         <div class="coord-role">Event Coordinator</div>
-        <a href="tel:9481067015" class="coord-phone">📞 +91 94810 67015</a>
+        <a href="tel:9481067015" class="coord-phone">
+          <svg class="lucide-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +91 94810 67015
+        </a>
       </div>
 
-      <div class="glass-card coord-card reveal">
+      <div class="glass-card coord-card reveal reveal-delay-2">
         <div class="coord-avatar">
           <img src="assets/jeevan.jpg" alt="Jeevan Y." />
         </div>
         <div class="coord-name">Jeevan Y.</div>
         <div class="coord-role">Event Coordinator</div>
-        <a href="tel:7204402406" class="coord-phone">📞 +91 72044 02406</a>
+        <a href="tel:7204402406" class="coord-phone">
+          <svg class="lucide-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +91 72044 02406
+        </a>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FINAL CALL / REGISTRATION SECTION -->
+<div class="section-divider-line reveal" aria-hidden="true"></div>
 <section id="registration" aria-label="Registration terminal">
   <div class="container">
     <div class="glass-card final-call-box reveal">
@@ -1585,7 +1790,7 @@
       </p>
 
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="btn-primary" target="_blank" rel="noopener">
-        REGISTER NOW →
+        REGISTER NOW <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
     </div>
   </div>
@@ -1615,12 +1820,14 @@
 </footer>
 
 <!-- Back to top button -->
-<button id="back-top" aria-label="Back to top">↑</button>
+<button id="back-top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+</button>
 
 <!-- Sticky Mobile Registration CTA (Visible on mobile screens) -->
 <div id="mobile-sticky-cta" aria-hidden="false">
   <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" target="_blank" rel="noopener">
-    REGISTER NOW →
+    REGISTER NOW <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
   </a>
 </div>
 
@@ -1842,295 +2049,18 @@
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 })();
 
-/* ══════════════════════════════════════════════════════════
-   CYBER SECURITY SCANNER ANIMATION — Full-width background
-   Glass sweeps left→right, key reveals at center
-══════════════════════════════════════════════════════════ */
+/* SUBTLE HERO BACKGROUND PARALLAX */
 (function() {
-  const canvas = document.getElementById('cyber-scanner-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-
-  function resize() {
-    const wrap = canvas.parentElement;
-    W = canvas.width  = wrap ? wrap.offsetWidth  : 1200;
-    H = canvas.height = wrap ? wrap.offsetHeight : 420;
-    // Rebuild iso grid whenever canvas resizes
-    buildGrid();
-  }
-
-  let W = 1200, H = 420;
-  let state = 0;
-  let progress = 0;
-  let keyAlpha = 0;
-  let floatOffset = 0;
-  let glassX = -100;
-
+  const heroArt = document.querySelector('.hero-bg-art');
+  if (!heroArt) return;
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return;
 
-  // ── Isometric 3D Maze Grid ──────────────────────────────
-  let isoBlocks = [];
-  const isoCols = 18, isoRows = 9;
-  const tileW = 54, tileH = 27;
-
-  function buildGrid() {
-    isoBlocks = [];
-    const originX = W / 2;
-    const originY = H * 0.28;
-    for (let r = 0; r < isoRows; r++) {
-      for (let c = 0; c < isoCols; c++) {
-        if ((r + c) % 2 === 0 || (r === 4 && c === 9) || (r === 2 && c === 12) || (r === 6 && c === 5)) {
-          const h = ((r * 7 + c * 13) % 4 === 0) ? 36 : ((r + c) % 3 === 0 ? 22 : 14);
-          const sx = originX + (c - r) * (tileW / 2);
-          const sy = originY + (c + r) * (tileH / 2);
-          isoBlocks.push({ x: sx, y: sy, h });
-        }
-      }
+  window.addEventListener('scroll', () => {
+    if (window.scrollY < window.innerHeight * 1.2) {
+      heroArt.style.transform = `translateY(${window.scrollY * 0.14}px)`;
     }
-  }
-
-  // Matrix streams
-  let matrixCols = [];
-  function buildMatrix() {
-    matrixCols = Array.from({ length: 24 }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      speed: 0.35 + Math.random() * 0.65,
-      char: Math.random() > 0.5 ? '1' : '0'
-    }));
-  }
-
-  // ── Draw helpers ────────────────────────────────────────
-  function drawIsoBlock(x, y, h, lit) {
-    const hw = tileW / 2, hh = tileH / 2;
-    const top   = lit ? '#0E5244' : '#082D27';
-    const left  = lit ? '#07352D' : '#041B18';
-    const right = lit ? '#0A4038' : '#05231F';
-    const edge  = lit ? 'rgba(0,245,155,0.38)' : 'rgba(0,245,155,0.08)';
-
-    ctx.lineWidth = 0.8;
-    // Top face
-    ctx.fillStyle = top;
-    ctx.beginPath();
-    ctx.moveTo(x, y - h); ctx.lineTo(x + hw, y + hh - h);
-    ctx.lineTo(x, y + tileH - h); ctx.lineTo(x - hw, y + hh - h);
-    ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = edge; ctx.stroke();
-    // Left face
-    ctx.fillStyle = left;
-    ctx.beginPath();
-    ctx.moveTo(x - hw, y + hh - h); ctx.lineTo(x, y + tileH - h);
-    ctx.lineTo(x, y + tileH);       ctx.lineTo(x - hw, y + hh);
-    ctx.closePath(); ctx.fill(); ctx.stroke();
-    // Right face
-    ctx.fillStyle = right;
-    ctx.beginPath();
-    ctx.moveTo(x, y + tileH - h);   ctx.lineTo(x + hw, y + hh - h);
-    ctx.lineTo(x + hw, y + hh);     ctx.lineTo(x, y + tileH);
-    ctx.closePath(); ctx.fill(); ctx.stroke();
-  }
-
-  function drawScene(gx, gy, spotR) {
-    // Transparent background — no fillRect so page bg shows through
-    ctx.clearRect(0, 0, W, H);
-
-    // Subtle dark vignette gradient
-    const vg = ctx.createRadialGradient(W/2, H/2, H*0.1, W/2, H/2, H*0.75);
-    vg.addColorStop(0, 'rgba(2,18,18,0)');
-    vg.addColorStop(1, 'rgba(2,18,18,0.82)');
-    ctx.fillStyle = vg;
-    ctx.fillRect(0, 0, W, H);
-
-    // Matrix rain
-    ctx.font = '11px "Fira Code", monospace';
-    matrixCols.forEach(m => {
-      m.y += m.speed;
-      if (m.y > H + 20) { m.y = -20; m.x = Math.random() * W; }
-      ctx.fillStyle = 'rgba(0,245,155,0.08)';
-      ctx.fillText(m.char, m.x, m.y);
-    });
-
-    // Iso maze blocks
-    isoBlocks.forEach(b => {
-      const d = Math.hypot(b.x - gx, b.y - gy);
-      drawIsoBlock(b.x, b.y, b.h, d < spotR);
-    });
-  }
-
-  function drawCyberKey(cx, cy, scale, alpha) {
-    ctx.save();
-    ctx.translate(cx, cy + Math.sin(floatOffset) * 5);
-    ctx.scale(scale, scale);
-    ctx.globalAlpha = alpha;
-
-    // Glow pool
-    const glow = ctx.createRadialGradient(0, 0, 4, 0, 0, 80);
-    glow.addColorStop(0, 'rgba(0,245,155,0.9)');
-    glow.addColorStop(0.4, 'rgba(16,185,129,0.4)');
-    glow.addColorStop(1, 'transparent');
-    ctx.fillStyle = glow;
-    ctx.beginPath(); ctx.arc(0, 0, 80, 0, Math.PI * 2); ctx.fill();
-
-    ctx.shadowColor = '#00F59B'; ctx.shadowBlur = 28;
-    ctx.strokeStyle = '#00F59B'; ctx.fillStyle = '#C7F9E5'; ctx.lineWidth = 4;
-
-    // Hexagonal bow
-    ctx.beginPath();
-    for (let i = 0; i < 6; i++) {
-      const a = (i * Math.PI) / 3 - Math.PI / 6;
-      const hx = -32 + 18 * Math.cos(a), hy = 18 * Math.sin(a);
-      i === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
-    }
-    ctx.closePath(); ctx.stroke();
-    // Inner hole
-    ctx.beginPath();
-    for (let i = 0; i < 6; i++) {
-      const a = (i * Math.PI) / 3 - Math.PI / 6;
-      const hx = -32 + 8 * Math.cos(a), hy = 8 * Math.sin(a);
-      i === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
-    }
-    ctx.closePath(); ctx.fillStyle = 'rgba(2,18,18,0.9)'; ctx.fill(); ctx.stroke();
-    // Shaft
-    ctx.beginPath(); ctx.moveTo(-14, 0); ctx.lineTo(36, 0); ctx.stroke();
-    // Teeth
-    ctx.beginPath();
-    ctx.moveTo(14,0); ctx.lineTo(14,14); ctx.lineTo(20,14); ctx.lineTo(20,0);
-    ctx.moveTo(26,0); ctx.lineTo(26,18); ctx.lineTo(34,18); ctx.lineTo(34,0);
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  function drawMagnifyingGlass(x, y, radius) {
-    ctx.save();
-    ctx.translate(x, y);
-
-    // Handle
-    ctx.save();
-    ctx.rotate(Math.PI * 0.72);
-    const hg = ctx.createLinearGradient(-12, 0, 12, 0);
-    hg.addColorStop(0, '#041814');
-    hg.addColorStop(0.35, '#114038');
-    hg.addColorStop(0.7, '#082520');
-    hg.addColorStop(1, '#020E0C');
-    ctx.fillStyle = hg;
-    ctx.beginPath();
-    ctx.roundRect(-8, radius * 0.82, 16, radius * 1.9, 9);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(0,245,155,0.4)'; ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(-8, radius * 1.1); ctx.lineTo(8, radius * 1.1);
-    ctx.moveTo(-8, radius * 1.3); ctx.lineTo(8, radius * 1.3);
-    ctx.stroke();
-    ctx.restore();
-
-    // Lens dark fill (gives depth)
-    ctx.fillStyle = 'rgba(4,20,18,0.72)';
-    ctx.beginPath(); ctx.arc(0, 0, radius - 5, 0, Math.PI * 2); ctx.fill();
-
-    // Rim bevel
-    const rg = ctx.createLinearGradient(-radius, -radius, radius, radius);
-    rg.addColorStop(0, '#124A40');
-    rg.addColorStop(0.3, '#00F59B');
-    rg.addColorStop(0.65, '#062923');
-    rg.addColorStop(1, '#0B3B33');
-    ctx.strokeStyle = rg; ctx.lineWidth = 8;
-    ctx.shadowColor = '#00F59B'; ctx.shadowBlur = 20;
-    ctx.beginPath(); ctx.arc(0, 0, radius, 0, Math.PI * 2); ctx.stroke();
-
-    // Inner edge
-    ctx.strokeStyle = 'rgba(2,18,18,0.9)'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.arc(0, 0, radius - 5, 0, Math.PI * 2); ctx.stroke();
-
-    // Specular highlight
-    ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 3; ctx.shadowBlur = 0;
-    ctx.beginPath(); ctx.arc(0, 0, radius - 7, Math.PI * 1.15, Math.PI * 1.65); ctx.stroke();
-
-    ctx.restore();
-  }
-
-  // ── State machine ────────────────────────────────────────
-  const RADIUS = 85;
-  const centerX = () => W / 2;
-  const centerY = () => H / 2;
-
-  function render() {
-    floatOffset += 0.035;
-
-    if (prefersReduced) {
-      const cx = centerX(), cy = centerY();
-      drawScene(cx, cy, RADIUS + 10);
-      drawCyberKey(cx, cy, 1, 1);
-      drawMagnifyingGlass(cx, cy, RADIUS);
-      requestAnimationFrame(render);
-      return;
-    }
-
-    if (state === 0) {
-      // Glass sweeps in from left edge to center
-      progress += 0.007;
-      glassX = -RADIUS + (centerX() + RADIUS) * Math.min(1, progress * 1.4);
-      const gy = centerY();
-
-      drawScene(glassX, gy, RADIUS * 0.9);
-      drawMagnifyingGlass(glassX, gy, RADIUS);
-
-      if (progress >= 1) { state = 1; progress = 0; glassX = centerX(); }
-
-    } else if (state === 1) {
-      // Glass at center, scans right → left
-      progress += 0.005;
-      const sweep = Math.sin(progress * Math.PI * 2.5) * (W * 0.35);
-      glassX = centerX() + sweep;
-      const gy = centerY();
-
-      drawScene(glassX, gy, RADIUS * 1.1);
-      drawMagnifyingGlass(glassX, gy, RADIUS);
-
-      if (progress >= 1.4) { state = 2; progress = 0; glassX = centerX(); }
-
-    } else if (state === 2) {
-      // Key reveal at center
-      progress += 0.016;
-      keyAlpha = Math.min(1, progress);
-      const cx = centerX(), cy = centerY();
-
-      drawScene(cx, cy, RADIUS + 20);
-      drawCyberKey(cx, cy, Math.min(1, progress * 1.1), keyAlpha);
-      drawMagnifyingGlass(cx, cy, RADIUS);
-
-      if (progress >= 1) { state = 3; progress = 0; }
-
-    } else if (state === 3) {
-      // Hold key visible
-      progress += 0.004;
-      const cx = centerX(), cy = centerY();
-
-      drawScene(cx, cy, RADIUS + 20);
-      drawCyberKey(cx, cy, 1, 1);
-      drawMagnifyingGlass(cx, cy, RADIUS);
-
-      if (progress >= 1) { state = 4; progress = 0; }
-
-    } else if (state === 4) {
-      // Fade out & loop
-      progress += 0.022;
-      keyAlpha = Math.max(0, 1 - progress);
-      const cx = centerX(), cy = centerY();
-
-      drawScene(cx, cy, (RADIUS + 20) * keyAlpha);
-      drawCyberKey(cx, cy, 1, keyAlpha);
-      drawMagnifyingGlass(cx, cy, RADIUS);
-
-      if (progress >= 1) { state = 0; progress = 0; keyAlpha = 0; glassX = -RADIUS; }
-    }
-
-    requestAnimationFrame(render);
-  }
-
-  buildMatrix();
-  resize();
-  window.addEventListener('resize', resize);
-  render();
+  }, { passive: true });
 })();
 </script>
 </body>
