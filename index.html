@@ -9,7 +9,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Orbitron:wght@700;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Orbitron:wght@700;900&family=Fira+Code:wght@400;500;600&family=Cinzel:wght@700;900&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet" />
 
   <style>
     /* ============================================================
@@ -325,13 +325,13 @@
     }
 
     /* ============================================================
-       2. HERO SECTION (Editorial Layout)
+       2. HERO SECTION (Editorial Layout & Cyber Scanner)
     ============================================================ */
     #home {
       min-height: 100vh;
       display: flex; align-items: center; justify-content: center;
       position: relative; overflow: hidden;
-      padding: calc(var(--nav-h) + 60px) 0 90px;
+      padding: calc(var(--nav-h) + 40px) 0 80px;
       background: radial-gradient(circle at 50% 30%, rgba(0, 245, 155, 0.12) 0%, transparent 70%), var(--bg-main);
       text-align: center;
     }
@@ -343,15 +343,129 @@
     .hero-orb-2 { width:500px; height:500px; background:var(--accent-cyan); bottom:-100px; left:-100px; }
 
     .hero-content {
-      display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; width: 100%;
     }
 
+    /* HACK & HUNT TITLE — Recreating Reference Image 2 */
     .hero-h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(2.8rem, 8.5vw, 6.8rem);
-      font-weight: 900; line-height: 1.02;
-      letter-spacing: -0.02em; margin-bottom: 20px;
+      margin-bottom: 16px;
+      user-select: none;
+      width: 100%;
+    }
+    .hack-hunt-banner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.08em;
+      font-family: 'Cinzel', 'Space Grotesk', serif;
+      font-weight: 900;
       text-transform: uppercase;
+      font-size: clamp(2.8rem, 8.8vw, 6.8rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+    }
+    .word-distressed {
+      font-family: 'Cinzel', 'Space Grotesk', serif;
+      font-weight: 900;
+      background: linear-gradient(180deg, #FFFFFF 0%, #EAF8F1 32%, #A1E8C5 72%, #00F59B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 6px 14px rgba(2, 18, 18, 0.95)) drop-shadow(0 0 10px rgba(0, 245, 155, 0.25));
+      letter-spacing: 0.03em;
+      position: relative;
+    }
+    .ampersand-script {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      color: #00F59B;
+      font-size: 0.85em;
+      margin-inline: -0.05em;
+      line-height: 0.8;
+      filter: drop-shadow(0 0 12px #00F59B) drop-shadow(0 0 24px rgba(0, 245, 155, 0.7));
+      z-index: 2;
+    }
+    .year-gradient {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 2.6rem);
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* Cyber Security Hero Scanner Component */
+    .scanner-hero-wrap {
+      position: relative;
+      width: min(640px, 92vw);
+      height: min(340px, 58vw);
+      margin: 24px auto 32px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: rgba(4, 26, 22, 0.85);
+      box-shadow: 0 16px 44px rgba(2, 18, 18, 0.85), inset 0 1px 0 rgba(0, 245, 155, 0.2);
+    }
+    #cyber-scanner-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .scanner-status-ui {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(2, 18, 18, 0.88);
+      border: 1px solid var(--border-glow);
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(2, 18, 18, 0.7);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      z-index: 10;
+    }
+    .scanner-status-ui.visible { opacity: 1; }
+    .scanner-caption {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #00F59B;
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .scanner-caption .pulse-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #00F59B; box-shadow: 0 0 8px #00F59B;
+      animation: pulse-dot 1.5s infinite;
+    }
+    .btn-secure-access {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #021212;
+      background: #C7F9E5;
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      transition: var(--transition);
+      box-shadow: 0 0 12px rgba(0, 245, 155, 0.4);
+      white-space: nowrap;
+    }
+    .btn-secure-access:hover {
+      background: #00F59B;
+      box-shadow: 0 0 18px rgba(0, 245, 155, 0.6);
     }
 
     .hero-tagline {
@@ -671,10 +785,23 @@
     <div class="hero-content">
       <span class="cin-label-sm reveal">SJBIT × VIGYANTRA 2026</span>
       
-      <h1 class="hero-h1 reveal">
-        HACK &amp; HUNT<br />
-        <span class="gradient-text">2026</span>
+      <h1 class="hero-h1 reveal" aria-label="HACK AND HUNT 2026">
+        <div class="hack-hunt-banner">
+          <span class="word-distressed">HACK</span>
+          <span class="ampersand-script">&amp;</span>
+          <span class="word-distressed">HUNT</span>
+        </div>
+        <span class="year-gradient">2026</span>
       </h1>
+
+      <!-- CYBER-SECURITY HERO SCANNER ANIMATION COMPONENT -->
+      <div class="scanner-hero-wrap reveal">
+        <canvas id="cyber-scanner-canvas" width="640" height="340"></canvas>
+        <div class="scanner-status-ui" id="scanner-status-ui">
+          <div class="scanner-caption"><span class="pulse-dot"></span> SEARCH COMPLETE</div>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="btn-secure-access" target="_blank" rel="noopener">Secure Access</a>
+        </div>
+      </div>
 
       <p class="hero-tagline reveal">Think. Code. Hunt. Conquer.</p>
 
@@ -1364,6 +1491,178 @@
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+
+/* ══════════════════════════════════════════════════════════
+   CYBER SECURITY SCANNER ANIMATION (Binoculars + Key Reveal)
+══════════════════════════════════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('cyber-scanner-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const statusUI = document.getElementById('scanner-status-ui');
+
+  let W = canvas.width = 640;
+  let H = canvas.height = 340;
+
+  let state = 0; // 0: enter/sweep, 1: key reveal, 2: hold & UI show, 3: reset
+  let progress = 0;
+  let keyAngle = 0;
+  let keyAlpha = 0;
+  let beamAngle = 0;
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Maze circuit grid nodes
+  const mazeGrid = [];
+  const rows = 12, cols = 20;
+  for (let r = 0; r <= rows; r++) {
+    for (let c = 0; c <= cols; c++) {
+      if ((r + c) % 3 === 0 || r === 6 || c === 10) {
+        mazeGrid.push({ x: (c / cols) * W, y: (r / rows) * H });
+      }
+    }
+  }
+
+  function drawMazeBackground() {
+    ctx.fillStyle = '#021212';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.strokeStyle = 'rgba(0, 245, 155, 0.09)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let i = 0; i < mazeGrid.length; i++) {
+      const p = mazeGrid[i];
+      if (i > 0 && Math.abs(p.y - mazeGrid[i-1].y) < 35) {
+        ctx.moveTo(mazeGrid[i-1].x, mazeGrid[i-1].y);
+        ctx.lineTo(p.x, p.y);
+      }
+    }
+    ctx.stroke();
+
+    mazeGrid.forEach((p, idx) => {
+      if (idx % 4 === 0) {
+        ctx.fillStyle = 'rgba(0, 245, 155, 0.28)';
+        ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI * 2); ctx.fill();
+      }
+    });
+  }
+
+  function drawKey(cx, cy, scale, alpha, rotation) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(rotation);
+    ctx.scale(scale, scale);
+    ctx.globalAlpha = alpha;
+
+    const grad = ctx.createRadialGradient(0, 0, 5, 0, 0, 60);
+    grad.addColorStop(0, 'rgba(0, 245, 155, 0.65)');
+    grad.addColorStop(0.5, 'rgba(16, 185, 129, 0.25)');
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(0, 0, 60, 0, Math.PI * 2); ctx.fill();
+
+    ctx.strokeStyle = '#00F59B';
+    ctx.fillStyle = '#C7F9E5';
+    ctx.lineWidth = 3.5;
+    ctx.shadowColor = '#00F59B';
+    ctx.shadowBlur = 18;
+
+    // Key Bow (Head)
+    ctx.beginPath(); ctx.arc(-24, 0, 16, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(-24, 0, 8, 0, Math.PI * 2); ctx.fillStyle = '#021212'; ctx.fill(); ctx.stroke();
+
+    // Key Shaft
+    ctx.beginPath(); ctx.moveTo(-8, 0); ctx.lineTo(32, 0); ctx.stroke();
+
+    // Key Teeth
+    ctx.beginPath();
+    ctx.moveTo(16, 0); ctx.lineTo(16, 12); ctx.lineTo(22, 12); ctx.lineTo(22, 0);
+    ctx.moveTo(26, 0); ctx.lineTo(26, 16); ctx.lineTo(32, 16); ctx.lineTo(32, 0);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function drawScannerLens(x, y, radius) {
+    ctx.save();
+    ctx.translate(x, y);
+
+    const coneGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, radius * 2.2);
+    coneGrad.addColorStop(0, 'rgba(0, 245, 155, 0.35)');
+    coneGrad.addColorStop(0.6, 'rgba(0, 245, 155, 0.1)');
+    coneGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = coneGrad;
+    ctx.beginPath(); ctx.arc(0, 0, radius * 2.2, 0, Math.PI * 2); ctx.fill();
+
+    beamAngle += 0.04;
+    ctx.strokeStyle = '#00F59B';
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = '#00F59B'; ctx.shadowBlur = 14;
+    ctx.beginPath(); ctx.arc(0, 0, radius, beamAngle, beamAngle + 1.2); ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(0, 245, 155, 0.85)';
+    ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.arc(0, 0, radius, 0, Math.PI * 2); ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(199, 249, 229, 0.45)';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(-radius * 0.2, -radius * 0.2, radius * 0.75, Math.PI * 0.8, Math.PI * 1.6); ctx.stroke();
+
+    ctx.strokeStyle = '#082926'; ctx.lineWidth = 14;
+    ctx.beginPath(); ctx.moveTo(-radius * 0.7, radius * 0.7); ctx.lineTo(-radius * 1.9, radius * 1.9); ctx.stroke();
+    ctx.strokeStyle = 'rgba(0, 245, 155, 0.6)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-radius * 0.7, radius * 0.7); ctx.lineTo(-radius * 1.9, radius * 1.9); ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function render() {
+    drawMazeBackground();
+    const centerX = W / 2;
+    const centerY = H / 2;
+
+    if (prefersReduced) {
+      drawKey(centerX, centerY, 1, 1, 0);
+      drawScannerLens(centerX, centerY, 65);
+      statusUI?.classList.add('visible');
+      return;
+    }
+
+    if (state === 0) { // Sweep phase
+      progress += 0.01;
+      const lensX = (progress * (W + 100)) - 50;
+      const lensY = H * 0.75 - Math.sin(progress * Math.PI) * (H * 0.45);
+
+      drawScannerLens(lensX, lensY, 65);
+      if (progress >= 1) { state = 1; progress = 0; }
+    } else if (state === 1) { // Reveal key
+      progress += 0.02;
+      keyAlpha = Math.min(1, progress);
+      keyAngle += 0.015;
+
+      drawScannerLens(centerX, centerY, 70);
+      drawKey(centerX, centerY, Math.min(1, progress * 1.1), keyAlpha, keyAngle);
+      if (progress >= 1) { state = 2; progress = 0; statusUI?.classList.add('visible'); }
+    } else if (state === 2) { // Hold Phase
+      progress += 0.006;
+      keyAngle += 0.008;
+
+      drawScannerLens(centerX, centerY, 70);
+      drawKey(centerX, centerY, 1, 1, keyAngle);
+      if (progress >= 1) { state = 3; progress = 0; statusUI?.classList.remove('visible'); }
+    } else if (state === 3) { // Fade out & reset
+      progress += 0.03;
+      keyAlpha = Math.max(0, 1 - progress);
+
+      drawKey(centerX, centerY, 1, keyAlpha, keyAngle);
+      if (progress >= 1) { state = 0; progress = 0; keyAlpha = 0; }
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  render();
 })();
 </script>
 </body>
