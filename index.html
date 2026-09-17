@@ -651,43 +651,20 @@
     }
 
     /* ── HACK & HUNT title ───────────────────────────────── */
+    /* ── HACK & HUNT Title (Exact Event Logo Visual) ───── */
     .hero-h1 {
-      margin-bottom: 2px;
+      margin-bottom: 6px;
       user-select: none;
       width: 100%;
     }
-    .hack-hunt-banner {
-      display: inline-flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 0.06em;
-      font-family: 'Cinzel', 'Space Grotesk', serif;
-      font-weight: 900;
-      text-transform: uppercase;
-      font-size: clamp(2.8rem, 8.8vw, 6.4rem);
-      line-height: 0.92;
-      letter-spacing: 0.02em;
-    }
-    .word-distressed {
-      font-family: 'Cinzel', 'Space Grotesk', serif;
-      font-weight: 900;
-      background: linear-gradient(175deg, #FFFFFF 0%, #EAF8F1 30%, #A1E8C5 68%, #00F59B 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 4px 12px rgba(2, 18, 18, 0.9));
-      letter-spacing: 0.03em;
-    }
-    .ampersand-script {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-weight: 400;
-      color: #00F59B;
-      font-size: 0.82em;
-      margin-inline: -0.04em;
-      line-height: 0.8;
-      filter: drop-shadow(0 0 10px #00F59B) drop-shadow(0 0 20px rgba(0, 245, 155, 0.5));
-      z-index: 2;
+    .hero-title-img {
+      width: 100%;
+      max-width: 540px;
+      height: auto;
+      display: block;
+      mix-blend-mode: screen;
+      filter: drop-shadow(0 0 28px rgba(0, 245, 155, 0.35)) drop-shadow(0 6px 20px rgba(0, 0, 0, 0.85));
+      transform: translateZ(0);
     }
 
     /* Mobile-only magnifying glass framing */
@@ -1147,7 +1124,7 @@
         text-align: center;
         max-width: 100%;
       }
-      .hack-hunt-banner { justify-content: center; }
+      .hero-title-img { margin-inline: auto; max-width: min(440px, 92vw); }
       .hero-chips { justify-content: center; }
       .hero-typer-box { margin-inline: auto; }
       .scroll-hint { align-items: center; }
@@ -1177,7 +1154,7 @@
     @media (max-width: 540px) {
       .overview-grid { grid-template-columns: 1fr; }
       .bento-grid { grid-template-columns: 1fr; }
-      .hack-hunt-banner { font-size: clamp(2.4rem, 12vw, 3.8rem); }
+      .hero-title-img { max-width: min(340px, 88vw); }
       .hero-chips { gap: 6px; }
       .hero-chips span { font-size: 0.72rem; padding: 5px 12px; }
       .hero-typer-box { font-size: 0.76rem; padding: 10px 14px; }
@@ -1189,7 +1166,7 @@
     }
 
     @media (max-width: 390px) {
-      .hack-hunt-banner { font-size: clamp(2.2rem, 11vw, 2.9rem); letter-spacing: 0; }
+      .hero-title-img { max-width: min(290px, 86vw); }
       .container { width: 94vw; }
       .bento-card { min-height: 110px; padding: 20px 14px; }
     }
@@ -1288,12 +1265,8 @@
         SJBIT × VIGYANTRA 2026
       </span>
 
-      <h1 class="hero-h1 reveal" aria-label="HACK AND HUNT 2026">
-        <div class="hack-hunt-banner">
-          <span class="word-distressed">HACK</span>
-          <span class="ampersand-script">&amp;</span>
-          <span class="word-distressed">HUNT</span>
-        </div>
+      <h1 class="hero-h1 reveal" aria-label="HACK &amp; HUNT">
+        <img src="assets/hack-hunt-logo.png" alt="HACK &amp; HUNT" class="hero-title-img" width="395" height="106" />
       </h1>
 
       <!-- Mobile-only dedicated magnifying glass presentation -->
