@@ -85,8 +85,66 @@
     #particle-canvas {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
     }
-    #confetti-canvas {
-      position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+    /* Blow-up Intro Overlay */
+    #intro-overlay {
+      position: fixed; inset: 0; z-index: 99999;
+      background: #021212;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      pointer-events: none;
+      animation: introFade 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    #intro-overlay .intro-title {
+      text-align: center;
+      animation: introBlowUp 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      line-height: 1.05;
+    }
+    #intro-overlay .intro-line1 {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.8rem, 9vw, 7rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      background: linear-gradient(90deg, #00F59B, #C7F9E5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+    }
+    #intro-overlay .intro-sep {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      color: #00F59B;
+      letter-spacing: 0.05em;
+      margin: 0.1em 0;
+    }
+    #intro-overlay .intro-line2 {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.8rem, 9vw, 7rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      background: linear-gradient(90deg, #C7F9E5, #00F59B);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    @keyframes introBlowUp {
+      0%   { transform: scale(0.3); opacity: 0; }
+      30%  { transform: scale(1.08); opacity: 1; }
+      65%  { transform: scale(1); opacity: 1; }
+      88%  { transform: scale(1.18); opacity: 1; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+    @keyframes introFade {
+      0%   { opacity: 1; }
+      75%  { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #intro-overlay { animation: none; opacity: 0; visibility: hidden; }
     }
 
     /* Container */
@@ -733,7 +791,15 @@
 
 <!-- Background Canvases -->
 <canvas id="particle-canvas"></canvas>
-<canvas id="confetti-canvas"></canvas>
+
+<!-- BLOW-UP INTRO OVERLAY -->
+<div id="intro-overlay" role="presentation" aria-hidden="true">
+  <div class="intro-title">
+    <span class="intro-line1">VIGYANTRA '26</span>
+    <span class="intro-sep">× HACK &amp; HUNT</span>
+  </div>
+</div>
+
 
 <!-- Navigation -->
 <nav id="navbar" role="navigation" aria-label="Main navigation">
@@ -783,7 +849,8 @@
   
   <div class="container">
     <div class="hero-content">
-      <span class="cin-label-sm reveal">SJBIT × VIGYANTRA 2026</span>
+      <span class="cin-label-sm reveal">🔍 SJBIT × VIGYANTRA 2026</span>
+
       
       <h1 class="hero-h1 reveal" aria-label="HACK AND HUNT 2026">
         <div class="hack-hunt-banner">
@@ -791,8 +858,8 @@
           <span class="ampersand-script">&amp;</span>
           <span class="word-distressed">HUNT</span>
         </div>
-        <span class="year-gradient">2026</span>
       </h1>
+
 
       <!-- CYBER-SECURITY HERO SCANNER ANIMATION COMPONENT -->
       <div class="scanner-hero-wrap reveal">
@@ -1345,46 +1412,8 @@
   init(); loop();
 })();
 
-/* CONFETTI CANVAS */
-(function() {
-  const canvas = document.getElementById('confetti-canvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-  window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-  });
-  const COLORS = ['#00F59B', '#10B981', '#34D399', '#C7F9E5', '#F4F8FF'];
-  const TOTAL = 140; let pieces = []; let active = true;
-
-  for (let i = 0; i < TOTAL; i++) {
-    pieces.push({
-      x: Math.random() * canvas.width, y: -Math.random() * canvas.height,
-      w: 4 + Math.random() * 8, h: 8 + Math.random() * 14,
-      r: Math.random() * Math.PI * 2, vx: (Math.random() - 0.5) * 3,
-      vy: 2 + Math.random() * 4, vr: (Math.random() - 0.5) * 0.2,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)], alpha: 1
-    });
-  }
-
-  let done = 0;
-  function confettiLoop() {
-    if (!active) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    done = 0;
-    pieces.forEach(p => {
-      p.x += p.vx; p.y += p.vy; p.r += p.vr; p.vy += 0.05;
-      if (p.y > canvas.height) { p.alpha -= 0.04; if (p.alpha <= 0) done++; }
-      ctx.save(); ctx.globalAlpha = Math.max(0, p.alpha);
-      ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.color;
-      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h); ctx.restore();
-    });
-    if (done < TOTAL) requestAnimationFrame(confettiLoop);
-    else { active = false; ctx.clearRect(0,0,canvas.width,canvas.height); }
-  }
-  setTimeout(confettiLoop, 300);
-})();
-
 /* COUNTDOWN TIMER */
+
 (function() {
   const target = new Date('2026-10-30T09:00:00+05:30').getTime();
   const dEl = document.getElementById('cd-days');
@@ -1749,22 +1778,37 @@
     if (prefersReduced) {
       drawIsoMaze(centerX, centerY, 90);
       drawCyberKey(centerX, centerY, 1, 1, -0.2);
-      drawMagnifyingGlass(centerX, centerY, 70);
+      drawMagnifyingGlass(centerX, centerY, 85);
       statusUI?.classList.add('visible');
       return;
     }
 
-    if (state === 0) { // Sweep phase: Magnifying glass enters from lower left
-      progress += 0.009;
-      const startX = -60;
-      const startY = H + 80;
-      const currentX = startX + (centerX - startX) * Math.sin(progress * Math.PI * 0.5);
-      const currentY = startY + (centerY - startY) * Math.sin(progress * Math.PI * 0.5);
+    if (state === 0) {
+      // Scan beam sweeps left-to-right inside the lens; glass is centered & stationary
+      progress += 0.006;
+      // Beam oscillates: from left edge to right edge of glass, back and forth
+      const beamT = Math.sin(progress * Math.PI * 2);
+      const beamX = centerX + beamT * 68; // span ~68px each side
+      const beamY = centerY;
 
-      drawIsoMaze(currentX, currentY, 80);
-      drawMagnifyingGlass(currentX, currentY, 68);
+      drawIsoMaze(beamX, beamY, 72);
 
-      if (progress >= 1) {
+      // Draw neon scan line across the glass interior
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(centerX - 78, centerY - 78, 156, 156); // clip to glass area
+      ctx.clip();
+      const scanGrad = ctx.createLinearGradient(beamX - 30, 0, beamX + 30, 0);
+      scanGrad.addColorStop(0, 'transparent');
+      scanGrad.addColorStop(0.5, 'rgba(0, 245, 155, 0.55)');
+      scanGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = scanGrad;
+      ctx.fillRect(beamX - 30, centerY - 78, 60, 156);
+      ctx.restore();
+
+      drawMagnifyingGlass(centerX, centerY, 85);
+
+      if (progress >= 2.2) { // ~3 oscillations then reveal
         state = 1; progress = 0;
       }
     } else if (state === 1) { // Key Reveal Phase
@@ -1773,7 +1817,7 @@
 
       drawIsoMaze(centerX, centerY, 95);
       drawCyberKey(centerX, centerY, Math.min(1, progress * 1.05), keyAlpha, -0.2);
-      drawMagnifyingGlass(centerX, centerY, 72);
+      drawMagnifyingGlass(centerX, centerY, 85);
 
       if (progress >= 1) {
         state = 2; progress = 0;
@@ -1784,7 +1828,7 @@
 
       drawIsoMaze(centerX, centerY, 95);
       drawCyberKey(centerX, centerY, 1, 1, -0.2);
-      drawMagnifyingGlass(centerX, centerY, 72);
+      drawMagnifyingGlass(centerX, centerY, 85);
 
       if (progress >= 1) {
         state = 3; progress = 0;
@@ -1796,7 +1840,7 @@
 
       drawIsoMaze(centerX, centerY, 95 * keyAlpha);
       drawCyberKey(centerX, centerY, 1, keyAlpha, -0.2);
-      drawMagnifyingGlass(centerX, centerY, 72);
+      drawMagnifyingGlass(centerX, centerY, 85);
 
       if (progress >= 1) {
         state = 0; progress = 0; keyAlpha = 0;
@@ -1811,3 +1855,4 @@
 </script>
 </body>
 </html>
+
