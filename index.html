@@ -463,89 +463,102 @@
     }
 
     /* ============================================================
-       1. NAVIGATION
+       1. NAVIGATION — FUTURISTIC HUD COMMAND BAR
     ============================================================ */
     #navbar {
-      position: fixed; top: 0; left: 0; right: 0;
+      position: fixed; top: 12px; left: 0; right: 0;
       z-index: 1000;
-      height: var(--nav-h);
-      display: flex; align-items: center;
-      transition: background var(--transition), box-shadow var(--transition), border-color var(--transition);
-      background: rgba(2, 18, 18, 0.86);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-      border-bottom: 1px solid rgba(0, 245, 155, 0.10);
+      display: flex; justify-content: center;
+      padding: 0 16px;
+      transition: top 0.25s ease, background 0.25s ease;
+      pointer-events: none;
     }
-    #navbar.scrolled {
-      background: rgba(2, 18, 18, 0.98);
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55);
-      border-bottom-color: rgba(0, 245, 155, 0.20);
+    .nav-hud-frame {
+      pointer-events: auto;
+      width: min(1180px, 96vw);
+      height: 52px;
+      background: rgba(2, 18, 17, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 245, 155, 0.32);
+      border-radius: 999px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 0 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 18px rgba(0, 245, 155, 0.12);
+      position: relative;
     }
-    .nav-inner {
-      width: min(1200px, 92vw);
-      margin-inline: auto;
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    #navbar.scrolled .nav-hud-frame {
+      background: rgba(2, 14, 13, 0.96);
+      border-color: rgba(0, 245, 155, 0.48);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.85), 0 0 24px rgba(0, 245, 155, 0.2);
     }
     .nav-logo {
       display: flex; align-items: center; gap: 10px;
       text-decoration: none; flex-shrink: 0;
     }
-    .nav-logo-icon {
-      width: 38px; height: 38px;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1.5px solid rgba(0, 245, 155, 0.45);
-      box-shadow: 0 0 14px rgba(0, 245, 155, 0.3);
-      flex-shrink: 0;
+    .nav-v-logo {
+      width: 32px; height: 32px;
       display: flex; align-items: center; justify-content: center;
-      background: #021212;
-      transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 8px rgba(0, 245, 155, 0.6));
+      transition: transform var(--transition-fast);
     }
-    .nav-logo:hover .nav-logo-icon {
-      transform: scale(1.06);
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 20px rgba(0, 245, 155, 0.5);
-    }
-    .nav-logo-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .nav-logo:hover .nav-v-logo { transform: scale(1.08); }
     .nav-logo-main {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.95rem; font-weight: 900;
-      color: var(--text-main); letter-spacing: 0.05em;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem; font-weight: 800;
+      color: #FFFFFF; letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
     .nav-logo-main span { color: var(--accent-cyan); }
 
-    .nav-links {
+    .nav-links-pill {
       display: flex; align-items: center; gap: 2px;
       list-style: none;
-      background: rgba(8, 41, 38, 0.65);
-      padding: 4px 6px; border-radius: var(--radius-full);
-      border: 1px solid rgba(0, 245, 155, 0.12);
+      background: rgba(4, 28, 25, 0.8);
+      padding: 3px 6px; border-radius: var(--radius-full);
+      border: 1px solid rgba(0, 245, 155, 0.16);
     }
-    .nav-links a {
+    .nav-links-pill a {
       display: block;
-      padding: 6px 16px;
-      color: var(--text-secondary);
-      text-decoration: none; font-size: 0.8rem; font-weight: 600;
+      padding: 5px 14px;
+      color: rgba(255, 255, 255, 0.82);
+      text-decoration: none; font-size: 0.74rem; font-weight: 700;
       border-radius: var(--radius-full);
       transition: color var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
-      font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.06em;
+      font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.08em;
       text-transform: uppercase;
-      position: relative;
     }
-    .nav-links a:hover {
-      color: var(--text-main);
-      background: rgba(0, 245, 155, 0.10);
+    .nav-links-pill a:hover {
+      color: var(--accent-cyan);
+      background: rgba(0, 245, 155, 0.12);
     }
-    .nav-links a.active {
+    .nav-links-pill a.nav-pill-active {
       color: #021212 !important;
-      background: linear-gradient(90deg, #00F59B, #10B981) !important;
-      box-shadow: 0 0 14px rgba(0, 245, 155, 0.35);
-      font-weight: 800;
+      background: #00F59B !important;
+      box-shadow: 0 0 14px rgba(0, 245, 155, 0.55);
+      font-weight: 900;
+    }
+
+    .nav-hud-register {
+      border: 1.5px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      background: rgba(0, 245, 155, 0.06);
+      border-radius: var(--radius-full);
+      padding: 7px 18px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.76rem; font-weight: 800;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      text-decoration: none;
+      display: flex; align-items: center; gap: 6px;
+      transition: all var(--transition-fast);
+      flex-shrink: 0;
+    }
+    .nav-hud-register:hover {
+      background: var(--accent-cyan);
+      color: #021212;
+      box-shadow: 0 0 18px rgba(0, 245, 155, 0.5);
+      transform: translateY(-1px);
     }
 
     .hamburger {
@@ -563,10 +576,12 @@
 
     /* Mobile menu */
     .mobile-menu {
-      display: none; position: fixed; top: var(--nav-h); left: 0; right: 0;
-      background: rgba(2, 18, 18, 0.99); backdrop-filter: blur(28px);
-      border-bottom: 1px solid rgba(0, 245, 155, 0.15);
+      display: none; position: fixed; top: 70px; left: 16px; right: 16px;
+      background: rgba(2, 18, 18, 0.98); backdrop-filter: blur(28px);
+      border: 1px solid rgba(0, 245, 155, 0.25);
+      border-radius: 16px;
       padding: 16px 20px 24px; z-index: 999;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(0, 245, 155, 0.15);
       animation: slideDown 0.25s ease forwards;
     }
     .mobile-menu.open { display: block; }
@@ -587,188 +602,185 @@
     }
 
     /* ============================================================
-       2. HERO SECTION — IMMERSIVE CYBER VISUAL BACKGROUND
+       2. HERO SECTION — CENTERED CYBER PORTAL & HUD STACK
     ============================================================ */
     #home {
-      min-height: calc(100vh - var(--nav-h));
-      display: flex; align-items: center; justify-content: flex-start;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
       position: relative; overflow: hidden;
-      padding: calc(var(--nav-h) + 20px) 0 44px;
-      background: #021212;
+      padding: 82px 16px 36px;
+      background: #010B0A url('assets/hero-cyber-portal-bg.jpg') no-repeat center 48% / cover;
     }
 
-    /* Full background visual container */
-    .hero-bg-visual {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    /* Supplied green cyber magnifying-glass artwork */
-    .hero-bg-art {
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 58%;
-      max-width: 820px;
-      height: 100%;
-      background: url('assets/cyber-magnifying-glass.png') no-repeat right 38% / contain;
-      opacity: 0.92;
-      filter: drop-shadow(0 0 36px rgba(0, 245, 155, 0.16));
-      mask-image: radial-gradient(ellipse at 65% 50%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 82%),
-                  linear-gradient(to right, transparent 0%, rgba(0,0,0,0.9) 25%, black 60%),
-                  linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-      -webkit-mask-image: radial-gradient(ellipse at 65% 50%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 82%),
-                          linear-gradient(to right, transparent 0%, rgba(0,0,0,0.9) 25%, black 60%),
-                          linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-      transition: transform 0.4s ease-out;
-    }
-
-    /* Dark gradient overlay for clear text contrast without looking like glass */
+    /* Ambient mist and vignette overlays */
     .hero-bg-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, #021212 0%, #021212 36%, rgba(2, 18, 18, 0.88) 55%, rgba(2, 18, 18, 0.35) 80%, rgba(2, 18, 18, 0.15) 100%),
-                  linear-gradient(180deg, rgba(2, 18, 18, 0.7) 0%, transparent 20%, transparent 75%, #021212 100%);
-      z-index: 1;
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at center 48%, transparent 40%, rgba(1, 11, 10, 0.35) 70%, rgba(1, 11, 10, 0.95) 100%),
+                  linear-gradient(to bottom, rgba(1, 11, 10, 0.5) 0%, transparent 15%, transparent 85%, #021212 100%);
+      pointer-events: none; z-index: 1;
     }
 
-    /* Cyber grid overlay */
-    .hero-cyber-grid {
-      position: absolute;
-      inset: 0;
-      background-image: linear-gradient(rgba(0, 245, 155, 0.035) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(0, 245, 155, 0.035) 1px, transparent 1px);
-      background-size: 48px 48px;
-      opacity: 0.65;
-      z-index: 1;
-    }
-
-    .hero-orb {
-      position: absolute; border-radius: 50%; filter: blur(140px); pointer-events: none; z-index: 1;
-    }
-    .hero-orb-1 { width:520px; height:520px; background:var(--accent-blue); opacity:0.08; top:-140px; right:10%; }
-    .hero-orb-2 { width:380px; height:380px; background:var(--accent-cyan); opacity:0.06; bottom:-60px; left:-40px; }
-
-    /* Hero content layout — left/center on desktop */
-    .hero-content {
-      display: flex; flex-direction: column;
+    .hero-content-center {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
       position: relative; z-index: 2;
-      width: 100%;
-      max-width: 660px;
-      align-items: flex-start;
-      text-align: left;
+      width: 100%; max-width: 820px;
+      margin-inline: auto;
     }
 
-    /* ── HACK & HUNT title ───────────────────────────────── */
-    /* ── HACK & HUNT Title (Transparent Logo Asset) ─────── */
-    .hero-h1 {
+    /* Eyebrow badge */
+    .hero-cyber-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1.5px solid rgba(0, 245, 155, 0.4);
+      background: rgba(2, 22, 20, 0.82);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius-full);
+      padding: 6px 20px;
+      font-family: 'Space Grotesk', monospace;
+      font-size: 0.78rem; font-weight: 700;
+      color: #E8FCF4; letter-spacing: 0.1em;
+      text-transform: uppercase;
       margin-bottom: 8px;
+      box-shadow: 0 0 16px rgba(0, 245, 155, 0.2);
+    }
+    .hero-cyber-badge svg { color: var(--accent-cyan); flex-shrink: 0; }
+
+    /* Main Title */
+    .hero-h1 {
+      margin-bottom: 2px;
       user-select: none;
       width: 100%;
+      display: flex; justify-content: center;
     }
     .hero-title-img {
-      width: 100%;
-      max-width: 540px;
-      height: auto;
-      display: block;
+      width: 100%; max-width: 520px; height: auto;
+      display: block; margin-inline: auto;
       transform: translateZ(0);
     }
 
-    /* Mobile-only magnifying glass framing */
-    .hero-art-mobile-wrap {
-      display: none;
-      width: min(340px, 86vw);
-      height: 180px;
-      margin: 12px auto 18px;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      position: relative;
-      border: 1px solid rgba(0, 245, 155, 0.25);
-      box-shadow: 0 0 24px rgba(0, 245, 155, 0.15);
-      background: #051A18;
-    }
-    .hero-art-mobile-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-    }
-
-    /* Hero tagline */
+    /* Tagline */
     .hero-tagline {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(0.95rem, 2.2vw, 1.3rem);
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 20px;
-      letter-spacing: 0.04em;
-      max-width: 460px;
+      font-size: clamp(0.92rem, 2.2vw, 1.22rem);
+      font-weight: 800;
+      color: #E8FCF4;
+      margin-top: 2px; margin-bottom: 14px;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(0, 245, 155, 0.35);
     }
 
-    /* Chips — solid cyberpunk surface, no glassmorphism */
-    .hero-chips {
-      display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 8px; margin-bottom: 22px;
+    /* Chips row */
+    .hero-chips-hud {
+      display: flex; justify-content: center; align-items: center;
+      gap: 10px; flex-wrap: wrap; margin-bottom: 14px;
     }
-    .hero-chips span {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-family: 'Fira Code', monospace; font-size: 0.76rem; font-weight: 600;
-      color: var(--text-main); background: #051A18;
-      border: 1px solid rgba(0, 245, 155, 0.22); padding: 6px 14px;
+    .hero-chip-pill {
+      background: rgba(2, 22, 20, 0.8);
+      border: 1px solid rgba(0, 245, 155, 0.35);
       border-radius: var(--radius-full);
-      box-shadow: 0 2px 8px rgba(2, 18, 18, 0.6);
+      padding: 6px 18px;
+      font-family: 'Space Grotesk', monospace;
+      font-size: 0.76rem; font-weight: 700;
+      color: #E8FCF4; letter-spacing: 0.06em;
+      display: inline-flex; align-items: center; gap: 7px;
+      box-shadow: 0 0 12px rgba(0, 245, 155, 0.12);
+      backdrop-filter: blur(8px);
     }
-    .hero-chips span .lucide-icon { color: var(--accent-cyan); }
+    .hero-chip-pill .lucide-icon { color: var(--accent-cyan); }
 
-    /* Typewriter terminal box — solid dark panel, no glass */
-    .hero-typer-box {
-      background: #051A18;
-      border: 1px solid rgba(0, 245, 155, 0.18);
-      border-radius: var(--radius-md); padding: 11px 20px;
-      font-family: 'Fira Code', monospace; font-size: 0.82rem;
-      max-width: 520px; width: 100%; margin-bottom: 24px; text-align: left;
-      box-shadow: 0 8px 24px rgba(2, 18, 18, 0.7); display: flex; align-items: center; gap: 8px;
+    /* Typewriter console */
+    .hero-terminal-pill {
+      background: rgba(2, 20, 18, 0.85);
+      border: 1px solid rgba(0, 245, 155, 0.32);
+      border-radius: var(--radius-full);
+      padding: 9px 24px;
+      max-width: 520px; width: 92%;
+      margin: 0 auto 16px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem; color: #A1E8C5;
+      display: flex; align-items: center; justify-content: flex-start;
+      gap: 6px; box-shadow: 0 0 16px rgba(0, 245, 155, 0.12);
+      backdrop-filter: blur(8px);
     }
-    .hero-typer-prefix { color: var(--accent-cyan); font-weight: 700; }
-    .hero-typer-text { color: var(--text-main); }
-    .hero-typer-cursor { color: var(--accent-cyan); animation: blink 1s step-end infinite; }
+    .term-prompt { color: var(--accent-cyan); font-weight: 900; }
+    .term-code { color: var(--text-main); }
+    .term-cursor { color: var(--accent-cyan); animation: blink 1s step-end infinite; font-weight: 900; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-    /* Scroll hint */
-    .scroll-hint {
-      display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 28px;
+    /* Main CTA button with bracket wings */
+    .hero-cta-hud-wrap {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; margin-bottom: 18px;
     }
-    .scroll-hint__label { font-family: 'Fira Code', monospace; font-size: 0.58rem; color: var(--text-muted); letter-spacing: 0.22em; }
-    .scroll-hint__line { width: 1px; height: 26px; background: linear-gradient(180deg, var(--accent-cyan), transparent); animation: pulse-line 2s infinite; }
-    @keyframes pulse-line { 0%,100%{opacity:0.25} 50%{opacity:0.9} }
+    .cta-bracket {
+      width: 12px; height: 32px;
+      border: 2px solid var(--accent-cyan);
+      opacity: 0.75; flex-shrink: 0;
+    }
+    .cta-bracket--left {
+      border-right: none; border-radius: 6px 0 0 6px;
+    }
+    .cta-bracket--right {
+      border-left: none; border-radius: 0 6px 6px 0;
+    }
+    .hero-main-cta {
+      background: linear-gradient(135deg, #00F59B 0%, #10B981 100%);
+      color: #021212;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem; font-weight: 900;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 12px 38px; border-radius: var(--radius-full);
+      text-decoration: none;
+      box-shadow: 0 0 28px rgba(0, 245, 155, 0.6), 0 0 54px rgba(0, 245, 155, 0.25);
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .hero-main-cta:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 36px rgba(0, 245, 155, 0.8), 0 0 70px rgba(0, 245, 155, 0.4);
+    }
 
-    /* ============================================================
-       3. COUNTDOWN BANNER BAR
-    ============================================================ */
-    .countdown-banner {
-      background: var(--bg-main-alt);
-      border-top: 1px solid rgba(0, 245, 155, 0.10);
-      border-bottom: 1px solid rgba(0, 245, 155, 0.10);
-      padding: 20px 0; text-align: center;
+    /* Countdown HUD Panel */
+    .hero-countdown-hud {
+      max-width: 420px; width: 92%; margin: 0 auto;
+      background: rgba(2, 20, 18, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(0, 245, 155, 0.42);
+      padding: 12px 24px 10px;
       position: relative;
+      box-shadow: 0 0 24px rgba(0, 245, 155, 0.2), inset 0 0 16px rgba(0, 245, 155, 0.06);
+      clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
     }
-    .countdown-banner__inner {
-      display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px 32px;
+    .countdown-hud-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.68rem; font-weight: 700;
+      color: #A1E8C5; letter-spacing: 0.16em;
+      text-transform: uppercase; margin-bottom: 6px;
     }
-    .countdown-banner__label { font-family: 'Fira Code', monospace; font-size: 0.74rem; color: var(--text-muted); letter-spacing: 0.12em; }
-    .countdown-units { display: flex; gap: 16px; align-items: center; }
-    .countdown-unit { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-    .countdown-num {
-      font-family: 'Orbitron', sans-serif; font-size: 1.65rem; font-weight: 800;
-      color: var(--accent-cyan); line-height: 1; min-width: 48px;
-      filter: drop-shadow(0 0 10px rgba(0, 245, 155, 0.35));
+    .countdown-hud-grid {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
     }
-    .countdown-unit-label { font-family: 'Fira Code', monospace; font-size: 0.56rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
-    .countdown-sep { font-family: 'Orbitron', sans-serif; font-size: 1.05rem; color: var(--accent-cyan); opacity: 0.35; }
+    .hud-timer-col {
+      display: flex; flex-direction: column; align-items: center; min-width: 48px;
+    }
+    .hud-timer-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.75rem; font-weight: 900;
+      color: #00F59B; line-height: 1;
+      text-shadow: 0 0 14px rgba(0, 245, 155, 0.6);
+    }
+    .hud-timer-sep {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.4rem; font-weight: 700;
+      color: #00F59B; opacity: 0.75;
+      margin-top: -6px;
+    }
+    .hud-timer-sub {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.6rem; font-weight: 700;
+      color: #72AB98; letter-spacing: 0.12em;
+      margin-top: 3px;
+    }
 
     /* ============================================================
        4. NEURAL TICKER BAR
@@ -1123,22 +1135,19 @@
     }
 
     @media (max-width: 899px) {
+      .nav-hud-frame { height: 48px; padding: 0 12px; }
+      .nav-links-pill { display: none; }
+      .hamburger { display: flex; }
       #home {
-        text-align: center;
-        justify-content: center;
-        padding: calc(var(--nav-h) + 16px) 0 36px;
+        padding: 76px 12px 36px;
+        background-position: center center;
       }
-      .hero-bg-art { display: none; }
-      .hero-art-mobile-wrap { display: block; }
-      .hero-content {
-        align-items: center;
-        text-align: center;
-        max-width: 100%;
-      }
-      .hero-title-img { margin-inline: auto; max-width: min(440px, 92vw); }
-      .hero-chips { justify-content: center; }
-      .hero-typer-box { margin-inline: auto; }
-      .scroll-hint { align-items: center; }
+      .hero-title-img { max-width: min(420px, 90vw); }
+      .hero-tagline { font-size: 0.95rem; letter-spacing: 0.16em; margin-bottom: 12px; }
+      .hero-chip-pill { font-size: 0.72rem; padding: 5px 12px; }
+      .hero-terminal-pill { font-size: 0.74rem; padding: 8px 16px; }
+      .hero-main-cta { font-size: 0.88rem; padding: 11px 28px; }
+      .hud-timer-num { font-size: 1.45rem; }
       .split-layout { grid-template-columns: 1fr; gap: 28px; }
       .sticky-side { position: relative; top: 0; }
       .sticky-desc { max-width: 100%; }
@@ -1147,9 +1156,8 @@
     }
 
     @media (max-width: 768px) {
-      :root { --nav-h: 64px; }
-      .nav-links, .nav-register { display: none; }
-      .hamburger { display: flex; }
+      :root { --nav-h: 60px; }
+      .nav-hud-register { display: none; }
       .overview-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
       .overview-card { padding: 20px 16px; }
       .bento-grid { grid-template-columns: 1fr 1fr; }
@@ -1165,10 +1173,13 @@
     @media (max-width: 540px) {
       .overview-grid { grid-template-columns: 1fr; }
       .bento-grid { grid-template-columns: 1fr; }
-      .hero-title-img { max-width: min(340px, 88vw); }
-      .hero-chips { gap: 6px; }
-      .hero-chips span { font-size: 0.72rem; padding: 5px 12px; }
-      .hero-typer-box { font-size: 0.76rem; padding: 10px 14px; }
+      .hero-title-img { max-width: min(320px, 88vw); }
+      .hero-cyber-badge { font-size: 0.7rem; padding: 5px 14px; }
+      .hero-tagline { font-size: 0.85rem; letter-spacing: 0.14em; }
+      .hero-countdown-hud { padding: 10px 14px 8px; }
+      .hud-timer-col { min-width: 36px; }
+      .hud-timer-num { font-size: 1.25rem; }
+      .hud-timer-sep { font-size: 1.1rem; }
       .ed-line { font-size: clamp(1.6rem, 8.5vw, 2.5rem); }
       .fca-h2 { font-size: 1.85rem; }
       .rule-item-card { padding: 16px 14px; gap: 12px; }
@@ -1177,7 +1188,7 @@
     }
 
     @media (max-width: 390px) {
-      .hero-title-img { max-width: min(290px, 86vw); }
+      .hero-title-img { max-width: min(280px, 86vw); }
       .container { width: 94vw; }
       .bento-card { min-height: 110px; padding: 20px 14px; }
     }
@@ -1214,27 +1225,29 @@
 
 <!-- Navigation -->
 <nav id="navbar" role="navigation" aria-label="Main navigation">
-  <div class="nav-inner">
+  <div class="nav-hud-frame">
     <a href="#home" class="nav-logo" aria-label="VIGYANTRA × HACK & HUNT Home">
-      <div class="nav-logo-icon" aria-hidden="true">
-        <img src="assets/nav-logo-square.png" alt="Hack &amp; Hunt Logo" class="nav-logo-img" width="38" height="38" />
+      <div class="nav-v-logo" aria-hidden="true">
+        <svg viewBox="0 0 36 36" width="30" height="30">
+          <polygon points="18,3 32,10 32,26 18,33 4,26 4,10" fill="#031A17" stroke="#00F59B" stroke-width="2"/>
+          <text x="18" y="23" font-family="'Orbitron', sans-serif" font-weight="900" font-size="16" fill="#00F59B" text-anchor="middle">V</text>
+        </svg>
       </div>
       <span class="nav-logo-main">VIGYANTRA <span>× HACK &amp; HUNT</span></span>
     </a>
 
-    <ul class="nav-links" role="list">
-      <li><a href="#home" class="active">Home</a></li>
-      <li><a href="#overview">About</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#rules">Directives</a></li>
-      <li><a href="#faq">Intel DB</a></li>
-      <li><a href="#coordinators">Team</a></li>
-    </ul>
+    <div class="nav-links-pill">
+      <a href="#home" class="nav-pill-active">HOME</a>
+      <a href="#overview">ABOUT</a>
+      <a href="#details">DETAILS</a>
+      <a href="#rules">DIRECTIVES</a>
+      <a href="#faq">INTEL DB</a>
+      <a href="#coordinators">TEAM</a>
+    </div>
 
-    <div style="display:flex;align-items:center;gap:12px;">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="nav-register" target="_blank" rel="noopener">
-        REGISTER NOW
-        <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="nav-hud-register" target="_blank" rel="noopener">
+        REGISTER NOW →
       </a>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -1252,106 +1265,90 @@
   <a href="#faq" role="menuitem">Intel DB</a>
   <a href="#coordinators" role="menuitem">Team</a>
   <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="mobile-register btn-primary" target="_blank" rel="noopener" role="menuitem">
-    REGISTER NOW
-    <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    REGISTER NOW →
   </a>
 </div>
 
 <!-- HERO SECTION -->
 <section id="home" aria-label="Hero section">
-  <!-- Immersive Cyber Visual Background using supplied magnifying glass artwork -->
-  <div class="hero-bg-visual" aria-hidden="true">
-    <div class="hero-bg-art"></div>
-    <div class="hero-bg-overlay"></div>
-    <div class="hero-cyber-grid"></div>
-  </div>
+  <div class="hero-bg-overlay" aria-hidden="true"></div>
 
-  <div class="hero-orb hero-orb-1"></div>
-  <div class="hero-orb hero-orb-2"></div>
-  
-  <div class="container">
-    <div class="hero-content">
-      <span class="cin-label-sm reveal">
-        <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        SJBIT × VIGYANTRA 2026
+  <div class="hero-content-center">
+    <!-- Eyebrow Badge -->
+    <div class="hero-cyber-badge reveal">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#00F59B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <span>SJBIT × VIGYANTRA 2026</span>
+    </div>
+
+    <!-- Main Title -->
+    <h1 class="hero-h1 reveal" aria-label="HACK &amp; HUNT">
+      <img src="assets/hack-hunt-logo.png" alt="HACK &amp; HUNT" class="hero-title-img" width="395" height="106" />
+    </h1>
+
+    <!-- Tagline -->
+    <p class="hero-tagline reveal">THINK. CODE. HUNT. CONQUER.</p>
+
+    <!-- 3 Metadata Chips -->
+    <div class="hero-chips-hud reveal">
+      <span class="hero-chip-pill">
+        <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        30 OCT 2026
       </span>
+      <span class="hero-chip-pill">
+        <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        SJBIT, BENGALURU
+      </span>
+      <span class="hero-chip-pill">
+        <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+        ₹50,000 PRIZE POOL
+      </span>
+    </div>
 
-      <h1 class="hero-h1 reveal" aria-label="HACK &amp; HUNT">
-        <img src="assets/hack-hunt-logo.png" alt="HACK &amp; HUNT" class="hero-title-img" width="395" height="106" />
-      </h1>
+    <!-- Typewriter Console Box -->
+    <div class="hero-terminal-pill reveal">
+      <span class="term-prompt">› </span>
+      <span class="term-code" id="typewriter-text">execute_code --round=1_to_4 --venue=SJBIT</span>
+      <span class="term-cursor">▎</span>
+    </div>
 
-      <!-- Mobile-only dedicated magnifying glass presentation -->
-      <div class="hero-art-mobile-wrap reveal" aria-hidden="true">
-        <img src="assets/cyber-magnifying-glass.png" alt="" class="hero-art-mobile-img" />
-      </div>
+    <!-- Main CTA Button with wings -->
+    <div class="hero-cta-hud-wrap reveal">
+      <div class="cta-bracket cta-bracket--left" aria-hidden="true"></div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="hero-main-cta" target="_blank" rel="noopener">
+        REGISTER NOW →
+      </a>
+      <div class="cta-bracket cta-bracket--right" aria-hidden="true"></div>
+    </div>
 
-      <p class="hero-tagline reveal">Think. Code. Hunt. Conquer.</p>
-
-      <div class="hero-chips reveal">
-        <span>
-          <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          30 OCT 2026
-        </span>
-        <span>
-          <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          SJBIT, BENGALURU
-        </span>
-        <span>
-          <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
-          ₹50,000 PRIZE POOL
-        </span>
-      </div>
-
-      <!-- Typewriter Console Box -->
-      <div class="hero-typer-box reveal">
-        <span class="hero-typer-prefix">› </span>
-        <span class="hero-typer-text" id="typewriter-text"></span>
-        <span class="hero-typer-cursor">▎</span>
-      </div>
-
-      <div class="reveal">
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="btn-primary" target="_blank" rel="noopener">
-          REGISTER NOW
-          <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </div>
-
-      <div class="scroll-hint reveal">
-        <span class="scroll-hint__label">SCROLL TO EXPLORE</span>
-        <div class="scroll-hint__line"></div>
+    <!-- Countdown Timer HUD Panel -->
+    <div class="hero-countdown-hud reveal" role="timer" aria-label="Event countdown timer">
+      <div class="countdown-hud-label">EVENT STARTS IN</div>
+      <div class="countdown-hud-grid">
+        <div class="hud-timer-col">
+          <div class="hud-timer-num" id="cd-days">41</div>
+          <div class="hud-timer-sub">DAYS</div>
+        </div>
+        <div class="hud-timer-sep">:</div>
+        <div class="hud-timer-col">
+          <div class="hud-timer-num" id="cd-hours">21</div>
+          <div class="hud-timer-sub">HRS</div>
+        </div>
+        <div class="hud-timer-sep">:</div>
+        <div class="hud-timer-col">
+          <div class="hud-timer-num" id="cd-mins">11</div>
+          <div class="hud-timer-sub">MIN</div>
+        </div>
+        <div class="hud-timer-sep">:</div>
+        <div class="hud-timer-col">
+          <div class="hud-timer-num" id="cd-secs">50</div>
+          <div class="hud-timer-sub">SEC</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
-
-<!-- COUNTDOWN BANNER BAR -->
-<div class="countdown-banner" role="timer" aria-label="Countdown to event">
-  <div class="countdown-banner__inner">
-    <span class="countdown-banner__label">EVENT STARTS IN</span>
-    <div class="countdown-units">
-      <div class="countdown-unit">
-        <div class="countdown-num" id="cd-days">--</div>
-        <div class="countdown-unit-label">DAYS</div>
-      </div>
-      <span class="countdown-sep">:</span>
-      <div class="countdown-unit">
-        <div class="countdown-num" id="cd-hours">--</div>
-        <div class="countdown-unit-label">HRS</div>
-      </div>
-      <span class="countdown-sep">:</span>
-      <div class="countdown-unit">
-        <div class="countdown-num" id="cd-mins">--</div>
-        <div class="countdown-unit-label">MIN</div>
-      </div>
-      <span class="countdown-sep">:</span>
-      <div class="countdown-unit">
-        <div class="countdown-num" id="cd-secs">--</div>
-        <div class="countdown-unit-label">SEC</div>
-      </div>
-    </div>
-    <span class="countdown-banner__label">30 OCTOBER 2026 · SJBIT, BENGALURU</span>
-  </div>
-</div>
 
 <!-- NEURAL TICKER BAR -->
 <div class="neural-ticker" aria-hidden="true">
@@ -1904,9 +1901,9 @@
   const typer = document.getElementById('typewriter-text');
   if (!typer) return;
   const phrases = [
+    'execute_code --round=1_to_4 --venue=SJBIT',
     './initialize_hack_and_hunt --track=all',
     'hunt_problems --level=master --prize=50000',
-    'execute_code --round=1_to_4 --venue=SJBIT',
     'ready_team_squad --size=4 --mode=victory'
   ];
   let pIdx = 0, cIdx = 0, deleting = false;
