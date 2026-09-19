@@ -1,0 +1,19 @@
+﻿{
+  "name": "Hack & Hunt - VIGYANTRA '26",
+  "short_name": "Hack & Hunt",
+  "icons": [
+    {
+      "src": "assets/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#00F59B",
+  "background_color": "#021212",
+  "display": "standalone"
+}
