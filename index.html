@@ -1380,6 +1380,407 @@
     }
 
     /* ============================================================
+       17. ADMIN CMS & LIVE IN-PLACE EDIT MODE STYLES
+    ============================================================ */
+    /* Floating Admin HUD Toolbar */
+    .cms-hud-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10000;
+      background: rgba(2, 18, 17, 0.96);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1.5px solid var(--accent-cyan);
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.85), 0 0 24px rgba(0, 245, 155, 0.2);
+      padding: 10px 20px;
+      animation: cmsSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes cmsSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    .cms-hud-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .cms-hud-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cms-hud-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 10px var(--accent-cyan);
+      animation: pulse-dot 1.5s infinite;
+    }
+    .cms-hud-role {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.76rem;
+      color: #A1E8C5;
+      letter-spacing: 0.08em;
+    }
+    .cms-hud-role strong { color: #FFFFFF; }
+
+    .cms-hud-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Common CMS buttons */
+    .cms-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+    .cms-btn--primary {
+      background: linear-gradient(135deg, #00F59B 0%, #10B981 100%);
+      color: #021212;
+      border-color: #00F59B;
+      box-shadow: 0 0 16px rgba(0, 245, 155, 0.4);
+    }
+    .cms-btn--primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 22px rgba(0, 245, 155, 0.6);
+    }
+    .cms-btn--save {
+      background: #00F59B;
+      color: #021212;
+      border-color: #00F59B;
+      font-weight: 800;
+      box-shadow: 0 0 18px rgba(0, 245, 155, 0.5);
+    }
+    .cms-btn--save:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 24px rgba(0, 245, 155, 0.7);
+    }
+    .cms-btn--preview {
+      background: rgba(0, 245, 155, 0.12);
+      color: #E8FCF4;
+      border-color: rgba(0, 245, 155, 0.4);
+    }
+    .cms-btn--preview:hover, .cms-btn--preview.cms-btn--active {
+      background: rgba(0, 245, 155, 0.25);
+      border-color: #00F59B;
+      color: #00F59B;
+      box-shadow: 0 0 12px rgba(0, 245, 155, 0.3);
+    }
+    .cms-btn--cancel {
+      background: rgba(239, 68, 68, 0.12);
+      color: #FCA5A5;
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+    .cms-btn--cancel:hover {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #EF4444;
+      color: #FFFFFF;
+    }
+    .cms-btn--subtle {
+      background: rgba(4, 28, 25, 0.9);
+      color: var(--text-secondary);
+      border-color: rgba(0, 245, 155, 0.2);
+    }
+    .cms-btn--subtle:hover {
+      background: rgba(0, 245, 155, 0.12);
+      color: #00F59B;
+      border-color: var(--accent-cyan);
+    }
+    .cms-btn--danger-text {
+      background: none;
+      color: #F87171;
+      border-color: rgba(239, 68, 68, 0.25);
+      font-size: 0.72rem;
+    }
+    .cms-btn--danger-text:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #EF4444;
+      color: #FFFFFF;
+    }
+    .cms-btn--logout {
+      background: rgba(2, 22, 20, 0.9);
+      color: #9AAAC5;
+      border-color: rgba(255, 255, 255, 0.15);
+      font-size: 0.72rem;
+    }
+    .cms-btn--logout:hover {
+      color: #FFFFFF;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Editable Element Outlines in Edit Mode */
+    body.cms-edit-mode-active [data-cms-key]:not(img) {
+      outline: 1.5px dashed rgba(0, 245, 155, 0.45);
+      outline-offset: 3px;
+      cursor: text;
+      border-radius: 4px;
+      transition: outline-color 0.18s ease, background 0.18s ease;
+    }
+    body.cms-edit-mode-active [data-cms-key]:not(img):hover {
+      outline-color: #00F59B;
+      background: rgba(0, 245, 155, 0.07);
+    }
+    body.cms-edit-mode-active [data-cms-key]:not(img):focus {
+      outline: 2px solid #00F59B !important;
+      background: rgba(0, 245, 155, 0.12) !important;
+    }
+
+    /* Editable Images */
+    body.cms-edit-mode-active img.cms-editable-img {
+      cursor: pointer;
+      outline: 2px dashed rgba(0, 245, 155, 0.6);
+      outline-offset: 4px;
+      transition: filter 0.2s ease, outline-color 0.2s ease;
+    }
+    body.cms-edit-mode-active img.cms-editable-img:hover {
+      outline-color: #00F59B;
+      filter: brightness(1.2) drop-shadow(0 0 14px rgba(0, 245, 155, 0.5));
+    }
+
+    /* Preview Mode: suppress outlines */
+    body.cms-preview-active [data-cms-key] {
+      outline: none !important;
+      background: transparent !important;
+      cursor: default !important;
+    }
+    body.cms-preview-active img.cms-editable-img {
+      outline: none !important;
+      cursor: default !important;
+      filter: none !important;
+    }
+
+    /* Modals (Login & Image Replace) */
+    .cms-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20000;
+      background: rgba(1, 11, 10, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .cms-modal-overlay.cms-modal--open {
+      display: flex;
+      animation: cmsFadeIn 0.22s ease forwards;
+    }
+    @keyframes cmsFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .cms-modal-box {
+      width: 100%;
+      max-width: 460px;
+      background: rgba(4, 28, 25, 0.98);
+      border: 1.5px solid rgba(0, 245, 155, 0.4);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.9), 0 0 32px rgba(0, 245, 155, 0.2);
+      overflow: hidden;
+      animation: cmsScaleIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes cmsScaleIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .cms-modal-header {
+      padding: 16px 20px;
+      background: rgba(2, 18, 17, 0.9);
+      border-bottom: 1px solid rgba(0, 245, 155, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cms-modal-header h3 {
+      font-size: 0.92rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cms-modal-close {
+      background: none;
+      border: none;
+      color: #9AAAC5;
+      font-size: 1.3rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.18s ease;
+    }
+    .cms-modal-close:hover { color: #00F59B; }
+
+    .cms-modal-body {
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .cms-login-lead {
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .cms-login-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      color: #FCA5A5;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      display: none;
+    }
+    .cms-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .cms-form-group label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.74rem;
+      color: #A1E8C5;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .cms-form-group input[type="text"],
+    .cms-form-group input[type="password"] {
+      background: rgba(2, 18, 17, 0.9);
+      border: 1px solid rgba(0, 245, 155, 0.28);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #FFFFFF;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .cms-form-group input[type="text"]:focus,
+    .cms-form-group input[type="password"]:focus {
+      border-color: #00F59B;
+      box-shadow: 0 0 12px rgba(0, 245, 155, 0.35);
+    }
+    .cms-form-group input[type="file"] {
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      padding: 4px 0;
+    }
+
+    .cms-img-preview-box {
+      width: 100%;
+      height: 160px;
+      background: #010B0A;
+      border: 1px solid rgba(0, 245, 155, 0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .cms-img-preview-box img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .cms-modal-footer {
+      padding: 14px 20px 18px;
+      background: rgba(2, 18, 17, 0.7);
+      border-top: 1px solid rgba(0, 245, 155, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Toast Notification Container */
+    #cms-toast-container {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 25000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .cms-toast {
+      pointer-events: auto;
+      background: rgba(2, 18, 17, 0.96);
+      border: 1.5px solid rgba(0, 245, 155, 0.45);
+      border-radius: 12px;
+      padding: 12px 18px;
+      color: #E8FCF4;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 18px rgba(0, 245, 155, 0.2);
+      transform: translateX(110%);
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      max-width: 380px;
+    }
+    .cms-toast--show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    .cms-toast-icon {
+      font-size: 1rem;
+      color: var(--accent-cyan);
+      flex-shrink: 0;
+    }
+    .cms-toast--error {
+      border-color: #EF4444;
+      color: #FCA5A5;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 18px rgba(239, 68, 68, 0.25);
+    }
+    .cms-toast--error .cms-toast-icon { color: #EF4444; }
+
+    /* Footer admin access link */
+    .footer-admin-link {
+      color: rgba(128, 168, 160, 0.6);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-family: 'Fira Code', monospace;
+      transition: color 0.2s ease;
+      cursor: pointer;
+    }
+    .footer-admin-link:hover {
+      color: var(--accent-cyan);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .cms-hud-bar { padding: 8px 12px; }
+      .cms-hud-inner { gap: 8px; justify-content: center; }
+      .cms-hud-role { font-size: 0.68rem; }
+      .cms-btn { padding: 5px 10px; font-size: 0.72rem; }
+      #cms-toast-container { top: 12px; right: 12px; left: 12px; }
+      .cms-toast { max-width: 100%; }
+    }
+
+    /* ============================================================
        16. REDUCED MOTION OVERRIDES
     ============================================================ */
     @media (prefers-reduced-motion: reduce) {
@@ -1465,44 +1866,44 @@
       <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#00F59B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
-      <span>SJBIT × VIGYANTRA 2026</span>
+      <span data-cms-key="hero.badge">SJBIT × VIGYANTRA 2026</span>
     </div>
 
     <!-- Main Title -->
     <h1 class="hero-h1 reveal" aria-label="HACK &amp; HUNT">
-      <img src="assets/hack-hunt-logo.png" alt="HACK &amp; HUNT" class="hero-title-img" width="395" height="106" />
+      <img src="assets/hack-hunt-logo.png" alt="HACK &amp; HUNT" class="hero-title-img" data-cms-key="hero.logo" width="395" height="106" />
     </h1>
 
     <!-- Tagline -->
-    <p class="hero-tagline reveal">THINK. CODE. HUNT. CONQUER.</p>
+    <p class="hero-tagline reveal" data-cms-key="hero.tagline">THINK. CODE. HUNT. CONQUER.</p>
 
     <!-- 3 Metadata Chips -->
     <div class="hero-chips-hud reveal">
       <span class="hero-chip-pill">
         <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        30 OCT 2026
+        <span data-cms-key="hero.chip_date">30 OCT 2026</span>
       </span>
       <span class="hero-chip-pill">
         <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        SJBIT, BENGALURU
+        <span data-cms-key="hero.chip_venue">SJBIT, BENGALURU</span>
       </span>
       <span class="hero-chip-pill">
         <svg class="lucide-icon" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
-        ₹50,000 PRIZE POOL
+        <span data-cms-key="hero.chip_prize">₹50,000 PRIZE POOL</span>
       </span>
     </div>
 
     <!-- Typewriter Console Box -->
     <div class="hero-terminal-pill reveal">
       <span class="term-prompt">› </span>
-      <span class="term-code" id="typewriter-text">execute_code --round=1_to_4 --venue=SJBIT</span>
+      <span class="term-code" id="typewriter-text" data-cms-key="hero.terminal">execute_code --round=1_to_4 --venue=SJBIT</span>
       <span class="term-cursor">▎</span>
     </div>
 
     <!-- Main CTA Button with wings -->
     <div class="hero-cta-hud-wrap reveal">
       <div class="cta-bracket cta-bracket--left" aria-hidden="true"></div>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="hero-main-cta" target="_blank" rel="noopener">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="hero-main-cta" data-cms-key="hero.cta" target="_blank" rel="noopener">
         REGISTER NOW →
       </a>
       <div class="cta-bracket cta-bracket--right" aria-hidden="true"></div>
@@ -1510,7 +1911,7 @@
 
     <!-- Countdown Timer HUD Panel -->
     <div class="hero-countdown-hud reveal" role="timer" aria-label="Event countdown timer">
-      <div class="countdown-hud-label">EVENT STARTS IN</div>
+      <div class="countdown-hud-label" data-cms-key="hero.countdown_label">EVENT STARTS IN</div>
       <div class="countdown-hud-grid">
         <div class="hud-timer-col">
           <div class="hud-timer-num" id="cd-days">41</div>
@@ -1547,15 +1948,15 @@
   <div class="container">
     <div class="ed-block reveal">
       <div class="ed-line">
-        <span>CODE</span>
-        <span class="ed-word--accent">THAT HUNTS</span>
+        <span data-cms-key="ed1.word1">CODE</span>
+        <span class="ed-word--accent" data-cms-key="ed1.word2">THAT HUNTS</span>
       </div>
       <div class="ed-line ed-line--shift">
-        <span class="ed-word--thin">AHEAD.</span>
+        <span class="ed-word--thin" data-cms-key="ed1.word3">AHEAD.</span>
       </div>
     </div>
     <div class="ed-sub-row reveal">
-      <p class="ed-sub-text">
+      <p class="ed-sub-text" data-cms-key="ed1.sub">
         Craft intelligent algorithms that push the boundaries of technology.<br />
         Compete. Code. Conquer.
       </p>
@@ -1568,9 +1969,9 @@
 <section id="overview" aria-label="Event overview">
   <div class="container">
     <div class="reveal section-intro">
-      <span class="cin-label-sm">THE ARENA</span>
-      <h2>WHAT IS <span class="gradient-text">HACK &amp; HUNT?</span></h2>
-      <p>
+      <span class="cin-label-sm" data-cms-key="overview.badge">THE ARENA</span>
+      <h2 data-cms-key="overview.heading">WHAT IS <span class="gradient-text">HACK &amp; HUNT?</span></h2>
+      <p data-cms-key="overview.subheading">
         The premier inter-college coding competition under VIGYANTRA '26 at SJBIT, Bengaluru. One day. Real problems. One champion squad.
       </p>
     </div>
@@ -1580,48 +1981,48 @@
         <div class="overview-icon">
           <svg viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
         </div>
-        <h3 class="overview-card-title">What You'll Build</h3>
-        <p class="overview-card-text">Teams design and develop working solutions to real-world problem statements revealed on competition day. Creativity and speed are both rewarded.</p>
+        <h3 class="overview-card-title" data-cms-key="overview.card1.title">What You'll Build</h3>
+        <p class="overview-card-text" data-cms-key="overview.card1.text">Teams design and develop working solutions to real-world problem statements revealed on competition day. Creativity and speed are both rewarded.</p>
       </div>
 
       <div class="glass-card overview-card reveal reveal-delay-2">
         <div class="overview-icon">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
         </div>
-        <h3 class="overview-card-title">What You'll Learn</h3>
-        <p class="overview-card-text">Rapid prototyping, team collaboration, time management under pressure, and pitching ideas to an expert panel — real skills, real exposure.</p>
+        <h3 class="overview-card-title" data-cms-key="overview.card2.title">What You'll Learn</h3>
+        <p class="overview-card-text" data-cms-key="overview.card2.text">Rapid prototyping, team collaboration, time management under pressure, and pitching ideas to an expert panel — real skills, real exposure.</p>
       </div>
 
       <div class="glass-card overview-card reveal reveal-delay-3">
         <div class="overview-icon">
           <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
-        <h3 class="overview-card-title">Teamwork First</h3>
-        <p class="overview-card-text">Hack and Hunt is built on collaboration. From developer to presenter — every role matters. The best teams win together, not alone.</p>
+        <h3 class="overview-card-title" data-cms-key="overview.card3.title">Teamwork First</h3>
+        <p class="overview-card-text" data-cms-key="overview.card3.text">Hack and Hunt is built on collaboration. From developer to presenter — every role matters. The best teams win together, not alone.</p>
       </div>
 
       <div class="glass-card overview-card reveal reveal-delay-4">
         <div class="overview-icon">
           <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         </div>
-        <h3 class="overview-card-title">High-Intensity Format</h3>
-        <p class="overview-card-text">Time-boxed rounds, live judging, and surprise constraints across 04 intense rounds. Only the most adaptable teams rise to the top.</p>
+        <h3 class="overview-card-title" data-cms-key="overview.card4.title">High-Intensity Format</h3>
+        <p class="overview-card-text" data-cms-key="overview.card4.text">Time-boxed rounds, live judging, and surprise constraints across 04 intense rounds. Only the most adaptable teams rise to the top.</p>
       </div>
 
       <div class="glass-card overview-card reveal reveal-delay-5">
         <div class="overview-icon">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         </div>
-        <h3 class="overview-card-title">Open to All Domains</h3>
-        <p class="overview-card-text">Web dev, AI/ML, cybersecurity, or algorithm design — problem statements span multiple tracks so every talent fits.</p>
+        <h3 class="overview-card-title" data-cms-key="overview.card5.title">Open to All Domains</h3>
+        <p class="overview-card-text" data-cms-key="overview.card5.text">Web dev, AI/ML, cybersecurity, or algorithm design — problem statements span multiple tracks so every talent fits.</p>
       </div>
 
       <div class="glass-card overview-card reveal reveal-delay-6">
         <div class="overview-icon">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
         </div>
-        <h3 class="overview-card-title">Recognition &amp; Rewards</h3>
-        <p class="overview-card-text">Cash prizes, trophies, and certificates for winners. Every participant receives an official participation certificate from SJBIT / VIGYANTRA.</p>
+        <h3 class="overview-card-title" data-cms-key="overview.card6.title">Recognition &amp; Rewards</h3>
+        <p class="overview-card-text" data-cms-key="overview.card6.text">Cash prizes, trophies, and certificates for winners. Every participant receives an official participation certificate from SJBIT / VIGYANTRA.</p>
       </div>
     </div>
   </div>
@@ -1632,29 +2033,29 @@
 <section id="prize-pool" aria-label="Prize pool breakdown">
   <div class="container">
     <div class="prize-pool-box reveal section-intro section-intro--center">
-      <span class="cin-label-sm">PRIZE BREAKDOWN</span>
-      <div class="prize-counter__num">₹50,000</div>
-      <h2>TOTAL PRIZE POOL</h2>
-      <p>More teams registered = bigger prize pool unlocked. Every registration counts.</p>
+      <span class="cin-label-sm" data-cms-key="prize.badge">PRIZE BREAKDOWN</span>
+      <div class="prize-counter__num" data-cms-key="prize.total">₹50,000</div>
+      <h2 data-cms-key="prize.heading">TOTAL PRIZE POOL</h2>
+      <p data-cms-key="prize.subheading">More teams registered = bigger prize pool unlocked. Every registration counts.</p>
     </div>
 
     <div class="prize-tiers-grid">
       <div class="glass-card prize-tier-card reveal reveal-delay-1">
-        <div class="prize-tier-badge">&lt; 15 TEAMS</div>
-        <div class="prize-tier-title">Single Prize Awarded</div>
-        <p class="prize-tier-desc">1st Place Winner takes the primary pool award.</p>
+        <div class="prize-tier-badge" data-cms-key="prize.tier1.badge">&lt; 15 TEAMS</div>
+        <div class="prize-tier-title" data-cms-key="prize.tier1.title">Single Prize Awarded</div>
+        <p class="prize-tier-desc" data-cms-key="prize.tier1.desc">1st Place Winner takes the primary pool award.</p>
       </div>
 
       <div class="glass-card prize-tier-card reveal reveal-delay-2">
-        <div class="prize-tier-badge">15 – 30 TEAMS</div>
-        <div class="prize-tier-title">Two Prizes Awarded</div>
-        <p class="prize-tier-desc">1st and 2nd Place Winners share the prize tier.</p>
+        <div class="prize-tier-badge" data-cms-key="prize.tier2.badge">15 – 30 TEAMS</div>
+        <div class="prize-tier-title" data-cms-key="prize.tier2.title">Two Prizes Awarded</div>
+        <p class="prize-tier-desc" data-cms-key="prize.tier2.desc">1st and 2nd Place Winners share the prize tier.</p>
       </div>
 
       <div class="glass-card prize-tier-card reveal reveal-delay-3">
-        <div class="prize-tier-badge">30+ TEAMS</div>
-        <div class="prize-tier-title">Full Prize Pool Unlocked</div>
-        <p class="prize-tier-desc">1st, 2nd, and 3rd Place Winners unlock full ₹50,000 rewards.</p>
+        <div class="prize-tier-badge" data-cms-key="prize.tier3.badge">30+ TEAMS</div>
+        <div class="prize-tier-title" data-cms-key="prize.tier3.title">Full Prize Pool Unlocked</div>
+        <p class="prize-tier-desc" data-cms-key="prize.tier3.desc">1st, 2nd, and 3rd Place Winners unlock full ₹50,000 rewards.</p>
       </div>
     </div>
   </div>
@@ -1665,34 +2066,34 @@
 <section id="details" aria-label="Event details">
   <div class="container">
     <div class="reveal section-intro section-intro--center">
-      <span class="cin-label-sm">EVENT SPECIFICATIONS</span>
-      <h2>EVENT <span class="gradient-text">DETAILS</span></h2>
-      <p>Everything you need to know before you register.</p>
+      <span class="cin-label-sm" data-cms-key="details.badge">EVENT SPECIFICATIONS</span>
+      <h2 data-cms-key="details.heading">EVENT <span class="gradient-text">DETAILS</span></h2>
+      <p data-cms-key="details.subheading">Everything you need to know before you register.</p>
     </div>
 
     <div class="bento-grid">
       <div class="glass-card bento-card reveal reveal-delay-1">
-        <span class="bento-title">DATE &amp; TIME</span>
-        <span class="bento-value">30 OCT 2026</span>
-        <span style="font-size:0.85rem; color:var(--text-secondary);">9:00 AM Onwards</span>
+        <span class="bento-title" data-cms-key="details.card1.title">DATE &amp; TIME</span>
+        <span class="bento-value" data-cms-key="details.card1.val">30 OCT 2026</span>
+        <span style="font-size:0.85rem; color:var(--text-secondary);" data-cms-key="details.card1.sub">9:00 AM Onwards</span>
       </div>
 
       <div class="glass-card bento-card reveal reveal-delay-2">
-        <span class="bento-title">VENUE</span>
-        <span class="bento-value">SJBIT CAMPUS</span>
-        <span style="font-size:0.85rem; color:var(--text-secondary);">Bengaluru, Karnataka</span>
+        <span class="bento-title" data-cms-key="details.card2.title">VENUE</span>
+        <span class="bento-value" data-cms-key="details.card2.val">SJBIT CAMPUS</span>
+        <span style="font-size:0.85rem; color:var(--text-secondary);" data-cms-key="details.card2.sub">Bengaluru, Karnataka</span>
       </div>
 
       <div class="glass-card bento-card reveal reveal-delay-3">
-        <span class="bento-title">TEAM SIZE</span>
-        <span class="bento-value">4 MEMBERS</span>
-        <span style="font-size:0.85rem; color:var(--text-secondary);">Strictly per team</span>
+        <span class="bento-title" data-cms-key="details.card3.title">TEAM SIZE</span>
+        <span class="bento-value" data-cms-key="details.card3.val">4 MEMBERS</span>
+        <span style="font-size:0.85rem; color:var(--text-secondary);" data-cms-key="details.card3.sub">Strictly per team</span>
       </div>
 
       <div class="glass-card bento-card reveal reveal-delay-4">
-        <span class="bento-title">ENTRY FEE</span>
-        <span class="bento-value">₹400 / TEAM</span>
-        <span style="font-size:0.85rem; color:var(--text-secondary);">Official registration</span>
+        <span class="bento-title" data-cms-key="details.card4.title">ENTRY FEE</span>
+        <span class="bento-value" data-cms-key="details.card4.val">₹400 / TEAM</span>
+        <span style="font-size:0.85rem; color:var(--text-secondary);" data-cms-key="details.card4.sub">Official registration</span>
       </div>
     </div>
   </div>
@@ -1704,11 +2105,11 @@
   <div class="container">
     <div class="ed-block reveal">
       <div class="ed-line">
-        <span class="ed-word--thin">PRECISION</span>
-        <span class="ed-word--accent">MEETS</span>
+        <span class="ed-word--thin" data-cms-key="ed2.word1">PRECISION</span>
+        <span class="ed-word--accent" data-cms-key="ed2.word2">MEETS</span>
       </div>
       <div class="ed-line ed-line--shift">
-        <span>ALGORITHM.</span>
+        <span data-cms-key="ed2.word3">ALGORITHM.</span>
       </div>
     </div>
   </div>
@@ -1721,9 +2122,9 @@
     <div class="split-layout">
       <!-- Sticky Sidebar -->
       <div class="sticky-side reveal">
-        <span class="cin-label-sm">THE DIRECTIVES</span>
-        <h2 class="sticky-title">OFFICIAL<br /><span class="gradient-text">RULES.</span></h2>
-        <p class="sticky-desc">Master the parameters to conquer the arena. Read carefully before entering.</p>
+        <span class="cin-label-sm" data-cms-key="rules.badge">THE DIRECTIVES</span>
+        <h2 class="sticky-title" data-cms-key="rules.heading">OFFICIAL<br /><span class="gradient-text">RULES.</span></h2>
+        <p class="sticky-desc" data-cms-key="rules.desc">Master the parameters to conquer the arena. Read carefully before entering.</p>
       </div>
 
       <!-- Scrollable List -->
@@ -1732,8 +2133,8 @@
         <div class="glass-card rule-item-card reveal reveal-delay-1">
           <div class="rule-item-num">01</div>
           <div>
-            <div class="rule-item-title">TEAM COMPOSITION</div>
-            <div class="rule-item-text">Teams must have exactly <strong>4 registered members</strong>.<br /><strong>No substitutions</strong> without organiser approval.</div>
+            <div class="rule-item-title" data-cms-key="rules.1.title">TEAM COMPOSITION</div>
+            <div class="rule-item-text" data-cms-key="rules.1.text">Teams must have exactly <strong>4 registered members</strong>.<br /><strong>No substitutions</strong> without organiser approval.</div>
           </div>
         </div>
 
@@ -1741,8 +2142,8 @@
         <div class="glass-card rule-item-card reveal reveal-delay-2">
           <div class="rule-item-num">02</div>
           <div>
-            <div class="rule-item-title">TEAM ID &amp; IDENTIFICATION</div>
-            <div class="rule-item-text">Use your assigned <strong>Team ID</strong> for identification and submissions.<br />It is required for all <strong>official event records</strong>.</div>
+            <div class="rule-item-title" data-cms-key="rules.2.title">TEAM ID &amp; IDENTIFICATION</div>
+            <div class="rule-item-text" data-cms-key="rules.2.text">Use your assigned <strong>Team ID</strong> for identification and submissions.<br />It is required for all <strong>official event records</strong>.</div>
           </div>
         </div>
 
@@ -1750,8 +2151,8 @@
         <div class="glass-card rule-item-card reveal reveal-delay-3">
           <div class="rule-item-num">03</div>
           <div>
-            <div class="rule-item-title">REGISTERED EMAIL ID</div>
-            <div class="rule-item-text">Use the <strong>registered email ID</strong> for all event activity.<br />This includes <strong>submissions, forms, and communication</strong>.</div>
+            <div class="rule-item-title" data-cms-key="rules.3.title">REGISTERED EMAIL ID</div>
+            <div class="rule-item-text" data-cms-key="rules.3.text">Use the <strong>registered email ID</strong> for all event activity.<br />This includes <strong>submissions, forms, and communication</strong>.</div>
           </div>
         </div>
 
@@ -1759,8 +2160,8 @@
         <div class="glass-card rule-item-card reveal reveal-delay-4">
           <div class="rule-item-num">04</div>
           <div>
-            <div class="rule-item-title">REPORTING &amp; CONDUCT</div>
-            <div class="rule-item-text"><strong>Report on time</strong> and follow event officials’ instructions.<br />Maintain <strong>professional and respectful conduct</strong> throughout.</div>
+            <div class="rule-item-title" data-cms-key="rules.4.title">REPORTING &amp; CONDUCT</div>
+            <div class="rule-item-text" data-cms-key="rules.4.text"><strong>Report on time</strong> and follow event officials’ instructions.<br />Maintain <strong>professional and respectful conduct</strong> throughout.</div>
           </div>
         </div>
 
@@ -1768,8 +2169,8 @@
         <div class="glass-card rule-item-card reveal reveal-delay-1">
           <div class="rule-item-num">05</div>
           <div>
-            <div class="rule-item-title">PERMITTED RESOURCES</div>
-            <div class="rule-item-text">Use only resources <strong>explicitly allowed</strong> for each round.<br /><strong>Phones and unauthorised electronics</strong> are prohibited where stated.</div>
+            <div class="rule-item-title" data-cms-key="rules.5.title">PERMITTED RESOURCES</div>
+            <div class="rule-item-text" data-cms-key="rules.5.text">Use only resources <strong>explicitly allowed</strong> for each round.<br /><strong>Phones and unauthorised electronics</strong> are prohibited where stated.</div>
           </div>
         </div>
 
@@ -1777,8 +2178,8 @@
         <div class="glass-card rule-item-card reveal reveal-delay-2">
           <div class="rule-item-num">06</div>
           <div>
-            <div class="rule-item-title">FAIR PLAY</div>
-            <div class="rule-item-text">Do not share answers, seek <strong>unauthorised help</strong>, or interfere with others.<br />Any violation may result in <strong>disqualification</strong>.</div>
+            <div class="rule-item-title" data-cms-key="rules.6.title">FAIR PLAY</div>
+            <div class="rule-item-text" data-cms-key="rules.6.text">Do not share answers, seek <strong>unauthorised help</strong>, or interfere with others.<br />Any violation may result in <strong>disqualification</strong>.</div>
           </div>
         </div>
 
@@ -1786,8 +2187,8 @@
         <div class="glass-card rule-item-card reveal reveal-delay-3">
           <div class="rule-item-num">07</div>
           <div>
-            <div class="rule-item-title">TIME LIMITS &amp; SUBMISSIONS</div>
-            <div class="rule-item-text">Complete and submit each round within its <strong>specified time limit</strong>.<br /><strong>Late submissions</strong> will not be considered.</div>
+            <div class="rule-item-title" data-cms-key="rules.7.title">TIME LIMITS &amp; SUBMISSIONS</div>
+            <div class="rule-item-text" data-cms-key="rules.7.text">Complete and submit each round within its <strong>specified time limit</strong>.<br /><strong>Late submissions</strong> will not be considered.</div>
           </div>
         </div>
 
@@ -1795,8 +2196,8 @@
         <div class="glass-card rule-item-card reveal reveal-delay-4">
           <div class="rule-item-num">08</div>
           <div>
-            <div class="rule-item-title">ROUND PROGRESSION &amp; SCORING</div>
-            <div class="rule-item-text">Teams advance through a <strong>sequential elimination format</strong>.<br /><strong>Judges’ decisions</strong> and official criteria are final.</div>
+            <div class="rule-item-title" data-cms-key="rules.8.title">ROUND PROGRESSION &amp; SCORING</div>
+            <div class="rule-item-text" data-cms-key="rules.8.text">Teams advance through a <strong>sequential elimination format</strong>.<br /><strong>Judges’ decisions</strong> and official criteria are final.</div>
           </div>
         </div>
 
@@ -1804,8 +2205,8 @@
         <div class="glass-card rule-item-card reveal reveal-delay-1">
           <div class="rule-item-num">09</div>
           <div>
-            <div class="rule-item-title">CLUES, MOVEMENT &amp; SAFETY</div>
-            <div class="rule-item-text">Handle materials carefully and follow <strong>designated routes</strong>.<br /><strong>Restricted areas</strong> and property damage are prohibited.</div>
+            <div class="rule-item-title" data-cms-key="rules.9.title">CLUES, MOVEMENT &amp; SAFETY</div>
+            <div class="rule-item-text" data-cms-key="rules.9.text">Handle materials carefully and follow <strong>designated routes</strong>.<br /><strong>Restricted areas</strong> and property damage are prohibited.</div>
           </div>
         </div>
 
@@ -1813,8 +2214,8 @@
         <div class="glass-card rule-item-card reveal reveal-delay-2">
           <div class="rule-item-num">10</div>
           <div>
-            <div class="rule-item-title">PRIZE DISTRIBUTION TIERS</div>
-            <div class="rule-item-text">
+            <div class="rule-item-title" data-cms-key="rules.10.title">PRIZE DISTRIBUTION TIERS</div>
+            <div class="rule-item-text" data-cms-key="rules.10.text">
               Prize distribution depends on total registered teams:
               <span style="display:block; margin-top:6px; color:var(--accent-mint);">• &lt; 15 teams: First Prize only</span>
               <span style="display:block; color:var(--accent-mint);">• 15–30 teams: First &amp; Second Prizes</span>
@@ -1827,8 +2228,8 @@
         <div class="glass-card rule-item-card reveal reveal-delay-3">
           <div class="rule-item-num">11</div>
           <div>
-            <div class="rule-item-title">SAFETY PROTOCOLS &amp; NOTICE</div>
-            <div class="rule-item-text">Stay in <strong>designated areas</strong> and follow safety instructions.<br />Organisers may adjust <strong>schedules or procedures</strong> when required.</div>
+            <div class="rule-item-title" data-cms-key="rules.11.title">SAFETY PROTOCOLS &amp; NOTICE</div>
+            <div class="rule-item-text" data-cms-key="rules.11.text">Stay in <strong>designated areas</strong> and follow safety instructions.<br />Organisers may adjust <strong>schedules or procedures</strong> when required.</div>
           </div>
         </div>
       </div>
@@ -1842,13 +2243,13 @@
   <div class="container" style="text-align:center;">
     <div class="ed-block reveal">
       <div class="ed-line" style="justify-content:center;">
-        <span class="ed-word--thin">ONE ALGORITHM.</span>
+        <span class="ed-word--thin" data-cms-key="ed3.word1">ONE ALGORITHM.</span>
       </div>
       <div class="ed-line" style="justify-content:center;">
-        <span class="ed-word--accent" style="font-size:clamp(3rem, 9vw, 6.5rem);">INFINITE</span>
+        <span class="ed-word--accent" style="font-size:clamp(3rem, 9vw, 6.5rem);" data-cms-key="ed3.word2">INFINITE</span>
       </div>
       <div class="ed-line" style="justify-content:center;">
-        <span>POSSIBILITIES.</span>
+        <span data-cms-key="ed3.word3">POSSIBILITIES.</span>
       </div>
     </div>
   </div>
@@ -1861,46 +2262,46 @@
     <div class="split-layout">
       <!-- Sticky Sidebar -->
       <div class="sticky-side reveal">
-        <span class="cin-label-sm">INTEL DB</span>
-        <h2 class="sticky-title">FREQUENTLY<br /><span class="gradient-text">ASKED.</span></h2>
-        <p class="sticky-desc">Everything you need to know about eligibility, laptops, tools, and event guidelines.</p>
+        <span class="cin-label-sm" data-cms-key="faq.badge">INTEL DB</span>
+        <h2 class="sticky-title" data-cms-key="faq.heading">FREQUENTLY<br /><span class="gradient-text">ASKED.</span></h2>
+        <p class="sticky-desc" data-cms-key="faq.desc">Everything you need to know about eligibility, laptops, tools, and event guidelines.</p>
       </div>
 
       <!-- FAQ Accordion -->
       <div class="faq-list">
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">Who can participate in Hack and Hunt?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-          <div class="faq-answer"><div class="faq-answer-inner">Any currently enrolled student from any college or university can participate. Students from any branch, year, or specialization are welcome. A valid institutional ID is mandatory on competition day (30 Oct 2026).</div></div>
+          <button class="faq-question" aria-expanded="false"><span data-cms-key="faq.1.q">Who can participate in Hack and Hunt?</span><span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-cms-key="faq.1.a">Any currently enrolled student from any college or university can participate. Students from any branch, year, or specialization are welcome. A valid institutional ID is mandatory on competition day (30 Oct 2026).</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">Can I register individually or with fewer than 4 members?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-          <div class="faq-answer"><div class="faq-answer-inner">No. Hack and Hunt requires teams of strictly 4 registered members. Solo registrations or teams with fewer members are not accepted. Reach out to classmates or friends to form your 4-member squad.</div></div>
+          <button class="faq-question" aria-expanded="false"><span data-cms-key="faq.2.q">Can I register individually or with fewer than 4 members?</span><span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-cms-key="faq.2.a">No. Hack and Hunt requires teams of strictly 4 registered members. Solo registrations or teams with fewer members are not accepted. Reach out to classmates or friends to form your 4-member squad.</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">Is there a registration fee?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-          <div class="faq-answer"><div class="faq-answer-inner">Yes, the registration fee is <strong>₹400/- per team</strong>. This covers event access, refreshments, participation certificates, and event materials. Payment details are provided in the registration form.</div></div>
+          <button class="faq-question" aria-expanded="false"><span data-cms-key="faq.3.q">Is there a registration fee?</span><span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-cms-key="faq.3.a">Yes, the registration fee is <strong>₹400/- per team</strong>. This covers event access, refreshments, participation certificates, and event materials. Payment details are provided in the registration form.</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">What should participants bring on event day?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-          <div class="faq-answer"><div class="faq-answer-inner">Bring: ✓ Valid college ID card ✓ Registration confirmation email ✓ Laptop + charger ✓ Any hardware/peripherals you plan to use ✓ Personal essentials. The venue provides Wi-Fi, power outlets, and workstations.</div></div>
+          <button class="faq-question" aria-expanded="false"><span data-cms-key="faq.4.q">What should participants bring on event day?</span><span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-cms-key="faq.4.a">Bring: ✓ Valid college ID card ✓ Registration confirmation email ✓ Laptop + charger ✓ Any hardware/peripherals you plan to use ✓ Personal essentials. The venue provides Wi-Fi, power outlets, and workstations.</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">How will projects and tasks be judged?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-          <div class="faq-answer"><div class="faq-answer-inner">Hack and Hunt follows a sequential elimination format across 04 rounds evaluated by expert judges. Official answer sheets, timestamps, completion records, and verified results determine qualification. The decision of authorized judges is final.</div></div>
+          <button class="faq-question" aria-expanded="false"><span data-cms-key="faq.5.q">How will projects and tasks be judged?</span><span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-cms-key="faq.5.a">Hack and Hunt follows a sequential elimination format across 04 rounds evaluated by expert judges. Official answer sheets, timestamps, completion records, and verified results determine qualification. The decision of authorized judges is final.</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">Can team members be from different colleges?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-          <div class="faq-answer"><div class="faq-answer-inner">Yes! Cross-college and cross-department teams are fully allowed and encouraged. Just ensure all 4 team members have valid college ID cards.</div></div>
+          <button class="faq-question" aria-expanded="false"><span data-cms-key="faq.6.q">Can team members be from different colleges?</span><span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-cms-key="faq.6.a">Yes! Cross-college and cross-department teams are fully allowed and encouraged. Just ensure all 4 team members have valid college ID cards.</div></div>
         </div>
 
         <div class="faq-item reveal">
-          <button class="faq-question" aria-expanded="false">Will certificates be provided to all participants?<span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-          <div class="faq-answer"><div class="faq-answer-inner">Yes. Every registered participant who attends and competes will receive an official Certificate of Participation from VIGYANTRA '26 / SJBIT. Winners will receive merit certificates and cash prizes.</div></div>
+          <button class="faq-question" aria-expanded="false"><span data-cms-key="faq.7.q">Will certificates be provided to all participants?</span><span class="faq-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+          <div class="faq-answer"><div class="faq-answer-inner" data-cms-key="faq.7.a">Yes. Every registered participant who attends and competes will receive an official Certificate of Participation from VIGYANTRA '26 / SJBIT. Winners will receive merit certificates and cash prizes.</div></div>
         </div>
       </div>
     </div>
@@ -1912,33 +2313,33 @@
 <section id="coordinators" aria-label="Event coordinators">
   <div class="container">
     <div class="reveal section-intro section-intro--center">
-      <span class="cin-label-sm">EVENT COORDINATORS</span>
-      <h2>MEET THE <span class="gradient-text">TEAM</span></h2>
-      <p>Have questions or need help? Reach out to our event coordinators directly.</p>
+      <span class="cin-label-sm" data-cms-key="coord.badge">EVENT COORDINATORS</span>
+      <h2 data-cms-key="coord.heading">MEET THE <span class="gradient-text">TEAM</span></h2>
+      <p data-cms-key="coord.subheading">Have questions or need help? Reach out to our event coordinators directly.</p>
     </div>
 
     <div class="coordinators-grid">
       <div class="glass-card coord-card reveal reveal-delay-1">
         <div class="coord-avatar">
-          <img src="assets/likitha.jpg" alt="Likitha G." />
+          <img src="assets/likitha.jpg" alt="Likitha G." data-cms-key="coord.1.img" />
         </div>
-        <div class="coord-name">Likitha G.</div>
-        <div class="coord-role">Event Coordinator</div>
+        <div class="coord-name" data-cms-key="coord.1.name">Likitha G.</div>
+        <div class="coord-role" data-cms-key="coord.1.role">Event Coordinator</div>
         <a href="tel:9481067015" class="coord-phone">
           <svg class="lucide-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          +91 94810 67015
+          <span data-cms-key="coord.1.phone">+91 94810 67015</span>
         </a>
       </div>
 
       <div class="glass-card coord-card reveal reveal-delay-2">
         <div class="coord-avatar">
-          <img src="assets/jeevan.jpg" alt="Jeevan Y." />
+          <img src="assets/jeevan.jpg" alt="Jeevan Y." data-cms-key="coord.2.img" />
         </div>
-        <div class="coord-name">Jeevan Y.</div>
-        <div class="coord-role">Event Coordinator</div>
+        <div class="coord-name" data-cms-key="coord.2.name">Jeevan Y.</div>
+        <div class="coord-role" data-cms-key="coord.2.role">Event Coordinator</div>
         <a href="tel:7204402406" class="coord-phone">
           <svg class="lucide-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          +91 72044 02406
+          <span data-cms-key="coord.2.phone">+91 72044 02406</span>
         </a>
       </div>
     </div>
@@ -1950,14 +2351,14 @@
 <section id="registration" aria-label="Registration terminal">
   <div class="container">
     <div class="glass-card final-call-box reveal">
-      <span class="cin-label-sm">THE FINAL CALL</span>
-      <h2 class="fca-h2">READY TO<br /><span class="gradient-text">HUNT &amp; HACK?</span></h2>
-      <p style="color:var(--text-secondary); max-width:560px; font-size:1.05rem;">
+      <span class="cin-label-sm" data-cms-key="reg.badge">THE FINAL CALL</span>
+      <h2 class="fca-h2" data-cms-key="reg.heading">READY TO<br /><span class="gradient-text">HUNT &amp; HACK?</span></h2>
+      <p style="color:var(--text-secondary); max-width:560px; font-size:1.05rem;" data-cms-key="reg.subheading">
         Bring your ideas. Build your algorithms. Make your impact at VIGYANTRA '26.
       </p>
 
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" class="btn-primary" target="_blank" rel="noopener">
-        REGISTER NOW <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        <span data-cms-key="reg.cta">REGISTER NOW</span> <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
     </div>
   </div>
@@ -1967,8 +2368,8 @@
 <footer>
   <div class="container">
     <div class="footer-inner">
-      <div class="footer-logo-main">VIGYANTRA '26 · HACK AND HUNT</div>
-      <p class="footer-text">SJBIT, BGS Health &amp; Education City, Kengeri, Bengaluru - 560060</p>
+      <div class="footer-logo-main" data-cms-key="footer.title">VIGYANTRA '26 · HACK AND HUNT</div>
+      <p class="footer-text" data-cms-key="footer.address">SJBIT, BGS Health &amp; Education City, Kengeri, Bengaluru - 560060</p>
       
       <div class="footer-divider" aria-hidden="true"></div>
 
@@ -1981,7 +2382,7 @@
         <a href="#coordinators">Team</a>
       </div>
 
-      <p class="footer-text">© 2026 VIGYANTRA · SJBIT. All rights reserved.</p>
+      <p class="footer-text"><span data-cms-key="footer.copyright">© 2026 VIGYANTRA · SJBIT. All rights reserved.</span> · <a href="#admin" id="admin-login-trigger" class="footer-admin-link" title="Administrator Access (Ctrl+Shift+A)">Admin</a></p>
     </div>
   </div>
 </footer>
@@ -1994,7 +2395,7 @@
 <!-- Sticky Mobile Registration CTA (Visible on mobile screens) -->
 <div id="mobile-sticky-cta" aria-hidden="false">
   <a href="https://docs.google.com/forms/d/e/1FAIpQLSeiW6m_2bEpKI5HoRR_YM_HJmfDmpnpzdJn9TWT0VaGBt1uyA/viewform?usp=publish-editor" target="_blank" rel="noopener">
-    REGISTER NOW <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    <span data-cms-key="mobile.cta">REGISTER NOW</span> <svg class="btn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
   </a>
 </div>
 
@@ -2249,6 +2650,9 @@
   }, { passive: true });
 })();
 </script>
+
+<!-- ADMIN CMS & IN-PLACE EDIT MODE -->
+<script src="assets/admin-cms.js"></script>
 </body>
 </html>
 
